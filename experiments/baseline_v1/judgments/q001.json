@@ -1,10 +1,11 @@
 {
     "schema_version": "1.0",
     "question_id": "q001",
-    "question": "Who was 'the woman' whom Sherlock Holmes always remembered?",
+    "question": "Who was \"the woman\" whom Sherlock Holmes always remembered?",
     "question_interpretation": "Identify the specific person Sherlock Holmes referred to as 'the woman'.",
     "reference_answer": "Irene Adler",
-    "candidate_story_judgments": [{
+    "candidate_story_judgments": [
+        {
             "section_order": 1,
             "section_title": "A Scandal in Bohemia",
             "label": "directly_relevant",
@@ -35,7 +36,8 @@
             "reason": "Does not discuss Irene Adler or 'the woman'."
         }
     ],
-    "retrieved_chunk_judgments": [{
+    "retrieved_chunk_judgments": [
+        {
             "rank": 1,
             "chunk_uid": "g1661-s01-c0001",
             "label": "direct_evidence",
