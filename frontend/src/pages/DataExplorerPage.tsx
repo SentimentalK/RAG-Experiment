@@ -34,30 +34,31 @@ export default function DataExplorerPage() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Data Explorer</h1>
-        <p className="text-muted-foreground mt-1 text-sm">
-          Browse the original stories and the extracted vector chunks.
-        </p>
-      </div>
-
-      <Tabs defaultValue="stories" className="w-full">
-        <TabsList className="w-full sm:w-auto grid grid-cols-2 sm:inline-flex">
-          <TabsTrigger value="stories" className="flex items-center gap-2">
-            <BookOpen className="h-4 w-4" />
-            Full Stories ({data.stories.length})
-          </TabsTrigger>
-          <TabsTrigger value="chunks" className="flex items-center gap-2">
-            <Database className="h-4 w-4" />
-            Cleaned Chunks ({data.chunks.length})
-          </TabsTrigger>
-        </TabsList>
+      <Tabs defaultValue="stories" className="w-full flex flex-col gap-6">
+        <div className="flex items-center justify-between gap-4 border-b pb-4">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">Data Explorer</h1>
+            <p className="text-muted-foreground mt-1 text-sm">
+              Browse the original stories and the extracted vector chunks.
+            </p>
+          </div>
+          <TabsList className="shrink-0 flex items-center">
+            <TabsTrigger value="stories" className="flex items-center gap-2">
+              <BookOpen className="h-4 w-4" />
+              Full Stories ({data.stories.length})
+            </TabsTrigger>
+            <TabsTrigger value="chunks" className="flex items-center gap-2">
+              <Database className="h-4 w-4" />
+              Cleaned Chunks ({data.chunks.length})
+            </TabsTrigger>
+          </TabsList>
+        </div>
         
-        <TabsContent value="stories" className="mt-6">
+        <TabsContent value="stories" className="mt-0 w-full">
           <StoriesTab stories={data.stories} />
         </TabsContent>
         
-        <TabsContent value="chunks" className="mt-6">
+        <TabsContent value="chunks" className="mt-0 w-full">
           <ChunksTab chunks={data.chunks} />
         </TabsContent>
       </Tabs>
