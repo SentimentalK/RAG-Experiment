@@ -312,13 +312,8 @@ def main():
         args.evaluation_output.parent.mkdir(parents=True, exist_ok=True)
         args.validation_output.parent.mkdir(parents=True, exist_ok=True)
 
-        if args.evaluation_output.exists():
-            args.evaluation_output.unlink()
-        shutil.move(str(staging_eval_path), str(args.evaluation_output))
-
-        if args.validation_output.exists():
-            args.validation_output.unlink()
-        shutil.move(str(staging_val_path), str(args.validation_output))
+        staging_eval_path.replace(args.evaluation_output)
+        staging_val_path.replace(args.validation_output)
 
         print("\nGenerated:")
         print(f"  {args.validation_output}")

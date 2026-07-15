@@ -108,9 +108,9 @@
         {
             "rank": 9,
             "chunk_uid": "g1661-s12-c0011",
-            "label": "direct_evidence",
+            "label": "supporting_context",
             "supports_answer": true,
-            "reason": "Introduces Violet Hunter's offer of £120 a year in 'The Adventure of the Copper Beeches', which was vastly higher than standard wages."
+            "reason": "Introduces Violet Hunter's offer of £120 a year in 'The Adventure of the Copper Beeches', which establishes the high-paying offer but not the hidden criminal purpose."
         },
         {
             "rank": 10,
@@ -124,21 +124,21 @@
         "top_1": false,
         "top_3": false,
         "top_5": false,
-        "top_10": true
+        "top_10": false
     },
     "first_direct_evidence_rank": 1,
     "missing_evidence_within_candidate_stories": [
         {
             "section_order": 12,
             "section_title": "The Adventure of the Copper Beeches",
-            "evidence_quote": "Your salary with me, madam, would commence at £ 100 a year.",
-            "reason": "Shows the initial offer details that were unusually high."
+            "evidence_quote": "You have been brought there to personate someone... You were chosen, doubtless, as resembling her in height, figure, and the colour of your hair... as you wore the girl’s dress and were so like her, he was convinced... that Miss Rucastle was perfectly happy... The dog is let loose at night to prevent him from endeavouring to communicate with her.",
+            "reason": "Explicitly details the hidden motive of the Copper Beeches offer: to personate the locked-up daughter and mislead her fiancé."
         }
     ],
     "overall_assessment": {
-        "retrieval_quality": "good",
-        "score_0_to_100": 85,
-        "summary": "Retrieved direct evidence for the Red-Headed League at Rank 1, and the Copper Beeches offer details at Rank 9, meaning both cases are represented in the top 10 retrieval."
+        "retrieval_quality": "mixed",
+        "score_0_to_100": 55,
+        "summary": "Retrieved direct evidence for the Red-Headed League at Rank 1, but only retrieved the high-paying offer details for the Copper Beeches at Rank 9. Since the hidden purpose of the Copper Beeches offer is missing from the top 10 retrieval, the overall evidence is insufficient."
     },
     "confidence": 1.0
 }

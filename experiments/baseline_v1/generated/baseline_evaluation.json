@@ -8319,7 +8319,7 @@
     "mean_direct_precision_at_1": 0.25,
     "mean_direct_precision_at_3": 0.08333333333333333,
     "mean_direct_precision_at_5": 0.1,
-    "mean_direct_precision_at_10": 0.0875,
+    "mean_direct_precision_at_10": 0.075,
     "mean_useful_precision_at_1": 0.5,
     "mean_useful_precision_at_3": 0.25,
     "mean_useful_precision_at_5": 0.275,
@@ -8327,11 +8327,11 @@
     "answer_sufficiency_rate_at_1": 0.125,
     "answer_sufficiency_rate_at_3": 0.125,
     "answer_sufficiency_rate_at_5": 0.375,
-    "answer_sufficiency_rate_at_10": 0.625,
+    "answer_sufficiency_rate_at_10": 0.5,
     "mean_noise_rate_at_10": 0.7375,
     "label_totals": {
-      "direct_evidence": 7,
-      "supporting_context": 14,
+      "direct_evidence": 6,
+      "supporting_context": 15,
       "topically_related": 38,
       "irrelevant": 21,
       "contradictory": 0
@@ -9072,7 +9072,7 @@
       "category": "symbolic_meaning",
       "question": "What did the five orange pips represent, and why were they sent?",
       "question_interpretation": "Explain the symbolic meaning of the five orange pips and the motive behind sending them to victims in the story.",
-      "reference_answer": "The five orange pips represented a warning of death from the Ku Klux Klan (K.K.K.)[cite: 4]. They were sent as a precursor to violence, demanding that the recipient either comply with the society's demands (such as returning the organization's secret register and papers), openly abjure their ways, or flee the country, under the threat of inevitable assassination[cite: 4].",
+      "reference_answer": "The five orange pips represented a warning of death from the Ku Klux Klan (K.K.K.). They were sent as a precursor to violence, demanding that the recipient either comply with the society's demands (such as returning the organization's secret register and papers), openly abjure their ways, or flee the country, under the threat of inevitable assassination.",
       "retrieval": {
         "query_token_count": 17,
         "embedding_duration_ms": 10.284856994985603,
@@ -10220,9 +10220,9 @@
           "cosine_similarity": 0.40943218357179645,
           "chunk_text": "“I have been a governess for five years,” said she, “in the\nfamily of Colonel Spence Munro, but two months ago the colonel received an\nappointment at Halifax, in Nova Scotia, and took his children over to America\nwith him, so that I found myself without a situation. I advertised, and I\nanswered advertisements, but without success. At last the little money which I\nhad saved began to run short, and I was at my wit’s end as to what I\nshould do. “There is a well-known agency for governesses in the West End called\nWestaway’s, and there I used to call about once a week in order to see\nwhether anything had turned up which might suit me. Westaway was the name of\nthe founder of the business, but it is really managed by Miss Stoper. She sits\nin her own little office, and the ladies who are seeking employment wait in an\nanteroom, and are then shown in one by one, when she consults her ledgers and\nsees whether she has anything which would suit them.",
           "judgment": {
-            "label": "direct_evidence",
+            "label": "supporting_context",
             "supports_answer": true,
-            "reason": "Introduces Violet Hunter's offer of £120 a year in 'The Adventure of the Copper Beeches', which was vastly higher than standard wages."
+            "reason": "Introduces Violet Hunter's offer of £120 a year in 'The Adventure of the Copper Beeches', which establishes the high-paying offer but not the hidden criminal purpose."
           }
         },
         {
@@ -10246,14 +10246,14 @@
         {
           "section_order": 12,
           "section_title": "The Adventure of the Copper Beeches",
-          "evidence_quote": "Your salary with me, madam, would commence at £ 100 a year.",
-          "reason": "Shows the initial offer details that were unusually high."
+          "evidence_quote": "You have been brought there to personate someone... You were chosen, doubtless, as resembling her in height, figure, and the colour of your hair... as you wore the girl’s dress and were so like her, he was convinced... that Miss Rucastle was perfectly happy... The dog is let loose at night to prevent him from endeavouring to communicate with her.",
+          "reason": "Explicitly details the hidden motive of the Copper Beeches offer: to personate the locked-up daughter and mislead her fiancé."
         }
       ],
       "judge_assessment": {
-        "retrieval_quality": "good",
-        "score_0_to_100": 85,
-        "summary": "Retrieved direct evidence for the Red-Headed League at Rank 1, and the Copper Beeches offer details at Rank 9, meaning both cases are represented in the top 10 retrieval.",
+        "retrieval_quality": "mixed",
+        "score_0_to_100": 55,
+        "summary": "Retrieved direct evidence for the Red-Headed League at Rank 1, but only retrieved the high-paying offer details for the Copper Beeches at Rank 9. Since the hidden purpose of the Copper Beeches offer is missing from the top 10 retrieval, the overall evidence is insufficient.",
         "confidence": 1.0
       },
       "computed_metrics": {
@@ -10266,7 +10266,7 @@
         "direct_precision_at_1": 1.0,
         "direct_precision_at_3": 0.3333333333333333,
         "direct_precision_at_5": 0.2,
-        "direct_precision_at_10": 0.2,
+        "direct_precision_at_10": 0.1,
         "useful_precision_at_1": 1.0,
         "useful_precision_at_3": 0.6666666666666666,
         "useful_precision_at_5": 0.6,
@@ -10274,10 +10274,10 @@
         "answer_sufficiency_at_1": 0,
         "answer_sufficiency_at_3": 0,
         "answer_sufficiency_at_5": 0,
-        "answer_sufficiency_at_10": 1,
+        "answer_sufficiency_at_10": 0,
         "label_counts": {
-          "direct_evidence": 2,
-          "supporting_context": 2,
+          "direct_evidence": 1,
+          "supporting_context": 3,
           "topically_related": 1,
           "irrelevant": 5,
           "contradictory": 0
@@ -10296,11 +10296,11 @@
       "q001": "3c92af23437ab1e332432acb064f65ac749e5620d2f5c246adbe473ed4e3dd59",
       "q002": "43049118a92ebd48f19a5e803d3b0ab579ce8d6c74c055afd69a4bc2d4ad5958",
       "q003": "6ed960d6e48d7442151bf5d2dc60e70cfe39117c79229e0f9ab7761bf5ce4fee",
-      "q004": "9e4078efffc4723ed54445d3a8c20b97ab0979a0d92530b29fe8c253d48dc20b",
+      "q004": "a3f9932a6c4099519e7b47d561f9bd8ce9723bd2e2dee6a9c213a3b70bd10544",
       "q005": "890ddc6986a67998b1ef608dc50e21a1c7fcf9607d91776d16bec17fa9f938f9",
       "q006": "9098d3981f7be8f5b6951863d3fb4416612792e487ef7cbce0c2c5c6930702df",
       "q007": "74203bbebb8f3832c6a67f4a376fc8d00e8d0c6dea4b673848df9c4dc1cb78c6",
-      "q008": "9d7fa313c696ab0e266392d0d863adc602fe8774595a2050369397c29cf23439"
+      "q008": "36a06822c7d79f85845fbca22612302693c07527547eaabe697787371704da7c"
     }
   }
 }

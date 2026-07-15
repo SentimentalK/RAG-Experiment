@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useBaselineEvaluation } from "@/hooks/use-baseline-evaluation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -111,7 +111,7 @@ function ChunksTab({ chunks }: { chunks: import("@/types/evaluation").Chunk[] })
   const paginatedChunks = filteredChunks.slice((page - 1) * CHUNKS_PER_PAGE, page * CHUNKS_PER_PAGE);
 
   // Reset page when search changes
-  useMemo(() => {
+  useEffect(() => {
     setPage(1);
   }, [searchTerm]);
 
