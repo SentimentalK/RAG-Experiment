@@ -1,0 +1,82 @@
+{
+  "title": "The Adventures of Sherlock Holmes",
+  "author": "Arthur Conan Doyle",
+  "sections_count": 12,
+  "total_character_count": 560698,
+  "total_word_count": 104351,
+  "processed_at": "2026-07-15T02:19:54.358447Z",
+  "sections": [
+    {
+      "section_order": 1,
+      "title": "A Scandal in Bohemia",
+      "character_count": 46361,
+      "word_count": 8521
+    },
+    {
+      "section_order": 2,
+      "title": "The Red-Headed League",
+      "character_count": 49203,
+      "word_count": 9105
+    },
+    {
+      "section_order": 3,
+      "title": "A Case of Identity",
+      "character_count": 37880,
+      "word_count": 6975
+    },
+    {
+      "section_order": 4,
+      "title": "The Boscombe Valley Mystery",
+      "character_count": 51313,
+      "word_count": 9616
+    },
+    {
+      "section_order": 5,
+      "title": "The Five Orange Pips",
+      "character_count": 39402,
+      "word_count": 7314
+    },
+    {
+      "section_order": 6,
+      "title": "The Man with the Twisted Lip",
+      "character_count": 49119,
+      "word_count": 9199
+    },
+    {
+      "section_order": 7,
+      "title": "The Adventure of the Blue Carbuncle",
+      "character_count": 42043,
+      "word_count": 7808
+    },
+    {
+      "section_order": 8,
+      "title": "The Adventure of the Speckled Band",
+      "character_count": 52906,
+      "word_count": 9805
+    },
+    {
+      "section_order": 9,
+      "title": "The Adventure of the Engineer's Thumb",
+      "character_count": 44550,
+      "word_count": 8283
+    },
+    {
+      "section_order": 10,
+      "title": "The Adventure of the Noble Bachelor",
+      "character_count": 44031,
+      "word_count": 8102
+    },
+    {
+      "section_order": 11,
+      "title": "The Adventure of the Beryl Coronet",
+      "character_count": 50920,
+      "word_count": 9679
+    },
+    {
+      "section_order": 12,
+      "title": "The Adventure of the Copper Beeches",
+      "character_count": 52970,
+      "word_count": 9944
+    }
+  ]
+}
