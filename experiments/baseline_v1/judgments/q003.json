@@ -1,0 +1,110 @@
+{
+    "schema_version": "1.0",
+    "question_id": "q003",
+    "question": "Who was Hosmer Angel really, and why did he disappear?",
+    "question_interpretation": "Identify the true identity of the character Hosmer Angel and the motive behind his sudden disappearance.",
+    "reference_answer": "Hosmer Angel was actually James Windibank, Mary Sutherland's stepfather, in disguise. He disappeared just before their wedding to leave Mary heartbroken and bound to his memory, ensuring she would remain single so that he could continue to control her inheritance of a hundred pounds a year.",
+    "candidate_story_judgments": [{
+        "section_order": 3,
+        "section_title": "A Case of Identity",
+        "label": "directly_relevant",
+        "reason": "This story focuses entirely on the mystery of Hosmer Angel's disappearance and reveals his true identity and motives."
+    }],
+    "retrieved_chunk_judgments": [{
+            "rank": 1,
+            "chunk_uid": "g1661-s03-c0030",
+            "label": "topically_related",
+            "supports_answer": false,
+            "reason": "Mentions Hosmer Angel's disappearance and Mary's father's place of business, but does not reveal his identity or motive."
+        },
+        {
+            "rank": 2,
+            "chunk_uid": "g1661-s03-c0029",
+            "label": "topically_related",
+            "supports_answer": false,
+            "reason": "Discusses Hosmer's independence with money and his disappearance, but provides no answers to the question."
+        },
+        {
+            "rank": 3,
+            "chunk_uid": "g1661-s03-c0020",
+            "label": "topically_related",
+            "supports_answer": false,
+            "reason": "Provides details about Hosmer's fake job as a cashier, but does not reveal his true identity."
+        },
+        {
+            "rank": 4,
+            "chunk_uid": "g1661-s03-c0060",
+            "label": "supporting_context",
+            "supports_answer": true,
+            "reason": "Explains that the stepfather profited from the incident and used a disguise, but lacks the full explanation of the financial motive."
+        },
+        {
+            "rank": 5,
+            "chunk_uid": "g1661-s03-c0023",
+            "label": "topically_related",
+            "supports_answer": false,
+            "reason": "Describes Hosmer's shy behavior, weak voice, and tinted glasses, which are clues to his disguise, but does not explicitly answer the question."
+        },
+        {
+            "rank": 6,
+            "chunk_uid": "g1661-s03-c0038",
+            "label": "topically_related",
+            "supports_answer": false,
+            "reason": "Provides the physical description of Hosmer Angel from the missing person advertisement, but does not explain his identity or motive."
+        },
+        {
+            "rank": 7,
+            "chunk_uid": "g1661-s03-c0026",
+            "label": "topically_related",
+            "supports_answer": false,
+            "reason": "Describes the specific event of Hosmer disappearing from the four-wheeler cab, but does not explain who he was or why he did it."
+        },
+        {
+            "rank": 8,
+            "chunk_uid": "g1661-s03-c0028",
+            "label": "topically_related",
+            "supports_answer": false,
+            "reason": "Details Mary's family's reaction to the disappearance, without revealing the truth of the mystery."
+        },
+        {
+            "rank": 9,
+            "chunk_uid": "g1661-s03-c0055",
+            "label": "direct_evidence",
+            "supports_answer": true,
+            "reason": "Directly states that the stepfather disguised himself as Hosmer Angel to keep other lovers away from the young lady by making love to her himself."
+        },
+        {
+            "rank": 10,
+            "chunk_uid": "g1661-s03-c0047",
+            "label": "topically_related",
+            "supports_answer": false,
+            "reason": "Contains dialogue with Mr. Windibank where Holmes claims he will find Hosmer Angel, but does not reveal the solution."
+        }
+    ],
+    "top_k_sufficiency": {
+        "top_1": false,
+        "top_3": false,
+        "top_5": false,
+        "top_10": true
+    },
+    "first_direct_evidence_rank": 9,
+    "missing_evidence_within_candidate_stories": [{
+            "section_order": 3,
+            "section_title": "A Case of Identity",
+            "evidence_quote": "James Windibank wished Miss Sutherland to be so bound to Hosmer Angel, and so uncertain as to his fate, that for ten years to come, at any rate, she would not listen to another man. As far as the church door he brought her, and then, as he could go no farther, he conveniently vanished away by the old trick of stepping in at one door of a four-wheeler and out at the other.",
+            "reason": "This quote explicitly names James Windibank and thoroughly details his manipulative motive of keeping her bound to a phantom lover, which fully explains why he orchestrated the disappearance at the church."
+        },
+        {
+            "section_order": 3,
+            "section_title": "A Case of Identity",
+            "evidence_quote": "Now her marriage would mean, of course, the loss of a hundred a year, so what does her stepfather do to prevent it? He takes the obvious course of keeping her at home and forbidding her to seek the company of people of her own age.",
+            "reason": "This passage explicitly establishes the exact financial motive (the loss of a hundred pounds a year) for the stepfather's elaborate deception."
+        }
+    ],
+    "overall_assessment": {
+        "retrieval_quality": "mixed",
+        "score_0_to_100": 65,
+        "summary": "The retrieval system successfully identified the correct story and found direct evidence at Rank 9 that explains the disguise. However, the top-ranked results were mostly superficial context about the disappearance, and the system missed the most crucial passages that explicitly name James Windibank and outline his financial motive."
+    },
+    "confidence": 0.95
+}

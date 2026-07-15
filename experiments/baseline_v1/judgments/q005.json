@@ -1,0 +1,120 @@
+{
+  "schema_version": "1.0",
+  "question_id": "q005",
+  "question": "Why did Neville St. Clair live part of his life as the beggar Hugh Boone?",
+  "question_interpretation": "Find the motive for Neville St. Clair's decision to adopt the secret identity of Hugh Boone the beggar instead of working his normal job.",
+  "reference_answer": "Neville St. Clair lived as the beggar Hugh Boone because he discovered that he could earn significantly more money by begging in disguise than he could through his regular profession as a reporter.",
+  "candidate_story_judgments": [
+    {
+      "section_order": 5,
+      "section_title": "The Five Orange Pips",
+      "label": "irrelevant",
+      "reason": "This story is about a Ku Klux Klan threat and has no connection to Neville St. Clair or Hugh Boone."
+    },
+    {
+      "section_order": 6,
+      "section_title": "The Man with the Twisted Lip",
+      "label": "directly_relevant",
+      "reason": "This is the source story featuring the characters Neville St. Clair and Hugh Boone, and it contains Neville's confession of why he begged."
+    },
+    {
+      "section_order": 7,
+      "section_title": "The Adventure of the Blue Carbuncle",
+      "label": "irrelevant",
+      "reason": "This story concerns a stolen jewel found in a goose and is completely unrelated to the question."
+    }
+  ],
+  "retrieved_chunk_judgments": [
+    {
+      "rank": 1,
+      "chunk_uid": "g1661-s06-c0032",
+      "label": "topically_related",
+      "supports_answer": false,
+      "reason": "Identifies Hugh Boone as a professional beggar, but does not explain why Neville St. Clair took on this persona."
+    },
+    {
+      "rank": 2,
+      "chunk_uid": "g1661-s06-c0041",
+      "label": "topically_related",
+      "supports_answer": false,
+      "reason": "Mentions both Neville St. Clair and Hugh Boone and the mystery surrounding them, but does not provide the solution or motive."
+    },
+    {
+      "rank": 3,
+      "chunk_uid": "g1661-s06-c0023",
+      "label": "topically_related",
+      "supports_answer": false,
+      "reason": "Describes Neville St. Clair's apparent lifestyle and wealth, but does not reveal his begging alter ego or the reason for it."
+    },
+    {
+      "rank": 4,
+      "chunk_uid": "g1661-s06-c0024",
+      "label": "topically_related",
+      "supports_answer": false,
+      "reason": "Discusses Neville's lack of money troubles and his regular trips to town, but does not explain his time as a beggar."
+    },
+    {
+      "rank": 5,
+      "chunk_uid": "g1661-s06-c0030",
+      "label": "topically_related",
+      "supports_answer": false,
+      "reason": "Describes the discovery of Neville St. Clair's clothes, but does not address why he became a beggar."
+    },
+    {
+      "rank": 6,
+      "chunk_uid": "g1661-s06-c0022",
+      "label": "topically_related",
+      "supports_answer": false,
+      "reason": "Introduces the mystery of Neville St. Clair, but contains no evidence explaining his secret life."
+    },
+    {
+      "rank": 7,
+      "chunk_uid": "g1661-s05-c0013",
+      "label": "irrelevant",
+      "supports_answer": false,
+      "reason": "Discusses characters from The Five Orange Pips, unrelated to Neville St. Clair."
+    },
+    {
+      "rank": 8,
+      "chunk_uid": "g1661-s06-c0068",
+      "label": "topically_related",
+      "supports_answer": false,
+      "reason": "Describes the moment Holmes washes the beggar's face to reveal Neville St. Clair, establishing they are the same person, but it does not explain *why* he did it."
+    },
+    {
+      "rank": 9,
+      "chunk_uid": "g1661-s06-c0035",
+      "label": "topically_related",
+      "supports_answer": false,
+      "reason": "Describes Hugh Boone's appearance as a cripple, but gives no motive for Neville's disguise."
+    },
+    {
+      "rank": 10,
+      "chunk_uid": "g1661-s06-c0017",
+      "label": "topically_related",
+      "supports_answer": false,
+      "reason": "Mentions Holmes looking for a clue in the opium den where Neville disappeared, but does not answer the question."
+    }
+  ],
+  "top_k_sufficiency": {
+    "top_1": false,
+    "top_3": false,
+    "top_5": false,
+    "top_10": false
+  },
+  "first_direct_evidence_rank": null,
+  "missing_evidence_within_candidate_stories": [
+    {
+      "section_order": 6,
+      "section_title": "The Man with the Twisted Lip",
+      "evidence_quote": "“Well, you can imagine how hard it was to settle down to arduous work at £ 2 a week when I knew that I could earn as much in a day by smearing my face with a little paint, laying my cap on the ground, and sitting still. It was a long fight between my pride and the money, but the dollars won at last, and I threw up reporting and sat day after day in the corner which I had first chosen...",
+      "reason": "This quote provides the exact motivation and explicit answer to the question: Neville St. Clair chose to live as a beggar because he made vastly more money doing so than working his legitimate job."
+    }
+  ],
+  "overall_assessment": {
+    "retrieval_quality": "poor",
+    "score_0_to_100": 20,
+    "summary": "The system successfully found chunks establishing that Neville St. Clair and Hugh Boone are the same person, but it completely failed to retrieve the end of the story where St. Clair explicitly confesses his financial motive for begging. As a result, the retrieved chunks cannot answer the 'why' of the user's question."
+  },
+  "confidence": 1.0
+}

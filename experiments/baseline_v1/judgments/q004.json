@@ -1,0 +1,132 @@
+{
+  "schema_version": "1.0",
+  "question_id": "q004",
+  "question": "What did the five orange pips represent, and why were they sent?",
+  "question_interpretation": "Explain the symbolic meaning of the five orange pips and the motive behind sending them to victims in the story.",
+  "reference_answer": "The five orange pips represented a warning of death from the Ku Klux Klan (K.K.K.)[cite: 4]. They were sent as a precursor to violence, demanding that the recipient either comply with the society's demands (such as returning the organization's secret register and papers), openly abjure their ways, or flee the country, under the threat of inevitable assassination[cite: 4].",
+  "candidate_story_judgments": [
+    {
+      "section_order": 2,
+      "section_title": "The Red-Headed League",
+      "label": "irrelevant",
+      "reason": "This story is about a bank robbery scheme and does not discuss orange pips or the K.K.K."
+    },
+    {
+      "section_order": 4,
+      "section_title": "The Boscombe Valley Mystery",
+      "label": "irrelevant",
+      "reason": "This story involves a murder in Boscombe Valley and has nothing to do with the orange pips."
+    },
+    {
+      "section_order": 5,
+      "section_title": "The Five Orange Pips",
+      "label": "directly_relevant",
+      "reason": "This is the source story that explains the meaning behind the orange pips, their connection to the Ku Klux Klan, and the reasons they were sent to the Openshaw family."
+    },
+    {
+      "section_order": 7,
+      "section_title": "The Adventure of the Blue Carbuncle",
+      "label": "irrelevant",
+      "reason": "This story revolves around a stolen gem found in a goose and is entirely unrelated to the question."
+    }
+  ],
+  "retrieved_chunk_judgments": [
+    {
+      "rank": 1,
+      "chunk_uid": "g1661-s05-c0015",
+      "label": "supporting_context",
+      "supports_answer": true,
+      "reason": "Links the orange pips to the letters 'K.K.K.' and the threat of 'Death,' but does not fully explain what the society is or their specific demands."
+    },
+    {
+      "rank": 2,
+      "chunk_uid": "g1661-s05-c0034",
+      "label": "topically_related",
+      "supports_answer": false,
+      "reason": "Mentions the pips in relation to burned papers, but does not explain their meaning or why they were sent."
+    },
+    {
+      "rank": 3,
+      "chunk_uid": "g1661-s05-c0063",
+      "label": "supporting_context",
+      "supports_answer": true,
+      "reason": "Implies that the pips are a warning showing that someone is upon the recipient's track, but does not provide the historical context of the K.K.K."
+    },
+    {
+      "rank": 4,
+      "chunk_uid": "g1661-s05-c0035",
+      "label": "topically_related",
+      "supports_answer": false,
+      "reason": "Shows diary entries mentioning setting pips on people, but fails to explain what this act represents."
+    },
+    {
+      "rank": 5,
+      "chunk_uid": "g1661-s02-c0022",
+      "label": "irrelevant",
+      "supports_answer": false,
+      "reason": "Mentions an 'orange barrow' in the context of The Red-Headed League, matching keywords but not the topic."
+    },
+    {
+      "rank": 6,
+      "chunk_uid": "g1661-s05-c0060",
+      "label": "supporting_context",
+      "supports_answer": true,
+      "reason": "Describes the pips as a 'sure precursor of his fate' (death), which helps define their representation, but misses the reason they were sent to the Openshaws."
+    },
+    {
+      "rank": 7,
+      "chunk_uid": "g1661-s07-c0007",
+      "label": "irrelevant",
+      "supports_answer": false,
+      "reason": "Discusses a Christmas goose from a different story."
+    },
+    {
+      "rank": 8,
+      "chunk_uid": "g1661-s04-c0074",
+      "label": "irrelevant",
+      "supports_answer": false,
+      "reason": "Discusses the Ballarat Gang in Australia from a different story."
+    },
+    {
+      "rank": 9,
+      "chunk_uid": "g1661-s05-c0017",
+      "label": "supporting_context",
+      "supports_answer": true,
+      "reason": "Associates the pips with 'K' repeated three times and mentions the resulting terror, but lacks the full explanation."
+    },
+    {
+      "rank": 10,
+      "chunk_uid": "g1661-s05-c0025",
+      "label": "supporting_context",
+      "supports_answer": true,
+      "reason": "Confirms the connection between the dried orange pips and 'K.K.K.', but lacks the deeper meaning."
+    }
+  ],
+  "top_k_sufficiency": {
+    "top_1": false,
+    "top_3": false,
+    "top_5": false,
+    "top_10": false
+  },
+  "first_direct_evidence_rank": null,
+  "missing_evidence_within_candidate_stories": [
+    {
+      "section_order": 5,
+      "section_title": "The Five Orange Pips",
+      "evidence_quote": "Its outrages were usually preceded by a warning sent to the marked man in some fantastic but generally recognised shape—a sprig of oak-leaves in some parts, melon seeds or orange pips in others. On receiving this the victim might either openly abjure his former ways, or might fly from the country.",
+      "reason": "This quote explicitly defines what the orange pips represent (a warning from the Ku Klux Klan) and the required actions to avoid death."
+    },
+    {
+      "section_order": 5,
+      "section_title": "The Five Orange Pips",
+      "evidence_quote": "The papers which Openshaw carried are obviously of vital importance to the person or persons in the sailing-ship. ... Their papers they mean to have, be the holder of them who it may.",
+      "reason": "This quote explains exactly why the pips were sent to the Openshaw family—to demand the return of the vital K.K.K. papers."
+    }
+  ],
+  "overall_assessment": {
+    "retrieval_quality": "poor",
+    "score_0_to_100": 30,
+    "summary": "The system retrieved several chunks mentioning the orange pips, 'K.K.K.', and the threat of death. However, it completely missed Holmes's encyclopedia reading about the Ku Klux Klan, which provides the definitive explanation of what the pips symbolize and why they were sent. As a result, the retrieved context is insufficient to fully answer the question."
+  },
+  "confidence": 0.95
+}

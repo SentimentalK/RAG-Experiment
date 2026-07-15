@@ -1,0 +1,123 @@
+{
+    "schema_version": "1.0",
+    "question_id": "q001",
+    "question": "Who was 'the woman' whom Sherlock Holmes always remembered?",
+    "question_interpretation": "Identify the specific person Sherlock Holmes referred to as 'the woman'.",
+    "reference_answer": "Irene Adler",
+    "candidate_story_judgments": [{
+            "section_order": 1,
+            "section_title": "A Scandal in Bohemia",
+            "label": "directly_relevant",
+            "reason": "This story introduces Irene Adler and explicitly states that Holmes refers to her as 'the woman'."
+        },
+        {
+            "section_order": 4,
+            "section_title": "The Boscombe Valley Mystery",
+            "label": "irrelevant",
+            "reason": "Does not discuss Irene Adler or 'the woman'."
+        },
+        {
+            "section_order": 6,
+            "section_title": "The Man with the Twisted Lip",
+            "label": "irrelevant",
+            "reason": "Does not discuss Irene Adler or 'the woman'."
+        },
+        {
+            "section_order": 8,
+            "section_title": "The Adventure of the Speckled Band",
+            "label": "irrelevant",
+            "reason": "Does not discuss Irene Adler or 'the woman'."
+        },
+        {
+            "section_order": 9,
+            "section_title": "The Adventure of the Engineer's Thumb",
+            "label": "irrelevant",
+            "reason": "Does not discuss Irene Adler or 'the woman'."
+        }
+    ],
+    "retrieved_chunk_judgments": [{
+            "rank": 1,
+            "chunk_uid": "g1661-s01-c0001",
+            "label": "direct_evidence",
+            "supports_answer": true,
+            "reason": "Explicitly names Irene Adler and states that to Sherlock Holmes she is always 'the woman'."
+        },
+        {
+            "rank": 2,
+            "chunk_uid": "g1661-s01-c0069",
+            "label": "topically_related",
+            "supports_answer": false,
+            "reason": "Discusses the female character in question but does not name her as Irene Adler or 'the woman'."
+        },
+        {
+            "rank": 3,
+            "chunk_uid": "g1661-s04-c0030",
+            "label": "irrelevant",
+            "supports_answer": false,
+            "reason": "Mentions a young woman in an unrelated case."
+        },
+        {
+            "rank": 4,
+            "chunk_uid": "g1661-s08-c0018",
+            "label": "irrelevant",
+            "supports_answer": false,
+            "reason": "Mentions a woman who died two years ago in an unrelated case."
+        },
+        {
+            "rank": 5,
+            "chunk_uid": "g1661-s01-c0002",
+            "label": "direct_evidence",
+            "supports_answer": true,
+            "reason": "States clearly that 'there was but one woman to him, and that woman was the late Irene Adler'."
+        },
+        {
+            "rank": 6,
+            "chunk_uid": "g1661-s01-c0073",
+            "label": "topically_related",
+            "supports_answer": false,
+            "reason": "Contains a letter from Irene Adler establishing her character, but does not state she is 'the woman' to Holmes."
+        },
+        {
+            "rank": 7,
+            "chunk_uid": "g1661-s08-c0035",
+            "label": "irrelevant",
+            "supports_answer": false,
+            "reason": "Mentions a dying woman in an unrelated case."
+        },
+        {
+            "rank": 8,
+            "chunk_uid": "g1661-s06-c0053",
+            "label": "irrelevant",
+            "supports_answer": false,
+            "reason": "Mentions the impression of a woman in an unrelated case."
+        },
+        {
+            "rank": 9,
+            "chunk_uid": "g1661-s09-c0013",
+            "label": "irrelevant",
+            "supports_answer": false,
+            "reason": "Mentions Watson's wife in an unrelated case."
+        },
+        {
+            "rank": 10,
+            "chunk_uid": "g1661-s01-c0076",
+            "label": "direct_evidence",
+            "supports_answer": true,
+            "reason": "Explicitly states that when Holmes speaks of Irene Adler, it is always under the honourable title of 'the woman'."
+        }
+    ],
+    "top_k_sufficiency": {
+        "top_1": true,
+        "top_3": true,
+        "top_5": true,
+        "top_10": true
+    },
+    "first_direct_evidence_rank": 1,
+    "missing_evidence_within_candidate_stories": [],
+    "overall_assessment": {
+        "retrieval_quality": "good",
+        "score_0_to_100": 85,
+        "summary": "The system successfully retrieved perfect direct evidence at Rank 1, explicitly answering the question. However, the retrieval of several purely keyword-matched chunks (relying on the word 'woman') in later ranks highlights a slight lack of deep semantic understanding, though the top results are excellent."
+    },
+    "confidence": 1.0
+}

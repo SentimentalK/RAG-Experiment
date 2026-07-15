@@ -1,0 +1,108 @@
+{
+  "schema_version": "1.0",
+  "question_id": "q006",
+  "question": "How did the stolen blue carbuncle end up inside a Christmas goose?",
+  "question_interpretation": "Determine the sequence of events and the specific method by which the stolen gem was placed inside the goose.",
+  "reference_answer": "James Ryder, the hotel attendant who stole the blue carbuncle, visited his sister Mrs. Oakshott's house. To hide the gem from police, he caught a white goose with a barred tail that he intended to take as a Christmas present, pried its bill open, and thrust the stone down its throat into its crop.",
+  "candidate_story_judgments": [
+    {
+      "section_order": 7,
+      "section_title": "The Adventure of the Blue Carbuncle",
+      "label": "directly_relevant",
+      "reason": "This story revolves entirely around the mystery of the blue carbuncle found inside a goose, and contains the culprit's confession detailing how he put it there."
+    }
+  ],
+  "retrieved_chunk_judgments": [
+    {
+      "rank": 1,
+      "chunk_uid": "g1661-s07-c0055",
+      "label": "supporting_context",
+      "supports_answer": true,
+      "reason": "Establishes that the gem was indeed found inside the goose and introduces Ryder's desperation to find the bird, but does not explain how the gem got inside."
+    },
+    {
+      "rank": 2,
+      "chunk_uid": "g1661-s07-c0005",
+      "label": "topically_related",
+      "supports_answer": false,
+      "reason": "Describes how Peterson the commissionaire acquired the goose during a street brawl, but does not explain how the stone got inside it."
+    },
+    {
+      "rank": 3,
+      "chunk_uid": "g1661-s07-c0029",
+      "label": "topically_related",
+      "supports_answer": false,
+      "reason": "Provides the background and sinister history of the blue carbuncle itself, without mentioning the goose."
+    },
+    {
+      "rank": 4,
+      "chunk_uid": "g1661-s07-c0008",
+      "label": "topically_related",
+      "supports_answer": false,
+      "reason": "Discusses Peterson bringing the goose and hat to Holmes, unrelated to how the stone was placed in the bird."
+    },
+    {
+      "rank": 5,
+      "chunk_uid": "g1661-s07-c0006",
+      "label": "topically_related",
+      "supports_answer": false,
+      "reason": "Continuation of the street brawl scene where Henry Baker drops the goose."
+    },
+    {
+      "rank": 6,
+      "chunk_uid": "g1661-s07-c0056",
+      "label": "supporting_context",
+      "supports_answer": true,
+      "reason": "Shows Holmes confronting Ryder with the stone that came from the goose, setting him up as the culprit, though still missing the exact method."
+    },
+    {
+      "rank": 7,
+      "chunk_uid": "g1661-s07-c0004",
+      "label": "topically_related",
+      "supports_answer": false,
+      "reason": "Introduces the arrival of the goose at Baker Street."
+    },
+    {
+      "rank": 8,
+      "chunk_uid": "g1661-s07-c0049",
+      "label": "supporting_context",
+      "supports_answer": true,
+      "reason": "Shows Ryder frantically tracking the geese to Covent Garden, which hints at his involvement, but doesn't explain the placement of the stone."
+    },
+    {
+      "rank": 9,
+      "chunk_uid": "g1661-s07-c0034",
+      "label": "topically_related",
+      "supports_answer": false,
+      "reason": "Holmes and Henry Baker discuss eating the original goose, which is irrelevant to the theft mechanism."
+    },
+    {
+      "rank": 10,
+      "chunk_uid": "g1661-s07-c0007",
+      "label": "topically_related",
+      "supports_answer": false,
+      "reason": "Further discussion of Peterson finding the hat and the goose on the street."
+    }
+  ],
+  "top_k_sufficiency": {
+    "top_1": false,
+    "top_3": false,
+    "top_5": false,
+    "top_10": false
+  },
+  "first_direct_evidence_rank": null,
+  "missing_evidence_within_candidate_stories": [
+    {
+      "section_order": 7,
+      "section_title": "The Adventure of the Blue Carbuncle",
+      "evidence_quote": "I caught it, and prying its bill open, I thrust the stone down its throat as far as my finger could reach. The bird gave a gulp, and I felt the stone pass along its gullet and down into its crop.",
+      "reason": "This quote is the exact confession from James Ryder detailing precisely how the blue carbuncle ended up inside the goose."
+    }
+  ],
+  "overall_assessment": {
+    "retrieval_quality": "poor",
+    "score_0_to_100": 20,
+    "summary": "The retrieval system fetched many passages discussing the discovery of the goose and the history of the gem, but completely failed to retrieve Ryder's confession at the end of the story, which explicitly explains how he shoved the gem down the goose's throat."
+  },
+  "confidence": 1.0
+}

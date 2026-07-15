@@ -1,0 +1,126 @@
+{
+  "schema_version": "1.0",
+  "question_id": "q002",
+  "question": "Why was Jabez Wilson paid unusually well to copy the Encyclopaedia Britannica?",
+  "question_interpretation": "Determine the true motive behind the Red-Headed League paying Jabez Wilson a high salary to perform a meaningless copying task.",
+  "reference_answer": "The job of copying the Encyclopaedia Britannica was a ruse designed to keep Jabez Wilson away from his pawnshop for several hours every day. This allowed criminals, including his assistant, to secretly dig a tunnel from his cellar into a neighboring bank vault.",
+  "candidate_story_judgments": [
+    {
+      "section_order": 1,
+      "section_title": "A Scandal in Bohemia",
+      "label": "irrelevant",
+      "reason": "This story does not feature Jabez Wilson, the Red-Headed League, or the encyclopedia copying task."
+    },
+    {
+      "section_order": 2,
+      "section_title": "The Red-Headed League",
+      "label": "directly_relevant",
+      "reason": "This is the source story for the question, containing the details of Jabez Wilson's employment and Holmes' explanation of the criminals' true motives."
+    },
+    {
+      "section_order": 7,
+      "section_title": "The Adventure of the Blue Carbuncle",
+      "label": "irrelevant",
+      "reason": "This story is about a stolen gem and a goose, and contains no information related to the question."
+    },
+    {
+      "section_order": 10,
+      "section_title": "The Adventure of the Noble Bachelor",
+      "label": "irrelevant",
+      "reason": "This story deals with a missing bride and is entirely unrelated to Jabez Wilson or the Red-Headed League."
+    }
+  ],
+  "retrieved_chunk_judgments": [
+    {
+      "rank": 1,
+      "chunk_uid": "g1661-s02-c0031",
+      "label": "topically_related",
+      "supports_answer": false,
+      "reason": "Discusses Wilson's high pay and the task of copying the encyclopedia, but does not reveal the reason behind it."
+    },
+    {
+      "rank": 2,
+      "chunk_uid": "g1661-s02-c0030",
+      "label": "topically_related",
+      "supports_answer": false,
+      "reason": "Describes the strict conditions of the copying job but lacks the underlying criminal motive."
+    },
+    {
+      "rank": 3,
+      "chunk_uid": "g1661-s01-c0030",
+      "label": "irrelevant",
+      "supports_answer": false,
+      "reason": "Discusses financial arrangements with the King of Bohemia in a different story."
+    },
+    {
+      "rank": 4,
+      "chunk_uid": "g1661-s02-c0032",
+      "label": "topically_related",
+      "supports_answer": false,
+      "reason": "Details Wilson's start of the copying work, but does not provide the criminals' true intent."
+    },
+    {
+      "rank": 5,
+      "chunk_uid": "g1661-s02-c0079",
+      "label": "supporting_context",
+      "supports_answer": true,
+      "reason": "Reveals that the 'League offices' were a ruse to control Wilson's presence while a tunnel was being completed, which partially answers the question."
+    },
+    {
+      "rank": 6,
+      "chunk_uid": "g1661-s02-c0010",
+      "label": "topically_related",
+      "supports_answer": false,
+      "reason": "Provides the advertisement showing the salary for nominal services, but not the reason."
+    },
+    {
+      "rank": 7,
+      "chunk_uid": "g1661-s07-c0021",
+      "label": "irrelevant",
+      "supports_answer": false,
+      "reason": "Discusses a reward for a lost jewel in a different story."
+    },
+    {
+      "rank": 8,
+      "chunk_uid": "g1661-s02-c0078",
+      "label": "supporting_context",
+      "supports_answer": true,
+      "reason": "Explains that the criminals were burrowing into a bank and that the League offices were used to get Wilson out of the way."
+    },
+    {
+      "rank": 9,
+      "chunk_uid": "g1661-s10-c0069",
+      "label": "irrelevant",
+      "supports_answer": false,
+      "reason": "Discusses hotel prices and an American gentleman in a different story."
+    },
+    {
+      "rank": 10,
+      "chunk_uid": "g1661-s02-c0012",
+      "label": "topically_related",
+      "supports_answer": false,
+      "reason": "Introduces Jabez Wilson and his pawnbroker business but provides no evidence regarding the copying job's motive."
+    }
+  ],
+  "top_k_sufficiency": {
+    "top_1": false,
+    "top_3": false,
+    "top_5": true,
+    "top_10": true
+  },
+  "first_direct_evidence_rank": null,
+  "missing_evidence_within_candidate_stories": [
+    {
+      "section_order": 2,
+      "section_title": "The Red-Headed League",
+      "evidence_quote": "“You see, Watson,” he explained in the early hours of the morning as we sat over a glass of whisky and soda in Baker Street, “it was perfectly obvious from the first that the only possible object of this rather fantastic business of the advertisement of the League, and the copying of the Encyclopædia, must be to get this not over-bright pawnbroker out of the way for a number of hours every day.”",
+      "reason": "This quote provides the explicit and direct answer to the question, specifically linking the bizarre copying task directly to the motive of getting Wilson out of his shop."
+    }
+  ],
+  "overall_assessment": {
+    "retrieval_quality": "mixed",
+    "score_0_to_100": 60,
+    "summary": "The system successfully retrieved chunks related to the copying task and the high salary, as well as separate chunks revealing the tunnel plot. However, it failed to retrieve any direct evidence that explicitly bridges the two concepts, missing Holmes's conclusive summary that directly answers the specific question."
+  },
+  "confidence": 1.0
+}

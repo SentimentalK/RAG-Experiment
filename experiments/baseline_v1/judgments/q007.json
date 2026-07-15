@@ -1,0 +1,125 @@
+{
+  "schema_version": "1.0",
+  "question_id": "q007",
+  "question": "What was the \"speckled band\" that caused Julia Stoner's death?",
+  "question_interpretation": "Identify the true nature of the \"speckled band\" referred to by the dying Julia Stoner.",
+  "reference_answer": "The \"speckled band\" was actually a swamp adder, described as the deadliest snake in India, which Dr. Grimesby Roylott used to murder his stepdaughter.",
+  "candidate_story_judgments": [
+    {
+      "section_order": 2,
+      "section_title": "The Red-Headed League",
+      "label": "irrelevant",
+      "reason": "Does not contain characters or events related to the speckled band."
+    },
+    {
+      "section_order": 4,
+      "section_title": "The Boscombe Valley Mystery",
+      "label": "irrelevant",
+      "reason": "A completely different mystery not involving Julia Stoner."
+    },
+    {
+      "section_order": 5,
+      "section_title": "The Five Orange Pips",
+      "label": "irrelevant",
+      "reason": "Unrelated story about the K.K.K."
+    },
+    {
+      "section_order": 7,
+      "section_title": "The Adventure of the Blue Carbuncle",
+      "label": "irrelevant",
+      "reason": "Unrelated story involving a stolen gem."
+    },
+    {
+      "section_order": 8,
+      "section_title": "The Adventure of the Speckled Band",
+      "label": "directly_relevant",
+      "reason": "This is the story in which Julia Stoner's death and the \"speckled band\" occur."
+    }
+  ],
+  "retrieved_chunk_judgments": [
+    {
+      "rank": 1,
+      "chunk_uid": "g1661-s08-c0028",
+      "label": "topically_related",
+      "supports_answer": false,
+      "reason": "Discusses early, incorrect theories about the \"speckled band\" (delirium or a band of gypsies) but does not reveal what it actually is."
+    },
+    {
+      "rank": 2,
+      "chunk_uid": "g1661-s08-c0036",
+      "label": "topically_related",
+      "supports_answer": false,
+      "reason": "Continues discussing the false theory linking the dying allusion to a \"band\" of gypsies."
+    },
+    {
+      "rank": 3,
+      "chunk_uid": "g1661-s08-c0025",
+      "label": "topically_related",
+      "supports_answer": false,
+      "reason": "Recounts Julia Stoner's dying words exclaiming, \"It was the band! The speckled band!\" but leaves the mystery unresolved."
+    },
+    {
+      "rank": 4,
+      "chunk_uid": "g1661-s08-c0077",
+      "label": "direct_evidence",
+      "supports_answer": true,
+      "reason": "Directly reveals that the \"speckled band\" is a swamp adder, the deadliest snake in India."
+    },
+    {
+      "rank": 5,
+      "chunk_uid": "g1661-s08-c0026",
+      "label": "topically_related",
+      "supports_answer": false,
+      "reason": "Discusses the coroner's inquiry into the death without revealing the cause."
+    },
+    {
+      "rank": 6,
+      "chunk_uid": "g1661-s07-c0028",
+      "label": "irrelevant",
+      "supports_answer": false,
+      "reason": "From 'The Blue Carbuncle'; discusses the blue stone and its history."
+    },
+    {
+      "rank": 7,
+      "chunk_uid": "g1661-s02-c0069",
+      "label": "irrelevant",
+      "supports_answer": false,
+      "reason": "From 'The Red-Headed League'; describes breaking into a bank vault."
+    },
+    {
+      "rank": 8,
+      "chunk_uid": "g1661-s08-c0083",
+      "label": "supporting_context",
+      "supports_answer": true,
+      "reason": "Explains how Holmes deduced the creature's path and drove it back through the ventilator, supporting the method of the attack."
+    },
+    {
+      "rank": 9,
+      "chunk_uid": "g1661-s08-c0013",
+      "label": "irrelevant",
+      "supports_answer": false,
+      "reason": "Provides background on Dr. Roylott's time in India and his marriage, but does not address the speckled band or the method of murder."
+    },
+    {
+      "rank": 10,
+      "chunk_uid": "g1661-s08-c0059",
+      "label": "irrelevant",
+      "supports_answer": false,
+      "reason": "A philosophical comment from Holmes about clever men turning to crime; does not answer the question."
+    }
+  ],
+  "top_k_sufficiency": {
+    "top_1": false,
+    "top_3": false,
+    "top_5": true,
+    "top_10": true
+  },
+  "first_direct_evidence_rank": 4,
+  "missing_evidence_within_candidate_stories": [],
+  "overall_assessment": {
+    "retrieval_quality": "good",
+    "score_0_to_100": 80,
+    "summary": "The system successfully retrieved the exact answer at rank 4. The earlier ranks matched the literal text of the question (the victim's quote and the early false theories) due to keyword overlap, demonstrating typical semantic search behavior prioritizing exact phrase matches over the final narrative resolution, but it still provided the necessary evidence within the top 5."
+  },
+  "confidence": 1.0
+}
