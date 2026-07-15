@@ -1,0 +1,127 @@
+{
+  "status": "success",
+  "question": "Why did Sherlock Holmes remember Irene Adler?",
+  "document_id": "gutenberg-1661",
+  "model_name": "sentence-transformers/all-MiniLM-L6-v2",
+  "search_mode": "exact_cosine",
+  "query_token_count": 10,
+  "query_dimensions": 384,
+  "query_vector_norm": 1.0,
+  "embedding_duration_ms": 39.805456006433815,
+  "database_duration_ms": 6.99059700127691,
+  "top_k": 10,
+  "available_chunk_count": 909,
+  "available_embedding_count": 909,
+  "results": [
+    {
+      "rank": 1,
+      "chunk_uid": "g1661-s01-c0002",
+      "section_order": 1,
+      "section_title": "A Scandal in Bohemia",
+      "chunk_order": 2,
+      "token_count": 212,
+      "cosine_distance": 0.3223960611348079,
+      "cosine_similarity": 0.6776039388651921,
+      "chunk_text": "But for the trained reasoner to\nadmit such intrusions into his own delicate and finely adjusted temperament was\nto introduce a distracting factor which might throw a doubt upon all his mental\nresults. Grit in a sensitive instrument, or a crack in one of his own\nhigh-power lenses, would not be more disturbing than a strong emotion in a\nnature such as his. And yet there was but one woman to him, and that woman was\nthe late Irene Adler, of dubious and questionable memory. I had seen little of Holmes lately. My marriage had drifted us away from each\nother. My own complete happiness, and the home-centred interests which rise up\naround the man who first finds himself master of his own establishment, were\nsufficient to absorb all my attention, while Holmes, who loathed every form of\nsociety with his whole Bohemian soul, remained in our lodgings in Baker Street,\nburied among his old books, and alternating from week to week between cocaine\nand ambition, the drowsiness of the drug, and the fierce energy of his own keen\nnature."
+    },
+    {
+      "rank": 2,
+      "chunk_uid": "g1661-s01-c0071",
+      "section_order": 1,
+      "section_title": "A Scandal in Bohemia",
+      "chunk_order": 71,
+      "token_count": 189,
+      "cosine_distance": 0.33358405032252847,
+      "cosine_similarity": 0.6664159496774715,
+      "chunk_text": "The photograph was of Irene Adler herself in\nevening dress, the letter was superscribed to “Sherlock Holmes, Esq. To\nbe left till called for.” My friend tore it open, and we all three read\nit together. It was dated at midnight of the preceding night and ran in this\nway: “MY DEAR MR. SHERLOCK HOLMES,—You really did it very well. You took\nme in completely. Until after the alarm of fire, I had not a suspicion. But\nthen, when I found how I had betrayed myself, I began to think. I had been\nwarned against you months ago. I had been told that, if the King employed an\nagent, it would certainly be you. And your address had been given me. Yet, with\nall this, you made me reveal what you wanted to know. Even after I became\nsuspicious, I found it hard to think evil of such a dear, kind old clergyman."
+    },
+    {
+      "rank": 3,
+      "chunk_uid": "g1661-s01-c0001",
+      "section_order": 1,
+      "section_title": "A Scandal in Bohemia",
+      "chunk_order": 1,
+      "token_count": 191,
+      "cosine_distance": 0.3505056678646007,
+      "cosine_similarity": 0.6494943321353993,
+      "chunk_text": "I. To Sherlock Holmes she\nis always the woman. I have seldom heard him mention her under any other\nname. In his eyes she eclipses and predominates the whole of her sex. It was\nnot that he felt any emotion akin to love for Irene Adler. All emotions, and\nthat one particularly, were abhorrent to his cold, precise but admirably\nbalanced mind. He was, I take it, the most perfect reasoning and observing\nmachine that the world has seen, but as a lover he would have placed himself in\na false position. He never spoke of the softer passions, save with a gibe and a\nsneer. They were admirable things for the observer—excellent for drawing\nthe veil from men’s motives and actions. But for the trained reasoner to\nadmit such intrusions into his own delicate and finely adjusted temperament was\nto introduce a distracting factor which might throw a doubt upon all his mental\nresults."
+    },
+    {
+      "rank": 4,
+      "chunk_uid": "g1661-s01-c0024",
+      "section_order": 1,
+      "section_title": "A Scandal in Bohemia",
+      "chunk_order": 24,
+      "token_count": 208,
+      "cosine_distance": 0.3679250259444091,
+      "cosine_similarity": 0.6320749740555909,
+      "chunk_text": "“But you can understand,” said our strange visitor, sitting down\nonce more and passing his hand over his high white forehead, “you can\nunderstand that I am not accustomed to doing such business in my own person. Yet the matter was so delicate that I could not confide it to an agent without\nputting myself in his power. I have come incognito from Prague for the\npurpose of consulting you.” “Then, pray consult,” said Holmes, shutting his eyes once more. “The facts are briefly these: Some five years ago, during a lengthy visit\nto Warsaw, I made the acquaintance of the well-known adventuress, Irene Adler. The name is no doubt familiar to you.” “Kindly look her up in my index, Doctor,” murmured Holmes without\nopening his eyes. For many years he had adopted a system of docketing all\nparagraphs concerning men and things, so that it was difficult to name a\nsubject or a person on which he could not at once furnish information."
+    },
+    {
+      "rank": 5,
+      "chunk_uid": "g1661-s01-c0070",
+      "section_order": 1,
+      "section_title": "A Scandal in Bohemia",
+      "chunk_order": 70,
+      "token_count": 184,
+      "cosine_distance": 0.38065709106241574,
+      "cosine_similarity": 0.6193429089375843,
+      "chunk_text": "“Do you mean that she has left England?” “Never to return.” “And the papers?” asked the King hoarsely. “All is\nlost.” “We shall see.” He pushed past the servant and rushed into the\ndrawing-room, followed by the King and myself. The furniture was scattered\nabout in every direction, with dismantled shelves and open drawers, as if the\nlady had hurriedly ransacked them before her flight. Holmes rushed at the\nbell-pull, tore back a small sliding shutter, and, plunging in his hand, pulled\nout a photograph and a letter. The photograph was of Irene Adler herself in\nevening dress, the letter was superscribed to “Sherlock Holmes, Esq. To\nbe left till called for.” My friend tore it open, and we all three read\nit together. It was dated at midnight of the preceding night and ran in this\nway:"
+    },
+    {
+      "rank": 6,
+      "chunk_uid": "g1661-s01-c0073",
+      "section_order": 1,
+      "section_title": "A Scandal in Bohemia",
+      "chunk_order": 73,
+      "token_count": 184,
+      "cosine_distance": 0.40237553091340894,
+      "cosine_similarity": 0.5976244690865911,
+      "chunk_text": "“We both thought the best resource was flight, when pursued by\nso formidable an antagonist; so you will find the nest empty when you call\nto-morrow. As to the photograph, your client may rest in peace. I love and am\nloved by a better man than he. The King may do what he will without hindrance\nfrom one whom he has cruelly wronged. I keep it only to safeguard myself, and\nto preserve a weapon which will always secure me from any steps which he might\ntake in the future. I leave a photograph which he might care to possess; and I\nremain, dear Mr. Sherlock Holmes, “Very truly yours,\n“IRENE NORTON, née ADLER.” “What a woman—oh, what a woman!” cried the King of Bohemia,\nwhen we had all three read this epistle. “Did I not tell you how quick\nand resolute she was?"
+    },
+    {
+      "rank": 7,
+      "chunk_uid": "g1661-s01-c0076",
+      "section_order": 1,
+      "section_title": "A Scandal in Bohemia",
+      "chunk_order": 76,
+      "token_count": 129,
+      "cosine_distance": 0.40727541403320844,
+      "cosine_similarity": 0.5927245859667916,
+      "chunk_text": "I\nhave the honour to wish you a very good morning.” He bowed, and, turning\naway without observing the hand which the King had stretched out to him, he set\noff in my company for his chambers. And that was how a great scandal threatened to affect the kingdom of Bohemia,\nand how the best plans of Mr. Sherlock Holmes were beaten by a woman’s\nwit. He used to make merry over the cleverness of women, but I have not heard\nhim do it of late. And when he speaks of Irene Adler, or when he refers to her\nphotograph, it is always under the honourable title of the woman."
+    },
+    {
+      "rank": 8,
+      "chunk_uid": "g1661-s01-c0057",
+      "section_order": 1,
+      "section_title": "A Scandal in Bohemia",
+      "chunk_order": 57,
+      "token_count": 180,
+      "cosine_distance": 0.43791503454267566,
+      "cosine_similarity": 0.5620849654573243,
+      "chunk_text": "A blow was struck, and in an instant the lady, who had stepped from her\ncarriage, was the centre of a little knot of flushed and struggling men, who\nstruck savagely at each other with their fists and sticks. Holmes dashed into\nthe crowd to protect the lady; but, just as he reached her, he gave a cry and\ndropped to the ground, with the blood running freely down his face. At his fall\nthe guardsmen took to their heels in one direction and the loungers in the\nother, while a number of better dressed people, who had watched the scuffle\nwithout taking part in it, crowded in to help the lady and to attend to the\ninjured man. Irene Adler, as I will still call her, had hurried up the steps;\nbut she stood at the top with her superb figure outlined against the lights of\nthe hall, looking back into the street."
+    },
+    {
+      "rank": 9,
+      "chunk_uid": "g1661-s01-c0005",
+      "section_order": 1,
+      "section_title": "A Scandal in Bohemia",
+      "chunk_order": 5,
+      "token_count": 180,
+      "cosine_distance": 0.4395192599583103,
+      "cosine_similarity": 0.5604807400416897,
+      "chunk_text": "As I passed the well-remembered door, which\nmust always be associated in my mind with my wooing, and with the dark\nincidents of the Study in Scarlet, I was seized with a keen desire to see\nHolmes again, and to know how he was employing his extraordinary powers. His\nrooms were brilliantly lit, and, even as I looked up, I saw his tall, spare\nfigure pass twice in a dark silhouette against the blind. He was pacing the\nroom swiftly, eagerly, with his head sunk upon his chest and his hands clasped\nbehind him. To me, who knew his every mood and habit, his attitude and manner\ntold their own story. He was at work again. He had risen out of his\ndrug-created dreams and was hot upon the scent of some new problem. I rang the\nbell and was shown up to the chamber which had formerly been in part my own."
+    },
+    {
+      "rank": 10,
+      "chunk_uid": "g1661-s01-c0058",
+      "section_order": 1,
+      "section_title": "A Scandal in Bohemia",
+      "chunk_order": 58,
+      "token_count": 182,
+      "cosine_distance": 0.43990017652808866,
+      "cosine_similarity": 0.5600998234719113,
+      "chunk_text": "Irene Adler, as I will still call her, had hurried up the steps;\nbut she stood at the top with her superb figure outlined against the lights of\nthe hall, looking back into the street. “Is the poor gentleman much hurt?” she asked. “He is dead,” cried several voices. “No, no, there’s life in him!” shouted another. “But\nhe’ll be gone before you can get him to hospital.” “He’s a brave fellow,” said a woman. “They would have\nhad the lady’s purse and watch if it hadn’t been for him. They were\na gang, and a rough one, too. Ah, he’s breathing now.” “He can’t lie in the street. May we bring him in, marm?” “Surely. Bring him into the sitting-room."
+    }
+  ]
+}

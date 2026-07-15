@@ -11,7 +11,7 @@ def clean_database():
     def _clear():
         with get_connection() as conn:
             with conn.cursor() as cur:
-                cur.execute("DELETE FROM documents;")
+                cur.execute("DELETE FROM documents WHERE document_id LIKE 'test-%' OR document_id LIKE 'doc-%';")
             conn.commit()
     _clear()
     yield
