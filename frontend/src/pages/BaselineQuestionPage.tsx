@@ -6,7 +6,8 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { AlertCircle, Clock, FileText, ChevronRight } from "lucide-react";
+import { AlertCircle, Clock, FileText, ChevronRight, HelpCircle } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import type { EvaluatedChunk } from "@/types/evaluation";
 
@@ -89,22 +90,30 @@ export default function BaselineQuestionPage() {
           </p>
           
           <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="flex flex-col">
-              <span className="text-xs text-muted-foreground">Hit @1</span>
-              <span className="font-semibold text-lg">{question.computed_metrics.direct_hit_at_1 ? 'Yes' : 'No'}</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xs text-muted-foreground">Reciprocal Rank</span>
-              <span className="font-semibold text-lg">{question.computed_metrics.reciprocal_rank.toFixed(3)}</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xs text-muted-foreground">Noise @10</span>
-              <span className="font-semibold text-lg">{(question.computed_metrics.noise_rate_at_10 * 100).toFixed(0)}%</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xs text-muted-foreground">Judge Score</span>
-              <span className="font-semibold text-lg">{question.judge_assessment.score_0_to_100}/100</span>
-            </div>
+            <TooltipProvider>
+              <MetricItem
+                label="Hit @1"
+                value={question.computed_metrics.direct_hit_at_1 ? 'Yes' : 'No'}
+                valueClass={question.computed_metrics.direct_hit_at_1 ? 'text-green-600 dark:text-green-400' : 'text-muted-foreground'}
+                tooltip="Whether the top 1 retrieved result directly answers the question. Yes = precise hit; No = top result is not the most relevant. Target is Yes."
+              />
+              <MetricItem
+                label="Reciprocal Rank"
+                value={question.computed_metrics.reciprocal_rank.toFixed(3)}
+                tooltip="The reciprocal of the rank of the first 'directly relevant' result. E.g., rank 1 → 1.000, rank 5 → 0.200, rank 9 → 0.111. Higher is better, max is 1.000."
+              />
+              <MetricItem
+                label="Noise @10"
+                value={(question.computed_metrics.noise_rate_at_10 * 100).toFixed(0) + '%'}
+                valueClass={question.computed_metrics.noise_rate_at_10 > 0.6 ? 'text-red-500 dark:text-red-400' : question.computed_metrics.noise_rate_at_10 > 0.3 ? 'text-amber-500' : 'text-green-600 dark:text-green-400'}
+                tooltip="The proportion of irrelevant/noisy chunks in the top 10 retrieved results. E.g., 80% means 8 out of 10 chunks are not useful. Lower is better, ideal is 0%."
+              />
+              <MetricItem
+                label="Judge Score"
+                value={question.judge_assessment.score_0_to_100 + '/100'}
+                tooltip="The score comprehensively evaluated by the AI Judge on whether the retrieved results can sufficiently answer the question. Higher is better, max is 100."
+              />
+            </TooltipProvider>
           </div>
         </CardContent>
       </Card>
@@ -124,17 +133,25 @@ export default function BaselineQuestionPage() {
 function ChunkCard({ chunk }: { chunk: EvaluatedChunk }) {
   const getLabelColor = (label: string) => {
     switch (label) {
-      case "DIRECTLY_ANSWERS": return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 border-green-200 dark:border-green-800";
-      case "RELATED_BUT_INSUFFICIENT": return "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400 border-amber-200 dark:border-amber-800";
-      default: return "bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-400 border-slate-200 dark:border-slate-700";
+      case "direct_evidence":
+      case "directly_relevant":
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 border-green-200 dark:border-green-800";
+      case "topically_related":
+      case "supporting_context":
+        return "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400 border-amber-200 dark:border-amber-800";
+      default:
+        return "bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-400 border-slate-200 dark:border-slate-700";
     }
   };
 
   const getLabelText = (label: string) => {
     switch (label) {
-      case "DIRECTLY_ANSWERS": return "Directly Answers";
-      case "RELATED_BUT_INSUFFICIENT": return "Related";
-      default: return "Not Relevant";
+      case "direct_evidence": return "Direct Evidence";
+      case "directly_relevant": return "Directly Relevant";
+      case "topically_related": return "Topically Related";
+      case "supporting_context": return "Supporting Context";
+      case "irrelevant": return "Irrelevant";
+      default: return label;
     }
   };
 
@@ -190,5 +207,36 @@ function ChunkCard({ chunk }: { chunk: EvaluatedChunk }) {
         </Accordion>
       </CardContent>
     </Card>
+  );
+}
+
+function MetricItem({
+  label,
+  value,
+  tooltip,
+  valueClass,
+}: {
+  label: string;
+  value: string;
+  tooltip: string;
+  valueClass?: string;
+}) {
+  return (
+    <div className="flex flex-col">
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <span className="text-xs text-muted-foreground flex items-center gap-1 cursor-help w-fit" />
+          }
+        >
+          {label}
+          <HelpCircle className="h-3 w-3 opacity-50" />
+        </TooltipTrigger>
+        <TooltipContent side="top" className="max-w-[220px] text-xs leading-relaxed">
+          {tooltip}
+        </TooltipContent>
+      </Tooltip>
+      <span className={`font-semibold text-lg ${valueClass ?? ""}`}>{value}</span>
+    </div>
   );
 }
