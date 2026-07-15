@@ -54,6 +54,14 @@
         "step_id": "evaluation",
         "name": "LLM-Assisted Retrieval Evaluation",
         "status": "completed"
+      },
+      {
+        "step_id": "rag_generation",
+        "name": "RAG Answer Generation",
+        "status": "completed",
+        "model": "openai/gpt-oss-120b",
+        "question_count": 8,
+        "prompt_version": "rag-grounded-v1"
       }
     ]
   },
@@ -8584,6 +8592,43 @@
           "contradictory": 0
         },
         "noise_rate_at_10": 0.7
+      },
+      "rag_answer": {
+        "generation_id": "6bcedf0fc1c04524a52e21eee644374a",
+        "prompt_version": "rag-grounded-v1",
+        "model_name": "openai/gpt-oss-120b",
+        "answer": "The woman Holmes always remembered was Irene Adler.",
+        "evidence_sufficient": true,
+        "citations": [
+          {
+            "chunk_uid": "g1661-s01-c0001",
+            "reason": "States that to Sherlock Holmes she is always \"the woman\" and refers to Irene Adler."
+          },
+          {
+            "chunk_uid": "g1661-s01-c0002",
+            "reason": "Mentions that the one woman to him was the late Irene Adler."
+          }
+        ],
+        "confidence": 0.97,
+        "generation_duration_ms": 777.4275359988678,
+        "attempt_count": 1,
+        "usage": {
+          "prompt_tokens": 2737,
+          "completion_tokens": 171,
+          "total_tokens": 2908
+        },
+        "context_chunk_uids": [
+          "g1661-s01-c0001",
+          "g1661-s01-c0069",
+          "g1661-s04-c0030",
+          "g1661-s08-c0018",
+          "g1661-s01-c0002",
+          "g1661-s01-c0073",
+          "g1661-s08-c0035",
+          "g1661-s06-c0053",
+          "g1661-s09-c0013",
+          "g1661-s01-c0076"
+        ]
       }
     },
     {
@@ -8832,6 +8877,43 @@
           "contradictory": 0
         },
         "noise_rate_at_10": 0.8
+      },
+      "rag_answer": {
+        "generation_id": "6bcedf0fc1c04524a52e21eee644374a",
+        "prompt_version": "rag-grounded-v1",
+        "model_name": "openai/gpt-oss-120b",
+        "answer": "Jabez Wilson was offered an unusually high wage because the scheme’s organizers needed to keep him occupied for a long period; they were willing to pay a large sum for the simple task of copying the Encyclopaedia Britannica to ensure he would stay away from his shop while they carried out their hidden work.",
+        "evidence_sufficient": true,
+        "citations": [
+          {
+            "chunk_uid": "g1661-s02-c0031",
+            "reason": "Expresses disbelief that anyone would pay such a sum for a simple copying task, implying the high pay was part of a larger scheme."
+          },
+          {
+            "chunk_uid": "g1661-s02-c0032",
+            "reason": "Notes the extraordinary sum paid for the simple work, supporting the idea that the payment was unusually large."
+          }
+        ],
+        "confidence": 0.92,
+        "generation_duration_ms": 866.9335020240396,
+        "attempt_count": 1,
+        "usage": {
+          "prompt_tokens": 2782,
+          "completion_tokens": 254,
+          "total_tokens": 3036
+        },
+        "context_chunk_uids": [
+          "g1661-s02-c0031",
+          "g1661-s02-c0030",
+          "g1661-s01-c0030",
+          "g1661-s02-c0032",
+          "g1661-s02-c0079",
+          "g1661-s02-c0010",
+          "g1661-s07-c0021",
+          "g1661-s02-c0078",
+          "g1661-s10-c0069",
+          "g1661-s02-c0012"
+        ]
       }
     },
     {
@@ -9065,6 +9147,47 @@
           "contradictory": 0
         },
         "noise_rate_at_10": 0.8
+      },
+      "rag_answer": {
+        "generation_id": "6bcedf0fc1c04524a52e21eee644374a",
+        "prompt_version": "rag-grounded-v1",
+        "model_name": "openai/gpt-oss-120b",
+        "answer": "Hosmer Angel was actually the young woman's stepfather, Mr. Windibank, who, with his wife's assistance, disguised himself with tinted glasses, a moustache, bushy whiskers and a whispering voice to pose as a gentleman. He vanished because the disguise was a scheme to keep the girl from marrying and to serve the stepfather’s own interests; once the ruse was uncovered, the stepfather withdrew and the ‘Angel’ disappeared.",
+        "evidence_sufficient": true,
+        "citations": [
+          {
+            "chunk_uid": "g1661-s03-c0060",
+            "reason": "States that the only person who profited from the incident was the stepfather, implying he was Hosmer Angel."
+          },
+          {
+            "chunk_uid": "g1661-s03-c0055",
+            "reason": "Describes the stepfather and his wife disguising him with glasses, moustache, whiskers, and altered voice to appear as Mr. Hosmer Angel."
+          },
+          {
+            "chunk_uid": "g1661-s03-c0023",
+            "reason": "Provides details of the disguise (tinted glasses, weak voice, whiskers) that match the description of Hosmer Angel."
+          }
+        ],
+        "confidence": 0.94,
+        "generation_duration_ms": 2217.905797995627,
+        "attempt_count": 2,
+        "usage": {
+          "prompt_tokens": 3118,
+          "completion_tokens": 320,
+          "total_tokens": 3438
+        },
+        "context_chunk_uids": [
+          "g1661-s03-c0030",
+          "g1661-s03-c0029",
+          "g1661-s03-c0020",
+          "g1661-s03-c0060",
+          "g1661-s03-c0023",
+          "g1661-s03-c0038",
+          "g1661-s03-c0026",
+          "g1661-s03-c0028",
+          "g1661-s03-c0055",
+          "g1661-s03-c0047"
+        ]
       }
     },
     {
@@ -9319,6 +9442,43 @@
           "contradictory": 0
         },
         "noise_rate_at_10": 0.5
+      },
+      "rag_answer": {
+        "generation_id": "6bcedf0fc1c04524a52e21eee644374a",
+        "prompt_version": "rag-grounded-v1",
+        "model_name": "openai/gpt-oss-120b",
+        "answer": "The five dried orange seeds were a warning sign used by the criminal gang that had murdered John Openshaw’s uncle. They were sent in a letter to signal that the gang was aware of the victim and that further danger was imminent.",
+        "evidence_sufficient": true,
+        "citations": [
+          {
+            "chunk_uid": "g1661-s05-c0060",
+            "reason": "Describes the five orange pips being placed in an envelope as a precursor of the recipient’s fate, indicating they are a warning from the gang."
+          },
+          {
+            "chunk_uid": "g1661-s05-c0034",
+            "reason": "Mentions the pips as part of the evidence related to the murder of John Openshaw, linking them to the gang’s actions."
+          }
+        ],
+        "confidence": 0.92,
+        "generation_duration_ms": 951.1235349928029,
+        "attempt_count": 1,
+        "usage": {
+          "prompt_tokens": 2755,
+          "completion_tokens": 241,
+          "total_tokens": 2996
+        },
+        "context_chunk_uids": [
+          "g1661-s05-c0015",
+          "g1661-s05-c0034",
+          "g1661-s05-c0063",
+          "g1661-s05-c0035",
+          "g1661-s02-c0022",
+          "g1661-s05-c0060",
+          "g1661-s07-c0007",
+          "g1661-s04-c0074",
+          "g1661-s05-c0017",
+          "g1661-s05-c0025"
+        ]
       }
     },
     {
@@ -9553,6 +9713,43 @@
           "contradictory": 0
         },
         "noise_rate_at_10": 1.0
+      },
+      "rag_answer": {
+        "generation_id": "6bcedf0fc1c04524a52e21eee644374a",
+        "prompt_version": "rag-grounded-v1",
+        "model_name": "openai/gpt-oss-120b",
+        "answer": "The provided excerpts do not explain why Neville St. Clair chose to live part of his life as the beggar Hugh Boone.",
+        "evidence_sufficient": false,
+        "citations": [
+          {
+            "chunk_uid": "g1661-s06-c0032",
+            "reason": "Mentions Hugh Boone as a professional beggar and Neville St. Clair's lodger, but gives no reason for Neville adopting that identity."
+          },
+          {
+            "chunk_uid": "g1661-s06-c0041",
+            "reason": "Notes Boone's background as a professional beggar and his connection to Neville St. Clair, but does not explain Neville's motive."
+          }
+        ],
+        "confidence": 0.9,
+        "generation_duration_ms": 816.6825470107142,
+        "attempt_count": 1,
+        "usage": {
+          "prompt_tokens": 2909,
+          "completion_tokens": 236,
+          "total_tokens": 3145
+        },
+        "context_chunk_uids": [
+          "g1661-s06-c0032",
+          "g1661-s06-c0041",
+          "g1661-s06-c0023",
+          "g1661-s06-c0024",
+          "g1661-s06-c0030",
+          "g1661-s06-c0022",
+          "g1661-s05-c0013",
+          "g1661-s06-c0068",
+          "g1661-s06-c0035",
+          "g1661-s06-c0017"
+        ]
       }
     },
     {
@@ -9780,6 +9977,43 @@
           "contradictory": 0
         },
         "noise_rate_at_10": 0.7
+      },
+      "rag_answer": {
+        "generation_id": "6bcedf0fc1c04524a52e21eee644374a",
+        "prompt_version": "rag-grounded-v1",
+        "model_name": "openai/gpt-oss-120b",
+        "answer": "The thief who stole the blue carbuncle concealed the jewel inside a plump Christmas goose he was carrying. When the thief was attacked by a gang of roughs, he dropped the goose and fled, leaving the bird (with the hidden carbuncle) to be found by the commissionaire, Peterson, on Christmas morning.",
+        "evidence_sufficient": true,
+        "citations": [
+          {
+            "chunk_uid": "g1661-s07-c0005",
+            "reason": "Describes the thief arriving on Christmas morning carrying a goose that later became the focus of the investigation."
+          },
+          {
+            "chunk_uid": "g1661-s07-c0006",
+            "reason": "Explains that the thief dropped the goose after his hat was knocked off during the scuffle, leaving the goose (containing the carbuncle) behind."
+          }
+        ],
+        "confidence": 0.92,
+        "generation_duration_ms": 960.6688980129547,
+        "attempt_count": 1,
+        "usage": {
+          "prompt_tokens": 2743,
+          "completion_tokens": 302,
+          "total_tokens": 3045
+        },
+        "context_chunk_uids": [
+          "g1661-s07-c0055",
+          "g1661-s07-c0005",
+          "g1661-s07-c0029",
+          "g1661-s07-c0008",
+          "g1661-s07-c0006",
+          "g1661-s07-c0056",
+          "g1661-s07-c0004",
+          "g1661-s07-c0049",
+          "g1661-s07-c0034",
+          "g1661-s07-c0007"
+        ]
       }
     },
     {
@@ -10014,6 +10248,39 @@
           "contradictory": 0
         },
         "noise_rate_at_10": 0.8
+      },
+      "rag_answer": {
+        "generation_id": "6bcedf0fc1c04524a52e21eee644374a",
+        "prompt_version": "rag-grounded-v1",
+        "model_name": "openai/gpt-oss-120b",
+        "answer": "The “speckled band” was a swamp adder – a deadly Indian snake whose bite killed Julia Stoner.",
+        "evidence_sufficient": true,
+        "citations": [
+          {
+            "chunk_uid": "g1661-s08-c0077",
+            "reason": "Describes the speckled band as a swamp adder, a venomous snake that caused death."
+          }
+        ],
+        "confidence": 0.97,
+        "generation_duration_ms": 902.0008639781736,
+        "attempt_count": 1,
+        "usage": {
+          "prompt_tokens": 2837,
+          "completion_tokens": 177,
+          "total_tokens": 3014
+        },
+        "context_chunk_uids": [
+          "g1661-s08-c0028",
+          "g1661-s08-c0036",
+          "g1661-s08-c0025",
+          "g1661-s08-c0077",
+          "g1661-s08-c0026",
+          "g1661-s07-c0028",
+          "g1661-s02-c0069",
+          "g1661-s08-c0083",
+          "g1661-s08-c0013",
+          "g1661-s08-c0059"
+        ]
       }
     },
     {
@@ -10283,6 +10550,43 @@
           "contradictory": 0
         },
         "noise_rate_at_10": 0.6
+      },
+      "rag_answer": {
+        "generation_id": "6bcedf0fc1c04524a52e21eee644374a",
+        "prompt_version": "rag-grounded-v1",
+        "model_name": "openai/gpt-oss-120b",
+        "answer": "The Red‑Headed League case involved a suspiciously generous offer of £4 a week. The high pay was a lure to get the victim, Jabez Wilson, to work in the league’s office each morning so that the criminals could keep him absent while they dug a tunnel beneath his shop.",
+        "evidence_sufficient": false,
+        "citations": [
+          {
+            "chunk_uid": "g1661-s02-c0075",
+            "reason": "Describes the £4 a week as a lure to draw the victim and the criminals’ motive of securing his absence."
+          },
+          {
+            "chunk_uid": "g1661-s02-c0076",
+            "reason": "Explains that the criminals needed the victim’s absence to work on a tunnel in the cellar."
+          }
+        ],
+        "confidence": 0.85,
+        "generation_duration_ms": 2545.1239550020546,
+        "attempt_count": 1,
+        "usage": {
+          "prompt_tokens": 2851,
+          "completion_tokens": 277,
+          "total_tokens": 3128
+        },
+        "context_chunk_uids": [
+          "g1661-s02-c0075",
+          "g1661-s06-c0073",
+          "g1661-s02-c0028",
+          "g1661-s02-c0040",
+          "g1661-s02-c0076",
+          "g1661-s03-c0061",
+          "g1661-s10-c0003",
+          "g1661-s07-c0040",
+          "g1661-s12-c0011",
+          "g1661-s11-c0040"
+        ]
       }
     }
   ],
@@ -10301,6 +10605,7 @@
       "q006": "9098d3981f7be8f5b6951863d3fb4416612792e487ef7cbce0c2c5c6930702df",
       "q007": "74203bbebb8f3832c6a67f4a376fc8d00e8d0c6dea4b673848df9c4dc1cb78c6",
       "q008": "36a06822c7d79f85845fbca22612302693c07527547eaabe697787371704da7c"
-    }
+    },
+    "rag_answers_sha256": "527dad5f8648b32d85f7f57fc4c3ca915565b6c1167a5c44a571a31a87b8e86e"
   }
 }

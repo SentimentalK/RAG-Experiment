@@ -89,6 +89,12 @@ def main():
         default=settings.DATA_DIR / "artifacts" / "embedding_ingestion_report.json",
         help="Path to embedding_ingestion_report.json"
     )
+    parser.add_argument(
+        "--rag-answers",
+        type=Path,
+        default=settings.DATA_DIR.parent / "experiments" / "baseline_v1" / "rag_answers.json",
+        help="Path to rag_answers.json (optional)"
+    )
 
     args = parser.parse_args()
 
@@ -239,8 +245,15 @@ def main():
     if staging_dir.exists():
         shutil.rmtree(staging_dir)
     staging_dir.mkdir(parents=True)
-
     try:
+        # Check and load RAG answers
+        rag_answers = None
+        rag_answers_sha = None
+        if args.rag_answers.exists():
+            with args.rag_answers.open("r", encoding="utf-8") as f:
+                rag_answers = json.load(f)
+            rag_answers_sha = calculate_sha256(args.rag_answers)
+
         # Calculate provenance hashes of all input files
         q_sha = calculate_sha256(args.questions)
         r_sha = calculate_sha256(args.retrieval_results)
@@ -260,6 +273,8 @@ def main():
             "chunks_sha256": c_sha,
             "judgments_sha256": judgments_sha
         }
+        if rag_answers_sha is not None:
+            source_provenance["rag_answers_sha256"] = rag_answers_sha
 
         # Build baseline evaluation payload
         evaluation_payload = EvaluationBuilder.build_evaluation(
@@ -271,7 +286,9 @@ def main():
             judgments=judgments_map,
             content_ingestion_report_path=args.content_ingestion_report,
             embedding_ingestion_report_path=args.embedding_ingestion_report,
-            embedding_report_path=args.embedding_report
+            embedding_report_path=args.embedding_report,
+            rag_answers=rag_answers,
+            retrieval_results_sha256=r_sha
         )
         
         # Add source provenance to final baseline evaluation

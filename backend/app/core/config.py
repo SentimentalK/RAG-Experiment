@@ -36,6 +36,6 @@ class Settings(BaseSettings):
         return self.RAW_DATA_DIR / self.SHERLOCK_METADATA_FILENAME
 
     # Configuration for loading from environment variables or .env file
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    model_config = SettingsConfigDict(env_file=BASE_DIR / ".env", extra="ignore")
 
 settings = Settings()

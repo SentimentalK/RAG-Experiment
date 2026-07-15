@@ -44,6 +44,48 @@ class RagAnswerService:
         search_res = self._search_service.search(question, document_id=document_id, top_k=top_k)
         retrieved_results = search_res.get("results", [])
         
+        retrieval_meta = {
+            "model_name": search_res["model_name"],
+            "top_k": top_k,
+            "embedding_duration_ms": search_res["embedding_duration_ms"],
+            "database_duration_ms": search_res["database_duration_ms"]
+        }
+
+        return self._generate_answer_common(
+            question=question,
+            retrieved_results=retrieved_results,
+            document_id=document_id,
+            retrieval_meta=retrieval_meta
+        )
+
+    def generate_answer_from_context(
+        self,
+        question: str,
+        retrieved_chunks: list[dict],
+        document_id: str,
+        retrieval_meta: dict
+    ) -> RagAnswerResponse:
+        """
+        Generates answer bypassing the database search, directly using pre-retrieved context chunks.
+        """
+        return self._generate_answer_common(
+            question=question,
+            retrieved_results=retrieved_chunks,
+            document_id=document_id,
+            retrieval_meta=retrieval_meta
+        )
+
+    def _generate_answer_common(
+        self,
+        question: str,
+        retrieved_results: list[dict],
+        document_id: str,
+        retrieval_meta: dict
+    ) -> RagAnswerResponse:
+        """
+        Common execution path for RAG generation, validation, and correction retry.
+        """
+        top_k = retrieval_meta["top_k"]
         # Verify rank sequence 1 to K
         expected_ranks = list(range(1, top_k + 1))
         actual_ranks = [r["rank"] for r in retrieved_results]
@@ -52,8 +94,7 @@ class RagAnswerService:
 
         retrieved_chunk_ids = {r["chunk_uid"] for r in retrieved_results}
 
-        # 2. Build initial RAG messages
-        # Map retrieve results to the expected prompt builder format
+        # Build initial RAG messages
         prompt_chunks = []
         for r in retrieved_results:
             prompt_chunks.append({
@@ -73,7 +114,7 @@ class RagAnswerService:
             attempt_count += 1
             start_time = perf_counter()
             try:
-                # 3. Call Groq
+                # Call Groq
                 res = self._groq_client.chat_completion(messages)
             except GroqApiError as e:
                 # Do not retry HTTP or network API issues as model output errors
@@ -87,7 +128,7 @@ class RagAnswerService:
             validation_errors = []
             model_output: Optional[RagModelOutput] = None
 
-            # 4. Parse content
+            # Parse content
             try:
                 # Validate output meets Schema
                 parsed_json = json.loads(content)
@@ -95,7 +136,7 @@ class RagAnswerService:
             except (json.JSONDecodeError, Exception) as e:
                 validation_errors.append(f"Response did not match JSON output schema: {e}")
 
-            # 5. Citation and business rules validation
+            # Citation and business rules validation
             if model_output:
                 if not model_output.answer.strip():
                     validation_errors.append("Answer field cannot be empty.")
@@ -124,7 +165,7 @@ class RagAnswerService:
                 if model_output.evidence_sufficient and not model_output.citations:
                     validation_errors.append("evidence_sufficient is true but no citations were provided.")
 
-            # 6. Retry / Error Handling
+            # Retry / Error Handling
             if validation_errors:
                 err_msg = "; ".join(validation_errors)
                 logger.warning(f"RAG validation failed on attempt {attempt_count}: {err_msg}")
@@ -148,7 +189,7 @@ class RagAnswerService:
                         f"Errors: {err_msg}"
                     )
 
-            # 7. Success! Compile final response object
+            # Success! Compile final response object
             usage = TokenUsage(
                 prompt_tokens=usage_data.get("prompt_tokens", 0),
                 completion_tokens=usage_data.get("completion_tokens", 0),
@@ -184,10 +225,10 @@ class RagAnswerService:
                 )
 
             ret_info = RetrievalInfo(
-                model_name=search_res["model_name"],
+                model_name=retrieval_meta["model_name"],
                 top_k=top_k,
-                embedding_duration_ms=search_res["embedding_duration_ms"],
-                database_duration_ms=search_res["database_duration_ms"],
+                embedding_duration_ms=retrieval_meta["embedding_duration_ms"],
+                database_duration_ms=retrieval_meta["database_duration_ms"],
                 results=mapped_results
             )
 

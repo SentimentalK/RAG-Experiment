@@ -30,6 +30,8 @@ class EvaluationBuilder:
         content_ingestion_report_path: Optional[Path] = None,
         embedding_ingestion_report_path: Optional[Path] = None,
         embedding_report_path: Optional[Path] = None,
+        rag_answers: Optional[dict] = None,
+        retrieval_results_sha256: Optional[str] = None,
     ) -> dict:
         """
         Integrates and normalizes all evaluation fields into the final frontend payload.
@@ -94,58 +96,106 @@ class EvaluationBuilder:
         sections_by_order = {s["section_order"]: s for s in raw_sections}
         chunks_by_id = {c["chunk_id"]: c for c in raw_chunks}
 
+        # Validate rag_answers if present
+        rag_answers_map = {}
+        if rag_answers is not None:
+            # Hash mismatch check
+            if retrieval_results_sha256 is not None:
+                expected_sha = rag_answers.get("retrieval_results_sha256")
+                if expected_sha != retrieval_results_sha256:
+                    raise ValueError(
+                        f"RAG answers file SHA-256 signature mismatch: "
+                        f"expected retrieval hash '{retrieval_results_sha256}', "
+                        f"but rag_answers.json records '{expected_sha}'."
+                    )
+            
+            # Question count checks
+            expected_q_count = len(questions_config.get("questions", []))
+            if len(rag_answers.get("answers", [])) != expected_q_count:
+                raise ValueError(
+                    f"RAG answers count mismatch: questions config has {expected_q_count}, "
+                    f"but rag_answers.json contains {len(rag_answers.get('answers', []))}."
+                )
+            
+            # Map by QID and check uniqueness
+            for ans in rag_answers.get("answers", []):
+                qid = ans.get("question_id")
+                if not qid:
+                    raise ValueError("RAG answer item has empty or missing question_id.")
+                if qid in rag_answers_map:
+                    raise ValueError(f"Duplicate question_id '{qid}' in RAG answers.")
+                rag_answers_map[qid] = ans
+
+            # Ensure all questions have an answer
+            for q in questions_config.get("questions", []):
+                qid = q["question_id"]
+                if qid not in rag_answers_map:
+                    raise ValueError(f"RAG answers missing question_id '{qid}'.")
+
         # 4. Integrate Pipeline Metadata
         experiment_id = questions_config["experiment_id"]
         document_id = questions_config["document_id"]
         top_k = questions_config["top_k"]
         generation_id = retrieval_results.get("generation_id")
 
+        steps = [
+            {
+                "step_id": "document_cleaning",
+                "name": "Document Cleaning",
+                "status": "completed"
+            },
+            {
+                "step_id": "section_splitting",
+                "name": "Story Splitting",
+                "status": "completed",
+                "section_count": actual_sections_count
+            },
+            {
+                "step_id": "chunking",
+                "name": "Sentence-Aware Chunking",
+                "status": "completed",
+                "chunk_count": actual_chunks_count,
+                "maximum_tokens": max_chunk_tokens
+            },
+            {
+                "step_id": "embedding",
+                "name": "MiniLM Embedding",
+                "status": "completed",
+                "model_name": emb_model,
+                "dimensions": emb_dims,
+                "normalized": emb_norm
+            },
+            {
+                "step_id": "database",
+                "name": "PostgreSQL and pgvector",
+                "status": "completed",
+                "embedding_count": db_embedding_count
+            },
+            {
+                "step_id": "retrieval",
+                "name": "Exact Cosine Top 10",
+                "status": "completed",
+                "question_count": len(questions_config.get("questions", []))
+            },
+            {
+                "step_id": "evaluation",
+                "name": "LLM-Assisted Retrieval Evaluation",
+                "status": "completed"
+            }
+        ]
+
+        if rag_answers is not None:
+            steps.append({
+                "step_id": "rag_generation",
+                "name": "RAG Answer Generation",
+                "status": "completed",
+                "model": rag_answers.get("generation_model", "openai/gpt-oss-120b"),
+                "question_count": len(rag_answers.get("answers", [])),
+                "prompt_version": rag_answers.get("prompt_version", "rag-grounded-v1")
+            })
+
         pipeline_metadata = {
-            "steps": [
-                {
-                    "step_id": "document_cleaning",
-                    "name": "Document Cleaning",
-                    "status": "completed"
-                },
-                {
-                    "step_id": "section_splitting",
-                    "name": "Story Splitting",
-                    "status": "completed",
-                    "section_count": actual_sections_count
-                },
-                {
-                    "step_id": "chunking",
-                    "name": "Sentence-Aware Chunking",
-                    "status": "completed",
-                    "chunk_count": actual_chunks_count,
-                    "maximum_tokens": max_chunk_tokens
-                },
-                {
-                    "step_id": "embedding",
-                    "name": "MiniLM Embedding",
-                    "status": "completed",
-                    "model_name": emb_model,
-                    "dimensions": emb_dims,
-                    "normalized": emb_norm
-                },
-                {
-                    "step_id": "database",
-                    "name": "PostgreSQL and pgvector",
-                    "status": "completed",
-                    "embedding_count": db_embedding_count
-                },
-                {
-                    "step_id": "retrieval",
-                    "name": "Exact Cosine Top 10",
-                    "status": "completed",
-                    "question_count": len(questions_config.get("questions", []))
-                },
-                {
-                    "step_id": "evaluation",
-                    "name": "LLM-Assisted Retrieval Evaluation",
-                    "status": "completed"
-                }
-            ]
+            "steps": steps
         }
 
         # 5. Process each question
@@ -222,6 +272,67 @@ class EvaluationBuilder:
                 key=lambda x: x["section_order"]
             )
 
+            # If RAG answers exist, validate each answer
+            rag_answer_payload = None
+            if rag_answers is not None:
+                rag_ans = rag_answers_map[qid]
+                
+                # Check question text matches
+                if rag_ans.get("question") != q["question"]:
+                    raise ValueError(
+                        f"RAG answer question text mismatch for '{qid}':\n"
+                        f"Config  : {q['question']!r}\n"
+                        f"RAG file: {rag_ans.get('question')!r}"
+                    )
+                
+                # Check context chunk_uids matches retrieved_chunks exactly in rank sequence
+                actual_uids = [rc["chunk_uid"] for rc in retrieved_chunks]
+                expected_uids = rag_ans.get("context", {}).get("chunk_uids", [])
+                if expected_uids != actual_uids:
+                    raise ValueError(
+                        f"RAG answer context chunks mismatch for '{qid}':\n"
+                        f"Expected (retrieval): {actual_uids}\n"
+                        f"Actual (RAG context): {expected_uids}"
+                    )
+
+                # Check citations belong to Top 10
+                citations_payload = []
+                for cit in rag_ans.get("generation", {}).get("citations", []):
+                    c_uid = cit.get("chunk_uid")
+                    if c_uid not in actual_uids:
+                        raise ValueError(
+                            f"RAG answer citation for '{qid}' references chunk '{c_uid}' "
+                            f"which is not in the allowed Top 10 retrieved chunks: {actual_uids}."
+                        )
+                    citations_payload.append({
+                        "chunk_uid": c_uid,
+                        "reason": cit.get("reason", "")
+                    })
+
+                # Check generation model matches
+                gen_model = rag_answers.get("generation_model")
+                if rag_ans.get("generation", {}).get("model_name") != gen_model:
+                    raise ValueError(
+                        f"RAG answer generation model mismatch for '{qid}': "
+                        f"expected '{gen_model}', got '{rag_ans.get('generation', {}).get('model_name')}'."
+                    )
+
+                # Construct rag_answer block
+                gen_data = rag_ans["generation"]
+                rag_answer_payload = {
+                    "generation_id": rag_answers["generation_id"],
+                    "prompt_version": rag_answers["prompt_version"],
+                    "model_name": gen_data["model_name"],
+                    "answer": gen_data["answer"],
+                    "evidence_sufficient": gen_data["evidence_sufficient"],
+                    "citations": citations_payload,
+                    "confidence": gen_data["confidence"],
+                    "generation_duration_ms": gen_data["generation_duration_ms"],
+                    "attempt_count": gen_data["attempt_count"],
+                    "usage": gen_data["usage"],
+                    "context_chunk_uids": actual_uids
+                }
+
             questions_list.append({
                 "question_id": qid,
                 "category": q["category"],
@@ -243,7 +354,8 @@ class EvaluationBuilder:
                     "summary": judgment_dict["overall_assessment"]["summary"],
                     "confidence": judgment_dict["confidence"]
                 },
-                "computed_metrics": computed
+                "computed_metrics": computed,
+                "rag_answer": rag_answer_payload
             })
 
         # 6. Aggregate metrics across all questions
