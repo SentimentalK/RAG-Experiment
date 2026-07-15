@@ -1,0 +1,144 @@
+{
+    "schema_version": "1.0",
+    "question_id": "q008",
+    "question": "Which two cases involved suspiciously generous employment offers, and what hidden purpose did each offer serve?",
+    "question_interpretation": "Identify the two stories in which a character was offered unusually high pay for simple or bizarre work, and explain the hidden criminal motives behind these offers.",
+    "reference_answer": "The two cases are 'The Red-Headed League' and 'The Adventure of the Copper Beeches'. In 'The Red-Headed League', Jabez Wilson was paid £4 a week to copy the Encyclopaedia Britannica, serving the hidden purpose of keeping him away from his shop so John Clay could dig a tunnel into a bank vault. In 'The Adventure of the Copper Beeches', Violet Hunter was offered £120 a year to act as a governess, serving the hidden purpose of forcing her to impersonate Alice Rucastle so that her fiancé would believe she had abandoned him.",
+    "candidate_story_judgments": [
+        {
+            "section_order": 2,
+            "section_title": "The Red-Headed League",
+            "label": "directly_relevant",
+            "reason": "This story details the suspiciously generous offer of the Red-Headed League and its hidden purpose."
+        },
+        {
+            "section_order": 3,
+            "section_title": "A Case of Identity",
+            "label": "irrelevant",
+            "reason": "Does not involve a suspiciously generous employment offer."
+        },
+        {
+            "section_order": 6,
+            "section_title": "The Man with the Twisted Lip",
+            "label": "irrelevant",
+            "reason": "Does not involve a suspiciously generous employment offer."
+        },
+        {
+            "section_order": 7,
+            "section_title": "The Adventure of the Blue Carbuncle",
+            "label": "irrelevant",
+            "reason": "Does not involve a suspiciously generous employment offer."
+        },
+        {
+            "section_order": 10,
+            "section_title": "The Adventure of the Noble Bachelor",
+            "label": "irrelevant",
+            "reason": "Does not involve a suspiciously generous employment offer."
+        },
+        {
+            "section_order": 11,
+            "section_title": "The Adventure of the Beryl Coronet",
+            "label": "irrelevant",
+            "reason": "Does not involve a suspiciously generous employment offer."
+        },
+        {
+            "section_order": 12,
+            "section_title": "The Adventure of the Copper Beeches",
+            "label": "directly_relevant",
+            "reason": "This story details the suspiciously generous governess job offer and its hidden purpose."
+        }
+    ],
+    "retrieved_chunk_judgments": [
+        {
+            "rank": 1,
+            "chunk_uid": "g1661-s02-c0075",
+            "label": "direct_evidence",
+            "supports_answer": true,
+            "reason": "Explains that the hidden purpose of the Red-Headed League was to get the pawnbroker out of the way so the criminals could work in his cellar."
+        },
+        {
+            "rank": 2,
+            "chunk_uid": "g1661-s06-c0073",
+            "label": "irrelevant",
+            "supports_answer": false,
+            "reason": "Mentions disguise and begging in 'The Man with the Twisted Lip', but not the employment offers."
+        },
+        {
+            "rank": 3,
+            "chunk_uid": "g1661-s02-c0028",
+            "label": "supporting_context",
+            "supports_answer": true,
+            "reason": "Details the terms of the Red-Headed League offer, specifically the £4 salary and nominal work hours."
+        },
+        {
+            "rank": 4,
+            "chunk_uid": "g1661-s02-c0040",
+            "label": "topically_related",
+            "supports_answer": false,
+            "reason": "Mentions that Wilson gained £30 from the League, but doesn't explain the hidden purpose."
+        },
+        {
+            "rank": 5,
+            "chunk_uid": "g1661-s02-c0076",
+            "label": "supporting_context",
+            "supports_answer": true,
+            "reason": "Provides Holmes' reasoning that the assistant was working in the cellar for the purpose of a bank robbery."
+        },
+        {
+            "rank": 6,
+            "chunk_uid": "g1661-s03-c0061",
+            "label": "irrelevant",
+            "supports_answer": false,
+            "reason": "Relates to the case of identity and step-father impersonation."
+        },
+        {
+            "rank": 7,
+            "chunk_uid": "g1661-s10-c0003",
+            "label": "irrelevant",
+            "supports_answer": false,
+            "reason": "Relates to the Noble Bachelor case."
+        },
+        {
+            "rank": 8,
+            "chunk_uid": "g1661-s07-c0040",
+            "label": "irrelevant",
+            "supports_answer": false,
+            "reason": "Relates to the Blue Carbuncle investigation."
+        },
+        {
+            "rank": 9,
+            "chunk_uid": "g1661-s12-c0011",
+            "label": "direct_evidence",
+            "supports_answer": true,
+            "reason": "Introduces Violet Hunter's offer of £120 a year in 'The Adventure of the Copper Beeches', which was vastly higher than standard wages."
+        },
+        {
+            "rank": 10,
+            "chunk_uid": "g1661-s11-c0040",
+            "label": "irrelevant",
+            "supports_answer": false,
+            "reason": "Relates to the Beryl Coronet case."
+        }
+    ],
+    "top_k_sufficiency": {
+        "top_1": false,
+        "top_3": false,
+        "top_5": false,
+        "top_10": true
+    },
+    "first_direct_evidence_rank": 1,
+    "missing_evidence_within_candidate_stories": [
+        {
+            "section_order": 12,
+            "section_title": "The Adventure of the Copper Beeches",
+            "evidence_quote": "Your salary with me, madam, would commence at £ 100 a year.",
+            "reason": "Shows the initial offer details that were unusually high."
+        }
+    ],
+    "overall_assessment": {
+        "retrieval_quality": "good",
+        "score_0_to_100": 85,
+        "summary": "Retrieved direct evidence for the Red-Headed League at Rank 1, and the Copper Beeches offer details at Rank 9, meaning both cases are represented in the top 10 retrieval."
+    },
+    "confidence": 1.0
+}

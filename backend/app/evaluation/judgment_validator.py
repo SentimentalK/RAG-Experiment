@@ -505,15 +505,32 @@ class JudgmentValidator:
                         message=f"missing_evidence section_title mismatch for section {m_order}: expected {canonical_title!r}, got {m_title!r}."
                     ))
 
-                # Standardized search in story text
-                norm_quote = normalize_evidence_text(m_quote)
+                # Standardized search in story text (handles ellipses in quotes)
+                raw_quote_parts = [p.strip() for p in m_quote.split("...") if p.strip()]
+                if not raw_quote_parts:
+                    result.errors.append(ValidationMessage(
+                        question_id=filename_qid,
+                        message=f"evidence_quote for section {m_order} is empty or invalid."
+                    ))
+                    continue
+
                 story_text = self.sections_by_order[m_order]["text"]
                 norm_story = normalize_evidence_text(story_text)
 
-                if norm_quote not in norm_story:
+                current_idx = 0
+                match_failed = False
+                for part in raw_quote_parts:
+                    norm_part = normalize_evidence_text(part)
+                    idx = norm_story.find(norm_part, current_idx)
+                    if idx == -1:
+                        match_failed = True
+                        break
+                    current_idx = idx + len(norm_part)
+
+                if match_failed:
                     result.errors.append(ValidationMessage(
                         question_id=filename_qid,
-                        message=f"evidence_quote for section {m_order} not found in story source text.\nNormalized Quote: {norm_quote!r}"
+                        message=f"evidence_quote for section {m_order} not found in story source text.\nNormalized Quote: {normalize_evidence_text(m_quote)!r}"
                     ))
 
             # Verify physical ordering of missing evidence

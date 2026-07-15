@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "status": "success",
+  "experiment_id": "minilm-exact-baseline-v1",
+  "generation_id": "a02e7cf8f614493f85da4c8b0d2e1998",
+  "validated_question_count": 8,
+  "validated_judgment_count": 8,
+  "validated_retrieved_chunk_count": 80,
+  "errors": [],
+  "warnings": [],
+  "corrections": [],
+  "source_files": {
+    "questions_sha256": "e93c62d417f9f67118ec6aa9e6ca5c38db4fc448c103e7176ea3d1c12ae42281",
+    "retrieval_results_sha256": "0985ccdc59722e369a7a2120475e7942a4bd725166bbd1797782f27b10aa1de0",
+    "document_sha256": "99d5f239ff03682e42f47aba06a384bd928fb3017e61d4f9d69d945e5b9cbee7",
+    "sections_sha256": "49fdcfeb58bd9d811aa574323966182515131256083a41ccaf001b7a045d0ff5",
+    "chunks_sha256": "ad1ba3003ceb81589683d0b560f5ee934ceae671e5505674fbb21f696d7b2a04",
+    "judgments_sha256": {
+      "q001": "3c92af23437ab1e332432acb064f65ac749e5620d2f5c246adbe473ed4e3dd59",
+      "q002": "43049118a92ebd48f19a5e803d3b0ab579ce8d6c74c055afd69a4bc2d4ad5958",
+      "q003": "6ed960d6e48d7442151bf5d2dc60e70cfe39117c79229e0f9ab7761bf5ce4fee",
+      "q004": "9e4078efffc4723ed54445d3a8c20b97ab0979a0d92530b29fe8c253d48dc20b",
+      "q005": "890ddc6986a67998b1ef608dc50e21a1c7fcf9607d91776d16bec17fa9f938f9",
+      "q006": "9098d3981f7be8f5b6951863d3fb4416612792e487ef7cbce0c2c5c6930702df",
+      "q007": "74203bbebb8f3832c6a67f4a376fc8d00e8d0c6dea4b673848df9c4dc1cb78c6",
+      "q008": "9d7fa313c696ab0e266392d0d863adc602fe8774595a2050369397c29cf23439"
+    }
+  }
+}

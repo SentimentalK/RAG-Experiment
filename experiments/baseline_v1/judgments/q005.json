@@ -16,12 +16,6 @@
       "section_title": "The Man with the Twisted Lip",
       "label": "directly_relevant",
       "reason": "This is the source story featuring the characters Neville St. Clair and Hugh Boone, and it contains Neville's confession of why he begged."
-    },
-    {
-      "section_order": 7,
-      "section_title": "The Adventure of the Blue Carbuncle",
-      "label": "irrelevant",
-      "reason": "This story concerns a stolen jewel found in a goose and is completely unrelated to the question."
     }
   ],
   "retrieved_chunk_judgments": [

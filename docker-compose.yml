@@ -26,5 +26,16 @@ services:
       timeout: 5s
       retries: 10
 
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: sherlock_rag_frontend
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    depends_on:
+      - postgres
+
 volumes:
   postgres_data:

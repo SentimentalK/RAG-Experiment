@@ -280,7 +280,17 @@ class EvaluationBuilder:
 
         # Formulate source provenance details
         # The hashes are set at the CLI orchestrator level or computed
-        source_provenance = {}
+        chunks_payload = []
+        for c in raw_chunks:
+            chunks_payload.append({
+                "chunk_uid": c["chunk_id"],
+                "section_order": c["section_order"],
+                "section_title": c["section_title"],
+                "chunk_order": c["chunk_order"],
+                "token_count": c["token_count"],
+                "overlap_tokens": c.get("overlap_tokens", 0),
+                "chunk_text": c["text"]
+            })
 
         return {
             "schema_version": "1.0",
@@ -288,6 +298,7 @@ class EvaluationBuilder:
             "pipeline": pipeline_metadata,
             "document": document_meta,
             "stories": stories_payload,
+            "chunks": chunks_payload,
             "aggregate_metrics": aggregate_metrics,
             "questions": questions_list
         }

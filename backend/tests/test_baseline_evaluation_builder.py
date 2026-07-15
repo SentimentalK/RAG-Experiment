@@ -187,6 +187,12 @@ def test_evaluation_builder_successful_run(
     assert len(payload["stories"]) == 2
     assert payload["document"]["title"] == "Sherlock Holmes Mock Book"
     
+    # Verify chunks array
+    assert "chunks" in payload
+    assert len(payload["chunks"]) == 10
+    assert payload["chunks"][0]["chunk_uid"] == "c-1-1"
+    assert payload["chunks"][0]["chunk_text"] == "Chunk 1 text content."
+    
     # 2. Verification of computed and merged metrics
     questions = payload["questions"]
     assert len(questions) == 1
