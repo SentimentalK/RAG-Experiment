@@ -95,3 +95,64 @@ class MiniLMProvider:
             raise ValueError(
                 f"Expected normalized embedding, received norm {norm:.8f}."
             )
+
+    def encode_batch(self, texts: list[str], batch_size: int = 32) -> np.ndarray:
+        """
+        Generates 384-dimensional normalized embeddings for a batch of texts.
+        """
+        if not texts:
+            raise ValueError("Embedding input list cannot be empty.")
+
+        for index, text in enumerate(texts):
+            if not isinstance(text, str):
+                raise TypeError(
+                    f"Text at index {index} must be a string."
+                )
+            if not text.strip():
+                raise ValueError(
+                    f"Text at index {index} cannot be empty."
+                )
+
+        embeddings = self._model.encode(
+            texts,
+            batch_size=batch_size,
+            convert_to_numpy=True,
+            normalize_embeddings=True,
+            show_progress_bar=True,
+        )
+
+        result = np.asarray(embeddings, dtype=np.float32)
+        self._validate_embedding_batch(result, expected_count=len(texts))
+
+        return result
+
+    def _validate_embedding_batch(self, embeddings: np.ndarray, expected_count: int) -> None:
+        expected_shape = (expected_count, self.EXPECTED_DIMENSIONS)
+
+        if embeddings.shape != expected_shape:
+            raise ValueError(
+                f"Expected embedding matrix shape {expected_shape}, "
+                f"received {embeddings.shape}."
+            )
+
+        if embeddings.dtype != np.float32:
+            raise ValueError(
+                f"Expected float32 matrix, received {embeddings.dtype}."
+            )
+
+        if not np.isfinite(embeddings).all():
+            raise ValueError(
+                "Embedding matrix contains NaN or infinite values."
+            )
+
+        norms = np.linalg.norm(embeddings, axis=1)
+
+        if not np.allclose(norms, 1.0, atol=1e-5):
+            invalid_count = int(
+                np.count_nonzero(
+                    ~np.isclose(norms, 1.0, atol=1e-5)
+                )
+            )
+            raise ValueError(
+                f"{invalid_count} embeddings are not normalized."
+            )
