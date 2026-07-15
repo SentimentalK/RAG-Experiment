@@ -22,6 +22,11 @@ class Settings(BaseSettings):
     SHERLOCK_RAW_HTML_FILENAME: str = "sherlock_holmes_1661.html"
     SHERLOCK_METADATA_FILENAME: str = "source_metadata.json"
 
+    # Groq Settings
+    GROQ_API_KEY: str = ""
+    GROQ_MODEL: str = "openai/gpt-oss-120b"
+    GROQ_BASE_URL: str = "https://api.groq.com/openai/v1"
+
     @property
     def raw_html_path(self) -> Path:
         return self.RAW_DATA_DIR / self.SHERLOCK_RAW_HTML_FILENAME
