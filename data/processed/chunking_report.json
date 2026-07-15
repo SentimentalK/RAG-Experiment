@@ -1,0 +1,71 @@
+{
+  "section_count": 12,
+  "chunk_count": 909,
+  "minimum_tokens": 60,
+  "maximum_tokens": 220,
+  "average_tokens": 191.1,
+  "empty_chunks": 0,
+  "chunks_over_limit": 0,
+  "chunks_per_section": [
+    {
+      "section_order": 1,
+      "title": "A Scandal in Bohemia",
+      "chunk_count": 76
+    },
+    {
+      "section_order": 2,
+      "title": "The Red-Headed League",
+      "chunk_count": 80
+    },
+    {
+      "section_order": 3,
+      "title": "A Case of Identity",
+      "chunk_count": 63
+    },
+    {
+      "section_order": 4,
+      "title": "The Boscombe Valley Mystery",
+      "chunk_count": 82
+    },
+    {
+      "section_order": 5,
+      "title": "The Five Orange Pips",
+      "chunk_count": 64
+    },
+    {
+      "section_order": 6,
+      "title": "The Man with the Twisted Lip",
+      "chunk_count": 81
+    },
+    {
+      "section_order": 7,
+      "title": "The Adventure of the Blue Carbuncle",
+      "chunk_count": 70
+    },
+    {
+      "section_order": 8,
+      "title": "The Adventure of the Speckled Band",
+      "chunk_count": 84
+    },
+    {
+      "section_order": 9,
+      "title": "The Adventure of the Engineer's Thumb",
+      "chunk_count": 70
+    },
+    {
+      "section_order": 10,
+      "title": "The Adventure of the Noble Bachelor",
+      "chunk_count": 71
+    },
+    {
+      "section_order": 11,
+      "title": "The Adventure of the Beryl Coronet",
+      "chunk_count": 82
+    },
+    {
+      "section_order": 12,
+      "title": "The Adventure of the Copper Beeches",
+      "chunk_count": 86
+    }
+  ]
+}
