@@ -14,6 +14,9 @@ class Settings(BaseSettings):
     RAW_DATA_DIR: Path = BASE_DIR / "data" / "raw"
     PROCESSED_DATA_DIR: Path = BASE_DIR / "data" / "processed"
 
+    # Database Settings
+    DATABASE_URL: str = "postgresql://rag_user:rag_password@localhost:5432/sherlock_rag"
+
     # Sherlock Book Specifics
     SHERLOCK_URL: str = "https://www.gutenberg.org/files/1661/1661-h/1661-h.htm"
     SHERLOCK_RAW_HTML_FILENAME: str = "sherlock_holmes_1661.html"
