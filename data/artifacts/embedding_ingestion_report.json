@@ -1,0 +1,20 @@
+{
+  "status": "success",
+  "document_id": "gutenberg-1661",
+  "model_name": "sentence-transformers/all-MiniLM-L6-v2",
+  "dimensions": 384,
+  "normalized": true,
+  "matrix_shape": [
+    909,
+    384
+  ],
+  "index_count": 909,
+  "database_chunk_count": 909,
+  "inserted_embedding_count": 909,
+  "replace_mode": true,
+  "embeddings_file_sha256": "e9cdab6e99ac9de3b8690822be4628472de62118719fba283e179d1ae331b641",
+  "index_file_sha256": "9005c23d59c5964940a426d6c6ee9ca4dcff8771cda049da74b335e709dcd4cd",
+  "chunks_file_sha256": "ad1ba3003ceb81589683d0b560f5ee934ceae671e5505674fbb21f696d7b2a04",
+  "minimum_vector_norm": 0.9999999,
+  "maximum_vector_norm": 1.0000001
+}
