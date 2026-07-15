@@ -1,0 +1,48 @@
+{
+  "experiment_id": "minilm-exact-baseline-v1",
+  "document_id": "gutenberg-1661",
+  "retrieval_method": "minilm_exact_cosine",
+  "top_k": 10,
+  "questions": [
+    {
+      "question_id": "q001",
+      "category": "entity_alias",
+      "question": "Who was \"the woman\" whom Sherlock Holmes always remembered?"
+    },
+    {
+      "question_id": "q002",
+      "category": "causal_reasoning",
+      "question": "Why was Jabez Wilson paid unusually well to copy the Encyclopaedia Britannica?"
+    },
+    {
+      "question_id": "q003",
+      "category": "hidden_identity",
+      "question": "Who was Hosmer Angel really, and why did he disappear?"
+    },
+    {
+      "question_id": "q004",
+      "category": "symbolic_meaning",
+      "question": "What did the five orange pips represent, and why were they sent?"
+    },
+    {
+      "question_id": "q005",
+      "category": "multiple_identity",
+      "question": "Why did Neville St. Clair live part of his life as the beggar Hugh Boone?"
+    },
+    {
+      "question_id": "q006",
+      "category": "event_chain",
+      "question": "How did the stolen blue carbuncle end up inside a Christmas goose?"
+    },
+    {
+      "question_id": "q007",
+      "category": "indirect_reference",
+      "question": "What was the \"speckled band\" that caused Julia Stoner's death?"
+    },
+    {
+      "question_id": "q008",
+      "category": "cross_story",
+      "question": "Which two cases involved suspiciously generous employment offers, and what hidden purpose did each offer serve?"
+    }
+  ]
+}

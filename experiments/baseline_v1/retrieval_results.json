@@ -1,0 +1,1018 @@
+{
+  "generation_id": "a02e7cf8f614493f85da4c8b0d2e1998",
+  "experiment_id": "minilm-exact-baseline-v1",
+  "document_id": "gutenberg-1661",
+  "model_name": "sentence-transformers/all-MiniLM-L6-v2",
+  "retrieval_method": "exact_cosine",
+  "top_k": 10,
+  "question_count": 8,
+  "generated_at_utc": "2026-07-15T15:53:34Z",
+  "question_file_sha256": "e93c62d417f9f67118ec6aa9e6ca5c38db4fc448c103e7176ea3d1c12ae42281",
+  "sections_file_sha256": "49fdcfeb58bd9d811aa574323966182515131256083a41ccaf001b7a045d0ff5",
+  "judge_prompt_sha256": "9bba6d628bed27ca39b1451b2adf88a1a4fc6825e4a0543958a72dd9fdea79d8",
+  "results": [
+    {
+      "question_id": "q001",
+      "category": "entity_alias",
+      "question": "Who was \"the woman\" whom Sherlock Holmes always remembered?",
+      "query_token_count": 14,
+      "embedding_duration_ms": 41.21160300564952,
+      "database_duration_ms": 7.959328009746969,
+      "candidate_story_orders": [
+        1,
+        4,
+        6,
+        8,
+        9
+      ],
+      "retrieved_chunks": [
+        {
+          "rank": 1,
+          "chunk_uid": "g1661-s01-c0001",
+          "section_order": 1,
+          "section_title": "A Scandal in Bohemia",
+          "chunk_order": 1,
+          "token_count": 191,
+          "cosine_distance": 0.2867007468133914,
+          "cosine_similarity": 0.7132992531866086,
+          "chunk_text": "I. To Sherlock Holmes she\nis always the woman. I have seldom heard him mention her under any other\nname. In his eyes she eclipses and predominates the whole of her sex. It was\nnot that he felt any emotion akin to love for Irene Adler. All emotions, and\nthat one particularly, were abhorrent to his cold, precise but admirably\nbalanced mind. He was, I take it, the most perfect reasoning and observing\nmachine that the world has seen, but as a lover he would have placed himself in\na false position. He never spoke of the softer passions, save with a gibe and a\nsneer. They were admirable things for the observer—excellent for drawing\nthe veil from men’s motives and actions. But for the trained reasoner to\nadmit such intrusions into his own delicate and finely adjusted temperament was\nto introduce a distracting factor which might throw a doubt upon all his mental\nresults."
+        },
+        {
+          "rank": 2,
+          "chunk_uid": "g1661-s01-c0069",
+          "section_order": 1,
+          "section_title": "A Scandal in Bohemia",
+          "chunk_order": 69,
+          "token_count": 188,
+          "cosine_distance": 0.36085478546782657,
+          "cosine_similarity": 0.6391452145321734,
+          "chunk_text": "What a queen she would have made!” He relapsed into a moody silence,\nwhich was not broken until we drew up in Serpentine Avenue. The door of Briony Lodge was open, and an elderly woman stood upon the steps. She watched us with a sardonic eye as we stepped from the brougham. “Mr. Sherlock Holmes, I believe?” said she. “I am Mr. Holmes,” answered my companion, looking at her with a\nquestioning and rather startled gaze. “Indeed! My mistress told me that you were likely to call. She left this\nmorning with her husband by the 5:15 train from Charing Cross for the\nContinent.” “What!” Sherlock Holmes staggered back, white with chagrin and\nsurprise. “Do you mean that she has left England?” “Never to return.” “And the papers?” asked the King hoarsely."
+        },
+        {
+          "rank": 3,
+          "chunk_uid": "g1661-s04-c0030",
+          "section_order": 4,
+          "section_title": "The Boscombe Valley Mystery",
+          "chunk_order": 30,
+          "token_count": 220,
+          "cosine_distance": 0.3714332767893862,
+          "cosine_similarity": 0.6285667232106138,
+          "chunk_text": "“You have, no doubt, already formed your\nconclusions from the newspapers,” he said. “The case is as plain as\na pikestaff, and the more one goes into it the plainer it becomes. Still, of\ncourse, one can’t refuse a lady, and such a very positive one, too. She\nhas heard of you, and would have your opinion, though I repeatedly told her\nthat there was nothing which you could do which I had not already done. Why,\nbless my soul! here is her carriage at the door.” He had hardly spoken before there rushed into the room one of the most lovely\nyoung women that I have ever seen in my life. Her violet eyes shining, her lips\nparted, a pink flush upon her cheeks, all thought of her natural reserve lost\nin her overpowering excitement and concern. “Oh, Mr. Sherlock Holmes!” she cried, glancing from one to the\nother of us, and finally, with a woman’s quick intuition, fastening upon\nmy companion, “I am so glad that you have come."
+        },
+        {
+          "rank": 4,
+          "chunk_uid": "g1661-s08-c0018",
+          "section_order": 8,
+          "section_title": "The Adventure of the Speckled Band",
+          "chunk_order": 18,
+          "token_count": 203,
+          "cosine_distance": 0.3910394129466833,
+          "cosine_similarity": 0.6089605870533167,
+          "chunk_text": "“She died just two years ago, and it is of her death that I wish to speak\nto you. You can understand that, living the life which I have described, we\nwere little likely to see anyone of our own age and position. We had, however,\nan aunt, my mother’s maiden sister, Miss Honoria Westphail, who lives\nnear Harrow, and we were occasionally allowed to pay short visits at this\nlady’s house. Julia went there at Christmas two years ago, and met there\na half-pay major of marines, to whom she became engaged. My stepfather learned\nof the engagement when my sister returned and offered no objection to the\nmarriage; but within a fortnight of the day which had been fixed for the\nwedding, the terrible event occurred which has deprived me of my only\ncompanion.” Sherlock Holmes had been leaning back in his chair with his eyes closed and his\nhead sunk in a cushion, but he half opened his lids now and glanced across at\nhis visitor."
+        },
+        {
+          "rank": 5,
+          "chunk_uid": "g1661-s01-c0002",
+          "section_order": 1,
+          "section_title": "A Scandal in Bohemia",
+          "chunk_order": 2,
+          "token_count": 212,
+          "cosine_distance": 0.3952838958715207,
+          "cosine_similarity": 0.6047161041284793,
+          "chunk_text": "But for the trained reasoner to\nadmit such intrusions into his own delicate and finely adjusted temperament was\nto introduce a distracting factor which might throw a doubt upon all his mental\nresults. Grit in a sensitive instrument, or a crack in one of his own\nhigh-power lenses, would not be more disturbing than a strong emotion in a\nnature such as his. And yet there was but one woman to him, and that woman was\nthe late Irene Adler, of dubious and questionable memory. I had seen little of Holmes lately. My marriage had drifted us away from each\nother. My own complete happiness, and the home-centred interests which rise up\naround the man who first finds himself master of his own establishment, were\nsufficient to absorb all my attention, while Holmes, who loathed every form of\nsociety with his whole Bohemian soul, remained in our lodgings in Baker Street,\nburied among his old books, and alternating from week to week between cocaine\nand ambition, the drowsiness of the drug, and the fierce energy of his own keen\nnature."
+        },
+        {
+          "rank": 6,
+          "chunk_uid": "g1661-s01-c0073",
+          "section_order": 1,
+          "section_title": "A Scandal in Bohemia",
+          "chunk_order": 73,
+          "token_count": 184,
+          "cosine_distance": 0.4001644432495677,
+          "cosine_similarity": 0.5998355567504323,
+          "chunk_text": "“We both thought the best resource was flight, when pursued by\nso formidable an antagonist; so you will find the nest empty when you call\nto-morrow. As to the photograph, your client may rest in peace. I love and am\nloved by a better man than he. The King may do what he will without hindrance\nfrom one whom he has cruelly wronged. I keep it only to safeguard myself, and\nto preserve a weapon which will always secure me from any steps which he might\ntake in the future. I leave a photograph which he might care to possess; and I\nremain, dear Mr. Sherlock Holmes, “Very truly yours,\n“IRENE NORTON, née ADLER.” “What a woman—oh, what a woman!” cried the King of Bohemia,\nwhen we had all three read this epistle. “Did I not tell you how quick\nand resolute she was?"
+        },
+        {
+          "rank": 7,
+          "chunk_uid": "g1661-s08-c0035",
+          "section_order": 8,
+          "section_title": "The Adventure of the Speckled Band",
+          "chunk_order": 35,
+          "token_count": 127,
+          "cosine_distance": 0.4047604976665802,
+          "cosine_similarity": 0.5952395023334198,
+          "chunk_text": "“And what do you think of it all, Watson?” asked Sherlock Holmes,\nleaning back in his chair. “It seems to me to be a most dark and sinister business.” “Dark enough and sinister enough.” “Yet if the lady is correct in saying that the flooring and walls are\nsound, and that the door, window, and chimney are impassable, then her sister\nmust have been undoubtedly alone when she met her mysterious end.” “What becomes, then, of these nocturnal whistles, and what of the very\npeculiar words of the dying woman?” “I cannot think.”"
+        },
+        {
+          "rank": 8,
+          "chunk_uid": "g1661-s06-c0053",
+          "section_order": 6,
+          "section_title": "The Man with the Twisted Lip",
+          "chunk_order": 53,
+          "token_count": 187,
+          "cosine_distance": 0.4059727014891116,
+          "cosine_similarity": 0.5940272985108884,
+          "chunk_text": "“Very well. It may, however, have been written on Monday and only posted\nto-day.” “That is possible.” “If so, much may have happened between.” “Oh, you must not discourage me, Mr. Holmes. I know that all is well with\nhim. There is so keen a sympathy between us that I should know if evil came\nupon him. On the very day that I saw him last he cut himself in the bedroom,\nand yet I in the dining-room rushed upstairs instantly with the utmost\ncertainty that something had happened. Do you think that I would respond to\nsuch a trifle and yet be ignorant of his death?” “I have seen too much not to know that the impression of a woman may be\nmore valuable than the conclusion of an analytical reasoner. And in this letter\nyou certainly have a very strong piece of evidence to corroborate your view."
+        },
+        {
+          "rank": 9,
+          "chunk_uid": "g1661-s09-c0013",
+          "section_order": 9,
+          "section_title": "The Adventure of the Engineer's Thumb",
+          "chunk_order": 13,
+          "token_count": 183,
+          "cosine_distance": 0.40676377435814637,
+          "cosine_similarity": 0.5932362256418536,
+          "chunk_text": "“Then my servant will call a cab, and I shall be with you in an\ninstant.” I rushed upstairs, explained the matter shortly to my wife, and\nin five minutes was inside a hansom, driving with my new acquaintance to Baker\nStreet. Sherlock Holmes was, as I expected, lounging about his sitting-room in his\ndressing-gown, reading the agony column of The Times and smoking his\nbefore-breakfast pipe, which was composed of all the plugs and dottles left\nfrom his smokes of the day before, all carefully dried and collected on the\ncorner of the mantelpiece. He received us in his quietly genial fashion,\nordered fresh rashers and eggs, and joined us in a hearty meal. When it was\nconcluded he settled our new acquaintance upon the sofa, placed a pillow\nbeneath his head, and laid a glass of brandy and water within his reach."
+        },
+        {
+          "rank": 10,
+          "chunk_uid": "g1661-s01-c0076",
+          "section_order": 1,
+          "section_title": "A Scandal in Bohemia",
+          "chunk_order": 76,
+          "token_count": 129,
+          "cosine_distance": 0.4135192457890283,
+          "cosine_similarity": 0.5864807542109717,
+          "chunk_text": "I\nhave the honour to wish you a very good morning.” He bowed, and, turning\naway without observing the hand which the King had stretched out to him, he set\noff in my company for his chambers. And that was how a great scandal threatened to affect the kingdom of Bohemia,\nand how the best plans of Mr. Sherlock Holmes were beaten by a woman’s\nwit. He used to make merry over the cleverness of women, but I have not heard\nhim do it of late. And when he speaks of Irene Adler, or when he refers to her\nphotograph, it is always under the honourable title of the woman."
+        }
+      ]
+    },
+    {
+      "question_id": "q002",
+      "category": "causal_reasoning",
+      "question": "Why was Jabez Wilson paid unusually well to copy the Encyclopaedia Britannica?",
+      "query_token_count": 24,
+      "embedding_duration_ms": 15.89255899307318,
+      "database_duration_ms": 5.705023999325931,
+      "candidate_story_orders": [
+        1,
+        2,
+        7,
+        10
+      ],
+      "retrieved_chunks": [
+        {
+          "rank": 1,
+          "chunk_uid": "g1661-s02-c0031",
+          "section_order": 2,
+          "section_title": "The Red-Headed League",
+          "chunk_order": 31,
+          "token_count": 190,
+          "cosine_distance": 0.46809718202965267,
+          "cosine_similarity": 0.5319028179703473,
+          "chunk_text": "“‘Then, good-bye, Mr. Jabez Wilson, and let me congratulate\nyou once more on the important position which you have been fortunate enough to\ngain.’ He bowed me out of the room and I went home with my assistant,\nhardly knowing what to say or do, I was so pleased at my own good fortune. “Well, I thought over the matter all day, and by evening I was in low\nspirits again; for I had quite persuaded myself that the whole affair must be\nsome great hoax or fraud, though what its object might be I could not imagine. It seemed altogether past belief that anyone could make such a will, or that\nthey would pay such a sum for doing anything so simple as copying out the\nEncyclopædia Britannica. Vincent Spaulding did what he could to cheer me\nup, but by bedtime I had reasoned myself out of the whole thing."
+        },
+        {
+          "rank": 2,
+          "chunk_uid": "g1661-s02-c0030",
+          "section_order": 2,
+          "section_title": "The Red-Headed League",
+          "chunk_order": 30,
+          "token_count": 185,
+          "cosine_distance": 0.5425714799676529,
+          "cosine_similarity": 0.45742852003234713,
+          "chunk_text": "“‘No excuse will avail,’ said Mr. Duncan Ross;\n‘neither sickness nor business nor anything else. There you must stay, or\nyou lose your billet.’ “‘And the work?’ “‘Is to copy out the Encyclopædia Britannica. There is the\nfirst volume of it in that press. You must find your own ink, pens, and\nblotting-paper, but we provide this table and chair. Will you be ready\nto-morrow?’ “‘Certainly,’ I answered. “‘Then, good-bye, Mr. Jabez Wilson, and let me congratulate\nyou once more on the important position which you have been fortunate enough to\ngain.’ He bowed me out of the room and I went home with my assistant,\nhardly knowing what to say or do, I was so pleased at my own good fortune."
+        },
+        {
+          "rank": 3,
+          "chunk_uid": "g1661-s01-c0030",
+          "section_order": 1,
+          "section_title": "A Scandal in Bohemia",
+          "chunk_order": 30,
+          "token_count": 190,
+          "cosine_distance": 0.601972758769989,
+          "cosine_similarity": 0.398027241230011,
+          "chunk_text": "Your Majesty will, of course, stay in London for the\npresent?” “Certainly. You will find me at the Langham under the name of the Count\nVon Kramm.” “Then I shall drop you a line to let you know how we progress.” “Pray do so. I shall be all anxiety.” “Then, as to money?” “You have carte blanche.” “Absolutely?” “I tell you that I would give one of the provinces of my kingdom to have\nthat photograph.” “And for present expenses?” The King took a heavy chamois leather bag from under his cloak and laid it on\nthe table. “There are three hundred pounds in gold and seven hundred in\nnotes,” he said. Holmes scribbled a receipt upon a sheet of his note-book and handed it to him. “And Mademoiselle’s address?” he asked."
+        },
+        {
+          "rank": 4,
+          "chunk_uid": "g1661-s02-c0032",
+          "section_order": 2,
+          "section_title": "The Red-Headed League",
+          "chunk_order": 32,
+          "token_count": 193,
+          "cosine_distance": 0.6052227851615669,
+          "cosine_similarity": 0.3947772148384331,
+          "chunk_text": "It seemed altogether past belief that anyone could make such a will, or that\nthey would pay such a sum for doing anything so simple as copying out the\nEncyclopædia Britannica. Vincent Spaulding did what he could to cheer me\nup, but by bedtime I had reasoned myself out of the whole thing. However, in\nthe morning I determined to have a look at it anyhow, so I bought a penny\nbottle of ink, and with a quill-pen, and seven sheets of foolscap paper, I\nstarted off for Pope’s Court. “Well, to my surprise and delight, everything was as right as possible. The table was set out ready for me, and Mr. Duncan Ross was there to see that I\ngot fairly to work. He started me off upon the letter A, and then he left me;\nbut he would drop in from time to time to see that all was right with me."
+        },
+        {
+          "rank": 5,
+          "chunk_uid": "g1661-s02-c0079",
+          "section_order": 2,
+          "section_title": "The Red-Headed League",
+          "chunk_order": 79,
+          "token_count": 182,
+          "cosine_distance": 0.605459713610427,
+          "cosine_similarity": 0.39454028638957295,
+          "chunk_text": "“Well, when they closed their League offices that was a sign that they\ncared no longer about Mr. Jabez Wilson’s presence—in other words,\nthat they had completed their tunnel. But it was essential that they should use\nit soon, as it might be discovered, or the bullion might be removed. Saturday\nwould suit them better than any other day, as it would give them two days for\ntheir escape. For all these reasons I expected them to come to-night.” “You reasoned it out beautifully,” I exclaimed in unfeigned\nadmiration. “It is so long a chain, and yet every link rings true.” “It saved me from ennui,” he answered, yawning. “Alas! I\nalready feel it closing in upon me. My life is spent in one long effort to\nescape from the commonplaces of existence."
+        },
+        {
+          "rank": 6,
+          "chunk_uid": "g1661-s02-c0010",
+          "section_order": 2,
+          "section_title": "The Red-Headed League",
+          "chunk_order": 10,
+          "token_count": 216,
+          "cosine_distance": 0.6074069376345307,
+          "cosine_similarity": 0.3925930623654693,
+          "chunk_text": "“I thought at first that you had done something clever, but I see that\nthere was nothing in it after all.” “I begin to think, Watson,” said Holmes, “that I make a\nmistake in explaining. ‘Omne ignotum pro magnifico,’ you\nknow, and my poor little reputation, such as it is, will suffer shipwreck if I\nam so candid. Can you not find the advertisement, Mr. Wilson?” “Yes, I have got it now,” he answered with his thick red finger\nplanted halfway down the column. “Here it is. This is what began it all. You just read it for yourself, sir.” I took the paper from him and read as follows: “TO THE RED-HEADED LEAGUE: On account of the bequest of the late Ezekiah\nHopkins, of Lebanon, Pennsylvania, U.S.A., there is now another vacancy open\nwhich entitles a member of the League to a salary of £ 4 a week for purely\nnominal services."
+        },
+        {
+          "rank": 7,
+          "chunk_uid": "g1661-s07-c0021",
+          "section_order": 7,
+          "section_title": "The Adventure of the Blue Carbuncle",
+          "chunk_order": 21,
+          "token_count": 192,
+          "cosine_distance": 0.6158075561638137,
+          "cosine_similarity": 0.38419244383618634,
+          "chunk_text": "“Precisely so. I ought to know its size and shape, seeing that I have\nread the advertisement about it in The Times every day lately. It is\nabsolutely unique, and its value can only be conjectured, but the reward\noffered of £ 1000 is certainly not within a twentieth part of the market\nprice.” “A thousand pounds! Great Lord of mercy!” The commissionaire\nplumped down into a chair and stared from one to the other of us. “That is the reward, and I have reason to know that there are sentimental\nconsiderations in the background which would induce the Countess to part with\nhalf her fortune if she could but recover the gem.” “It was lost, if I remember aright, at the Hotel Cosmopolitan,” I\nremarked. “Precisely so, on December 22nd, just five days ago. John Horner, a\nplumber, was accused of having abstracted it from the lady’s jewel-case."
+        },
+        {
+          "rank": 8,
+          "chunk_uid": "g1661-s02-c0078",
+          "section_order": 2,
+          "section_title": "The Red-Headed League",
+          "chunk_order": 78,
+          "token_count": 183,
+          "cosine_distance": 0.6343705058097839,
+          "cosine_similarity": 0.36562949419021606,
+          "chunk_text": "You must yourself have remarked how worn,\nwrinkled, and stained they were. They spoke of those hours of burrowing. The\nonly remaining point was what they were burrowing for. I walked round the\ncorner, saw the City and Suburban Bank abutted on our friend’s premises,\nand felt that I had solved my problem. When you drove home after the concert I\ncalled upon Scotland Yard and upon the chairman of the bank directors, with the\nresult that you have seen.” “And how could you tell that they would make their attempt\nto-night?” I asked. “Well, when they closed their League offices that was a sign that they\ncared no longer about Mr. Jabez Wilson’s presence—in other words,\nthat they had completed their tunnel. But it was essential that they should use\nit soon, as it might be discovered, or the bullion might be removed."
+        },
+        {
+          "rank": 9,
+          "chunk_uid": "g1661-s10-c0069",
+          "section_order": 10,
+          "section_title": "The Adventure of the Noble Bachelor",
+          "chunk_order": 69,
+          "token_count": 192,
+          "cosine_distance": 0.636192969310702,
+          "cosine_similarity": 0.363807030689298,
+          "chunk_text": "“And how in the world did you find them?” “It might have been difficult, but friend Lestrade held information in\nhis hands the value of which he did not himself know. The initials were, of\ncourse, of the highest importance, but more valuable still was it to know that\nwithin a week he had settled his bill at one of the most select London\nhotels.” “How did you deduce the select?” “By the select prices. Eight shillings for a bed and eightpence for a\nglass of sherry pointed to one of the most expensive hotels. There are not many\nin London which charge at that rate. In the second one which I visited in\nNorthumberland Avenue, I learned by an inspection of the book that Francis H.\nMoulton, an American gentleman, had left only the day before, and on looking\nover the entries against him, I came upon the very items which I had seen in\nthe duplicate bill."
+        },
+        {
+          "rank": 10,
+          "chunk_uid": "g1661-s02-c0012",
+          "section_order": 2,
+          "section_title": "The Red-Headed League",
+          "chunk_order": 12,
+          "token_count": 195,
+          "cosine_distance": 0.650879293680191,
+          "cosine_similarity": 0.34912070631980896,
+          "chunk_text": "Holmes chuckled and wriggled in his chair, as was his habit when in high\nspirits. “It is a little off the beaten track, isn’t it?”\nsaid he. “And now, Mr. Wilson, off you go at scratch and tell us all\nabout yourself, your household, and the effect which this advertisement had\nupon your fortunes. You will first make a note, Doctor, of the paper and the\ndate.” “It is The Morning Chronicle of April 27, 1890. Just two months\nago.” “Very good. Now, Mr. Wilson?” “Well, it is just as I have been telling you, Mr. Sherlock Holmes,”\nsaid Jabez Wilson, mopping his forehead; “I have a small\npawnbroker’s business at Coburg Square, near the City. It’s not a\nvery large affair, and of late years it has not done more than just give me a\nliving."
+        }
+      ]
+    },
+    {
+      "question_id": "q003",
+      "category": "hidden_identity",
+      "question": "Who was Hosmer Angel really, and why did he disappear?",
+      "query_token_count": 16,
+      "embedding_duration_ms": 9.797638005693443,
+      "database_duration_ms": 6.771863001631573,
+      "candidate_story_orders": [
+        3
+      ],
+      "retrieved_chunks": [
+        {
+          "rank": 1,
+          "chunk_uid": "g1661-s03-c0030",
+          "section_order": 3,
+          "section_title": "A Case of Identity",
+          "chunk_order": 30,
+          "token_count": 185,
+          "cosine_distance": 0.38326893398967166,
+          "cosine_similarity": 0.6167310660103283,
+          "chunk_text": "Let the\nweight of the matter rest upon me now, and do not let your mind dwell upon it\nfurther. Above all, try to let Mr. Hosmer Angel vanish from your memory, as he\nhas done from your life.” “Then you don’t think I’ll see him again?” “I fear not.” “Then what has happened to him?” “You will leave that question in my hands. I should like an accurate\ndescription of him and any letters of his which you can spare.” “I advertised for him in last Saturday’s Chronicle,”\nsaid she. “Here is the slip and here are four letters from him.” “Thank you. And your address?” “No. 31 Lyon Place, Camberwell.” “Mr. Angel’s address you never had, I understand. Where is your\nfather’s place of business?”"
+        },
+        {
+          "rank": 2,
+          "chunk_uid": "g1661-s03-c0029",
+          "section_order": 3,
+          "section_title": "A Case of Identity",
+          "chunk_order": 29,
+          "token_count": 187,
+          "cosine_distance": 0.4419581723796774,
+          "cosine_similarity": 0.5580418276203226,
+          "chunk_text": "Now, if he had\nborrowed my money, or if he had married me and got my money settled on him,\nthere might be some reason, but Hosmer was very independent about money and\nnever would look at a shilling of mine. And yet, what could have happened? And\nwhy could he not write? Oh, it drives me half-mad to think of it, and I\ncan’t sleep a wink at night.” She pulled a little handkerchief out\nof her muff and began to sob heavily into it. “I shall glance into the case for you,” said Holmes, rising,\n“and I have no doubt that we shall reach some definite result. Let the\nweight of the matter rest upon me now, and do not let your mind dwell upon it\nfurther. Above all, try to let Mr. Hosmer Angel vanish from your memory, as he\nhas done from your life.”"
+        },
+        {
+          "rank": 3,
+          "chunk_uid": "g1661-s03-c0020",
+          "section_order": 3,
+          "section_title": "A Case of Identity",
+          "chunk_order": 20,
+          "token_count": 182,
+          "cosine_distance": 0.47014401764106784,
+          "cosine_similarity": 0.5298559823589322,
+          "chunk_text": "But then, as I used to say to\nmother, a woman wants her own circle to begin with, and I had not got mine\nyet.” “But how about Mr. Hosmer Angel? Did he make no attempt to see\nyou?” “Well, father was going off to France again in a week, and Hosmer wrote\nand said that it would be safer and better not to see each other until he had\ngone. We could write in the meantime, and he used to write every day. I took\nthe letters in in the morning, so there was no need for father to know.” “Were you engaged to the gentleman at this time?” “Oh, yes, Mr. Holmes. We were engaged after the first walk that we took. Hosmer—Mr. Angel—was a cashier in an office in Leadenhall\nStreet—and—”"
+        },
+        {
+          "rank": 4,
+          "chunk_uid": "g1661-s03-c0060",
+          "section_order": 3,
+          "section_title": "A Case of Identity",
+          "chunk_order": 60,
+          "token_count": 198,
+          "cosine_distance": 0.488557442681713,
+          "cosine_similarity": 0.511442557318287,
+          "chunk_text": "“There’s a cold-blooded scoundrel!” said Holmes, laughing, as\nhe threw himself down into his chair once more. “That fellow will rise\nfrom crime to crime until he does something very bad, and ends on a gallows. The case has, in some respects, been not entirely devoid of interest.” “I cannot now entirely see all the steps of your reasoning,” I\nremarked. “Well, of course it was obvious from the first that this Mr. Hosmer Angel\nmust have some strong object for his curious conduct, and it was equally clear\nthat the only man who really profited by the incident, as far as we could see,\nwas the stepfather. Then the fact that the two men were never together, but\nthat the one always appeared when the other was away, was suggestive. So were\nthe tinted spectacles and the curious voice, which both hinted at a disguise,\nas did the bushy whiskers."
+        },
+        {
+          "rank": 5,
+          "chunk_uid": "g1661-s03-c0023",
+          "section_order": 3,
+          "section_title": "A Case of Identity",
+          "chunk_order": 23,
+          "token_count": 197,
+          "cosine_distance": 0.48905684086510814,
+          "cosine_similarity": 0.5109431591348919,
+          "chunk_text": "“He was a very shy man, Mr. Holmes. He would rather walk with me in the\nevening than in the daylight, for he said that he hated to be conspicuous. Very\nretiring and gentlemanly he was. Even his voice was gentle. He’d had the\nquinsy and swollen glands when he was young, he told me, and it had left him\nwith a weak throat, and a hesitating, whispering fashion of speech. He was\nalways well dressed, very neat and plain, but his eyes were weak, just as mine\nare, and he wore tinted glasses against the glare.” “Well, and what happened when Mr. Windibank, your stepfather, returned to\nFrance?” “Mr. Hosmer Angel came to the house again and proposed that we should\nmarry before father came back. He was in dreadful earnest and made me swear,\nwith my hands on the Testament, that whatever happened I would always be true\nto him."
+        },
+        {
+          "rank": 6,
+          "chunk_uid": "g1661-s03-c0038",
+          "section_order": 3,
+          "section_title": "A Case of Identity",
+          "chunk_order": 38,
+          "token_count": 183,
+          "cosine_distance": 0.49906156954352743,
+          "cosine_similarity": 0.5009384304564726,
+          "chunk_text": "You observed that her right glove was torn at the\nforefinger, but you did not apparently see that both glove and finger were\nstained with violet ink. She had written in a hurry and dipped her pen too\ndeep. It must have been this morning, or the mark would not remain clear upon\nthe finger. All this is amusing, though rather elementary, but I must go back\nto business, Watson. Would you mind reading me the advertised description of\nMr. Hosmer Angel?” I held the little printed slip to the light. “Missing,” it said,\n“on the morning of the fourteenth, a gentleman named Hosmer Angel. About\nfive ft. seven in. in height; strongly built, sallow complexion, black hair, a\nlittle bald in the centre, bushy, black side-whiskers and moustache; tinted\nglasses, slight infirmity of speech."
+        },
+        {
+          "rank": 7,
+          "chunk_uid": "g1661-s03-c0026",
+          "section_order": 3,
+          "section_title": "A Case of Identity",
+          "chunk_order": 26,
+          "token_count": 186,
+          "cosine_distance": 0.506033494888736,
+          "cosine_similarity": 0.49396650511126405,
+          "chunk_text": "Hosmer came for us in a hansom, but as there were two of us he put us\nboth into it and stepped himself into a four-wheeler, which happened to be the\nonly other cab in the street. We got to the church first, and when the\nfour-wheeler drove up we waited for him to step out, but he never did, and when\nthe cabman got down from the box and looked there was no one there! The cabman\nsaid that he could not imagine what had become of him, for he had seen him get\nin with his own eyes. That was last Friday, Mr. Holmes, and I have never seen\nor heard anything since then to throw any light upon what became of him.” “It seems to me that you have been very shamefully treated,” said\nHolmes. “Oh, no, sir! He was too good and kind to leave me so."
+        },
+        {
+          "rank": 8,
+          "chunk_uid": "g1661-s03-c0028",
+          "section_order": 3,
+          "section_title": "A Case of Identity",
+          "chunk_order": 28,
+          "token_count": 198,
+          "cosine_distance": 0.5089257213153158,
+          "cosine_similarity": 0.49107427868468423,
+          "chunk_text": "I believe that he foresaw some danger, or else he would not\nhave talked so. And then I think that what he foresaw happened.” “But you have no notion as to what it could have been?” “None.” “One more question. How did your mother take the matter?” “She was angry, and said that I was never to speak of the matter\nagain.” “And your father? Did you tell him?” “Yes; and he seemed to think, with me, that something had happened, and\nthat I should hear of Hosmer again. As he said, what interest could anyone have\nin bringing me to the doors of the church, and then leaving me? Now, if he had\nborrowed my money, or if he had married me and got my money settled on him,\nthere might be some reason, but Hosmer was very independent about money and\nnever would look at a shilling of mine."
+        },
+        {
+          "rank": 9,
+          "chunk_uid": "g1661-s03-c0055",
+          "section_order": 3,
+          "section_title": "A Case of Identity",
+          "chunk_order": 55,
+          "token_count": 191,
+          "cosine_distance": 0.5140001032948522,
+          "cosine_similarity": 0.48599989670514776,
+          "chunk_text": "With the connivance and assistance of his wife he disguised\nhimself, covered those keen eyes with tinted glasses, masked the face with a\nmoustache and a pair of bushy whiskers, sunk that clear voice into an\ninsinuating whisper, and doubly secure on account of the girl’s short\nsight, he appears as Mr. Hosmer Angel, and keeps off other lovers by making\nlove himself.” “It was only a joke at first,” groaned our visitor. “We never\nthought that she would have been so carried away.” “Very likely not. However that may be, the young lady was very decidedly\ncarried away, and, having quite made up her mind that her stepfather was in\nFrance, the suspicion of treachery never for an instant entered her mind. She\nwas flattered by the gentleman’s attentions, and the effect was increased\nby the loudly expressed admiration of her mother."
+        },
+        {
+          "rank": 10,
+          "chunk_uid": "g1661-s03-c0047",
+          "section_order": 3,
+          "section_title": "A Case of Identity",
+          "chunk_order": 47,
+          "token_count": 195,
+          "cosine_distance": 0.5233764804415844,
+          "cosine_similarity": 0.47662351955841564,
+          "chunk_text": "It was quite against my wishes that she came, but she is a very\nexcitable, impulsive girl, as you may have noticed, and she is not easily\ncontrolled when she has made up her mind on a point. Of course, I did not mind\nyou so much, as you are not connected with the official police, but it is not\npleasant to have a family misfortune like this noised abroad. Besides, it is a\nuseless expense, for how could you possibly find this Hosmer Angel?” “On the contrary,” said Holmes quietly; “I have every reason\nto believe that I will succeed in discovering Mr. Hosmer Angel.” Mr. Windibank gave a violent start and dropped his gloves. “I am\ndelighted to hear it,” he said. “It is a curious thing,” remarked Holmes, “that a typewriter\nhas really quite as much individuality as a man’s handwriting."
+        }
+      ]
+    },
+    {
+      "question_id": "q004",
+      "category": "symbolic_meaning",
+      "question": "What did the five orange pips represent, and why were they sent?",
+      "query_token_count": 17,
+      "embedding_duration_ms": 10.284856994985603,
+      "database_duration_ms": 8.100207007373683,
+      "candidate_story_orders": [
+        2,
+        4,
+        5,
+        7
+      ],
+      "retrieved_chunks": [
+        {
+          "rank": 1,
+          "chunk_uid": "g1661-s05-c0015",
+          "section_order": 5,
+          "section_title": "The Five Orange Pips",
+          "chunk_order": 15,
+          "token_count": 174,
+          "cosine_distance": 0.45695591486025866,
+          "cosine_similarity": 0.5430440851397413,
+          "chunk_text": "With a boy’s curiosity I have peeped through the keyhole, but I\nwas never able to see more than such a collection of old trunks and bundles as\nwould be expected in such a room. “One day—it was in March, 1883—a letter with a foreign stamp\nlay upon the table in front of the colonel’s plate. It was not a common\nthing for him to receive letters, for his bills were all paid in ready money,\nand he had no friends of any sort. ‘From India!’ said he as he took\nit up, ‘Pondicherry postmark! What can this be?’ Opening it\nhurriedly, out there jumped five little dried orange pips, which pattered down\nupon his plate. I began to laugh at this, but the laugh was struck from my lips\nat the sight of his face."
+        },
+        {
+          "rank": 2,
+          "chunk_uid": "g1661-s05-c0034",
+          "section_order": 5,
+          "section_title": "The Five Orange Pips",
+          "chunk_order": 34,
+          "token_count": 180,
+          "cosine_distance": 0.5225631283185993,
+          "cosine_similarity": 0.4774368716814007,
+          "chunk_text": "You have no further evidence, I suppose, than that which you have\nplaced before us—no suggestive detail which might help us?” “There is one thing,” said John Openshaw. He rummaged in his coat\npocket, and, drawing out a piece of discoloured, blue-tinted paper, he laid it\nout upon the table. “I have some remembrance,” said he, “that\non the day when my uncle burned the papers I observed that the small, unburned\nmargins which lay amid the ashes were of this particular colour. I found this\nsingle sheet upon the floor of his room, and I am inclined to think that it may\nbe one of the papers which has, perhaps, fluttered out from among the others,\nand in that way has escaped destruction. Beyond the mention of pips, I do not\nsee that it helps us much."
+        },
+        {
+          "rank": 3,
+          "chunk_uid": "g1661-s05-c0063",
+          "section_order": 5,
+          "section_title": "The Five Orange Pips",
+          "chunk_order": 63,
+          "token_count": 187,
+          "cosine_distance": 0.5280823988865369,
+          "cosine_similarity": 0.47191760111346315,
+          "chunk_text": "“Oh, I have my hand upon him. He and the two mates, are as I learn, the\nonly native-born Americans in the ship. The others are Finns and Germans. I\nknow, also, that they were all three away from the ship last night. I had it\nfrom the stevedore who has been loading their cargo. By the time that their\nsailing-ship reaches Savannah the mail-boat will have carried this letter, and\nthe cable will have informed the police of Savannah that these three gentlemen\nare badly wanted here upon a charge of murder.” There is ever a flaw, however, in the best laid of human plans, and the\nmurderers of John Openshaw were never to receive the orange pips which would\nshow them that another, as cunning and as resolute as themselves, was upon\ntheir track. Very long and very severe were the equinoctial gales that year."
+        },
+        {
+          "rank": 4,
+          "chunk_uid": "g1661-s05-c0035",
+          "section_order": 5,
+          "section_title": "The Five Orange Pips",
+          "chunk_order": 35,
+          "token_count": 180,
+          "cosine_distance": 0.5675403435504224,
+          "cosine_similarity": 0.4324596564495776,
+          "chunk_text": "I found this\nsingle sheet upon the floor of his room, and I am inclined to think that it may\nbe one of the papers which has, perhaps, fluttered out from among the others,\nand in that way has escaped destruction. Beyond the mention of pips, I do not\nsee that it helps us much. I think myself that it is a page from some private\ndiary. The writing is undoubtedly my uncle’s.” Holmes moved the lamp, and we both bent over the sheet of paper, which showed\nby its ragged edge that it had indeed been torn from a book. It was headed,\n“March, 1869,” and beneath were the following enigmatical notices: “4th. Hudson came. Same old platform. “7th. Set the pips on McCauley, Paramore, and John Swain of St.\nAugustine. “9th. McCauley cleared."
+        },
+        {
+          "rank": 5,
+          "chunk_uid": "g1661-s02-c0022",
+          "section_order": 2,
+          "section_title": "The Red-Headed League",
+          "chunk_order": 22,
+          "token_count": 191,
+          "cosine_distance": 0.5733106986695105,
+          "cosine_similarity": 0.42668930133048955,
+          "chunk_text": "From north,\nsouth, east, and west every man who had a shade of red in his hair had tramped\ninto the city to answer the advertisement. Fleet Street was choked with\nred-headed folk, and Pope’s Court looked like a coster’s orange\nbarrow. I should not have thought there were so many in the whole country as\nwere brought together by that single advertisement. Every shade of colour they\nwere—straw, lemon, orange, brick, Irish-setter, liver, clay; but, as\nSpaulding said, there were not many who had the real vivid flame-coloured tint. When I saw how many were waiting, I would have given it up in despair; but\nSpaulding would not hear of it. How he did it I could not imagine, but he\npushed and pulled and butted until he got me through the crowd, and right up to\nthe steps which led to the office."
+        },
+        {
+          "rank": 6,
+          "chunk_uid": "g1661-s05-c0060",
+          "section_order": 5,
+          "section_title": "The Five Orange Pips",
+          "chunk_order": 60,
+          "token_count": 180,
+          "cosine_distance": 0.613727168592552,
+          "cosine_similarity": 0.38627283140744795,
+          "chunk_text": "He took an orange from the cupboard, and tearing it to pieces he squeezed out\nthe pips upon the table. Of these he took five and thrust them into an\nenvelope. On the inside of the flap he wrote “S. H. for J. O.” Then\nhe sealed it and addressed it to “Captain James Calhoun, Barque Lone\nStar, Savannah, Georgia.” “That will await him when he enters port,” said he, chuckling. “It may give him a sleepless night. He will find it as sure a precursor\nof his fate as Openshaw did before him.” “And who is this Captain Calhoun?” “The leader of the gang. I shall have the others, but he first.” “How did you trace it, then?” He took a large sheet of paper from his pocket, all covered with dates and\nnames."
+        },
+        {
+          "rank": 7,
+          "chunk_uid": "g1661-s07-c0007",
+          "section_order": 7,
+          "section_title": "The Adventure of the Blue Carbuncle",
+          "chunk_order": 7,
+          "token_count": 200,
+          "cosine_distance": 0.6270714624481515,
+          "cosine_similarity": 0.3729285375518485,
+          "chunk_text": "The roughs had also fled at the appearance of Peterson, so that he was left in\npossession of the field of battle, and also of the spoils of victory in the\nshape of this battered hat and a most unimpeachable Christmas goose.” “Which surely he restored to their owner?” “My dear fellow, there lies the problem. It is true that ‘For Mrs.\nHenry Baker’ was printed upon a small card which was tied to the\nbird’s left leg, and it is also true that the initials ‘H.\nB.’ are legible upon the lining of this hat, but as there are some\nthousands of Bakers, and some hundreds of Henry Bakers in this city of ours, it\nis not easy to restore lost property to any one of them.” “What, then, did Peterson do?” “He brought round both hat and goose to me on Christmas morning, knowing\nthat even the smallest problems are of interest to me."
+        },
+        {
+          "rank": 8,
+          "chunk_uid": "g1661-s04-c0074",
+          "section_order": 4,
+          "section_title": "The Boscombe Valley Mystery",
+          "chunk_order": 74,
+          "token_count": 193,
+          "cosine_distance": 0.627312503617256,
+          "cosine_similarity": 0.372687496382744,
+          "chunk_text": "There were six of us, and we had a wild, free life of it, sticking up a station\nfrom time to time, or stopping the wagons on the road to the diggings. Black\nJack of Ballarat was the name I went under, and our party is still remembered\nin the colony as the Ballarat Gang. “One day a gold convoy came down from Ballarat to Melbourne, and we lay\nin wait for it and attacked it. There were six troopers and six of us, so it\nwas a close thing, but we emptied four of their saddles at the first volley. Three of our boys were killed, however, before we got the swag. I put my pistol\nto the head of the wagon-driver, who was this very man McCarthy. I wish to the\nLord that I had shot him then, but I spared him, though I saw his wicked little\neyes fixed on my face, as though to remember every feature."
+        },
+        {
+          "rank": 9,
+          "chunk_uid": "g1661-s05-c0017",
+          "section_order": 5,
+          "section_title": "The Five Orange Pips",
+          "chunk_order": 17,
+          "token_count": 181,
+          "cosine_distance": 0.6273715344224531,
+          "cosine_similarity": 0.3726284655775469,
+          "chunk_text": "I took up the envelope and saw\nscrawled in red ink upon the inner flap, just above the gum, the letter K three\ntimes repeated. There was nothing else save the five dried pips. What could be\nthe reason of his overpowering terror? I left the breakfast-table, and as I\nascended the stair I met him coming down with an old rusty key, which must have\nbelonged to the attic, in one hand, and a small brass box, like a cashbox, in\nthe other. “‘They may do what they like, but I’ll checkmate them\nstill,’ said he with an oath. ‘Tell Mary that I shall want a fire\nin my room to-day, and send down to Fordham, the Horsham lawyer.’ “I did as he ordered, and when the lawyer arrived I was asked to step up\nto the room."
+        },
+        {
+          "rank": 10,
+          "chunk_uid": "g1661-s05-c0025",
+          "section_order": 5,
+          "section_title": "The Five Orange Pips",
+          "chunk_order": 25,
+          "token_count": 186,
+          "cosine_distance": 0.6334413726995739,
+          "cosine_similarity": 0.3665586273004261,
+          "chunk_text": "“Well, it was the beginning of ’84 when my father came to live at\nHorsham, and all went as well as possible with us until the January of\n’85. On the fourth day after the new year I heard my father give a sharp\ncry of surprise as we sat together at the breakfast-table. There he was,\nsitting with a newly opened envelope in one hand and five dried orange pips in\nthe outstretched palm of the other one. He had always laughed at what he called\nmy cock-and-bull story about the colonel, but he looked very scared and puzzled\nnow that the same thing had come upon himself. “‘Why, what on earth does this mean, John?’ he\nstammered. “My heart had turned to lead. ‘It is K. K. K.,’ said I. “He looked inside the envelope. ‘So it is,’ he cried."
+        }
+      ]
+    },
+    {
+      "question_id": "q005",
+      "category": "multiple_identity",
+      "question": "Why did Neville St. Clair live part of his life as the beggar Hugh Boone?",
+      "query_token_count": 20,
+      "embedding_duration_ms": 11.155607993714511,
+      "database_duration_ms": 5.484166002133861,
+      "candidate_story_orders": [
+        5,
+        6
+      ],
+      "retrieved_chunks": [
+        {
+          "rank": 1,
+          "chunk_uid": "g1661-s06-c0032",
+          "section_order": 6,
+          "section_title": "The Man with the Twisted Lip",
+          "chunk_order": 32,
+          "token_count": 179,
+          "cosine_distance": 0.2929817088864146,
+          "cosine_similarity": 0.7070182911135854,
+          "chunk_text": "His\ndefence was one of absolute ignorance, and he protested that he had no\nknowledge as to the doings of Hugh Boone, his lodger, and that he could not\naccount in any way for the presence of the missing gentleman’s clothes. “So much for the Lascar manager. Now for the sinister cripple who lives\nupon the second floor of the opium den, and who was certainly the last human\nbeing whose eyes rested upon Neville St. Clair. His name is Hugh Boone, and his\nhideous face is one which is familiar to every man who goes much to the City. He is a professional beggar, though in order to avoid the police regulations he\npretends to a small trade in wax vestas. Some little distance down Threadneedle\nStreet, upon the left-hand side, there is, as you may have remarked, a small\nangle in the wall."
+        },
+        {
+          "rank": 2,
+          "chunk_uid": "g1661-s06-c0041",
+          "section_order": 6,
+          "section_title": "The Man with the Twisted Lip",
+          "chunk_order": 41,
+          "token_count": 199,
+          "cosine_distance": 0.29984973672634685,
+          "cosine_similarity": 0.7001502632736532,
+          "chunk_text": "Boone, as I have told you, was arrested and taken to the station, but it could\nnot be shown that there had ever before been anything against him. He had for\nyears been known as a professional beggar, but his life appeared to have been a\nvery quiet and innocent one. There the matter stands at present, and the\nquestions which have to be solved—what Neville St. Clair was doing in the\nopium den, what happened to him when there, where is he now, and what Hugh\nBoone had to do with his disappearance—are all as far from a solution as\never. I confess that I cannot recall any case within my experience which looked\nat the first glance so simple and yet which presented such difficulties.” While Sherlock Holmes had been detailing this singular series of events, we had\nbeen whirling through the outskirts of the great town until the last straggling\nhouses had been left behind, and we rattled along with a country hedge upon\neither side of us."
+        },
+        {
+          "rank": 3,
+          "chunk_uid": "g1661-s06-c0023",
+          "section_order": 6,
+          "section_title": "The Man with the Twisted Lip",
+          "chunk_order": 23,
+          "token_count": 212,
+          "cosine_distance": 0.39737970860245886,
+          "cosine_similarity": 0.6026202913975411,
+          "chunk_text": "“Some years ago—to be definite, in May, 1884—there came to\nLee a gentleman, Neville St. Clair by name, who appeared to have plenty of\nmoney. He took a large villa, laid out the grounds very nicely, and lived\ngenerally in good style. By degrees he made friends in the neighbourhood, and\nin 1887 he married the daughter of a local brewer, by whom he now has two\nchildren. He had no occupation, but was interested in several companies and\nwent into town as a rule in the morning, returning by the 5:14 from Cannon\nStreet every night. Mr. St. Clair is now thirty-seven years of age, is a man of\ntemperate habits, a good husband, a very affectionate father, and a man who is\npopular with all who know him. I may add that his whole debts at the present\nmoment, as far as we have been able to ascertain, amount to £ 88 10s.,\nwhile he has £ 220 standing to his credit in the Capital and Counties Bank."
+        },
+        {
+          "rank": 4,
+          "chunk_uid": "g1661-s06-c0024",
+          "section_order": 6,
+          "section_title": "The Man with the Twisted Lip",
+          "chunk_order": 24,
+          "token_count": 208,
+          "cosine_distance": 0.41692773993115206,
+          "cosine_similarity": 0.5830722600688479,
+          "chunk_text": "I may add that his whole debts at the present\nmoment, as far as we have been able to ascertain, amount to £ 88 10s.,\nwhile he has £ 220 standing to his credit in the Capital and Counties Bank. There is no reason, therefore, to think that money troubles have been weighing\nupon his mind. “Last Monday Mr. Neville St. Clair went into town rather earlier than\nusual, remarking before he started that he had two important commissions to\nperform, and that he would bring his little boy home a box of bricks. Now, by\nthe merest chance, his wife received a telegram upon this same Monday, very\nshortly after his departure, to the effect that a small parcel of considerable\nvalue which she had been expecting was waiting for her at the offices of the\nAberdeen Shipping Company. Now, if you are well up in your London, you will\nknow that the office of the company is in Fresno Street, which branches out of\nUpper Swandam Lane, where you found me to-night."
+        },
+        {
+          "rank": 5,
+          "chunk_uid": "g1661-s06-c0030",
+          "section_order": 6,
+          "section_title": "The Man with the Twisted Lip",
+          "chunk_order": 30,
+          "token_count": 201,
+          "cosine_distance": 0.49418038199181413,
+          "cosine_similarity": 0.5058196180081859,
+          "chunk_text": "Between the wharf and the bedroom\nwindow is a narrow strip, which is dry at low tide but is covered at high tide\nwith at least four and a half feet of water. The bedroom window was a broad one\nand opened from below. On examination traces of blood were to be seen upon the\nwindowsill, and several scattered drops were visible upon the wooden floor of\nthe bedroom. Thrust away behind a curtain in the front room were all the\nclothes of Mr. Neville St. Clair, with the exception of his coat. His boots,\nhis socks, his hat, and his watch—all were there. There were no signs of\nviolence upon any of these garments, and there were no other traces of Mr.\nNeville St. Clair. Out of the window he must apparently have gone for no other\nexit could be discovered, and the ominous bloodstains upon the sill gave little\npromise that he could save himself by swimming, for the tide was at its very\nhighest at the moment of the tragedy."
+        },
+        {
+          "rank": 6,
+          "chunk_uid": "g1661-s06-c0022",
+          "section_order": 6,
+          "section_title": "The Man with the Twisted Lip",
+          "chunk_order": 22,
+          "token_count": 204,
+          "cosine_distance": 0.508896467948802,
+          "cosine_similarity": 0.49110353205119806,
+          "chunk_text": "’Pon my word, it is a great\nthing for me to have someone to talk to, for my own thoughts are not\nover-pleasant. I was wondering what I should say to this dear little woman\nto-night when she meets me at the door.” “You forget that I know nothing about it.” “I shall just have time to tell you the facts of the case before we get\nto Lee. It seems absurdly simple, and yet, somehow I can get nothing to go\nupon. There’s plenty of thread, no doubt, but I can’t get the end\nof it into my hand. Now, I’ll state the case clearly and concisely to\nyou, Watson, and maybe you can see a spark where all is dark to me.” “Proceed, then.” “Some years ago—to be definite, in May, 1884—there came to\nLee a gentleman, Neville St. Clair by name, who appeared to have plenty of\nmoney."
+        },
+        {
+          "rank": 7,
+          "chunk_uid": "g1661-s05-c0013",
+          "section_order": 5,
+          "section_title": "The Five Orange Pips",
+          "chunk_order": 13,
+          "token_count": 196,
+          "cosine_distance": 0.5109292851770741,
+          "cosine_similarity": 0.48907071482292586,
+          "chunk_text": "He was a singular man, fierce and\nquick-tempered, very foul-mouthed when he was angry, and of a most retiring\ndisposition. During all the years that he lived at Horsham, I doubt if ever he\nset foot in the town. He had a garden and two or three fields round his house,\nand there he would take his exercise, though very often for weeks on end he\nwould never leave his room. He drank a great deal of brandy and smoked very\nheavily, but he would see no society and did not want any friends, not even his\nown brother. “He didn’t mind me; in fact, he took a fancy to me, for at the time\nwhen he saw me first I was a youngster of twelve or so. This would be in the\nyear 1878, after he had been eight or nine years in England. He begged my\nfather to let me live with him and he was very kind to me in his way."
+        },
+        {
+          "rank": 8,
+          "chunk_uid": "g1661-s06-c0068",
+          "section_order": 6,
+          "section_title": "The Man with the Twisted Lip",
+          "chunk_order": 68,
+          "token_count": 182,
+          "cosine_distance": 0.5278280625650762,
+          "cosine_similarity": 0.4721719374349238,
+          "chunk_text": "Holmes\nstooped to the water-jug, moistened his sponge, and then rubbed it twice\nvigorously across and down the prisoner’s face. “Let me introduce you,” he shouted, “to Mr. Neville St.\nClair, of Lee, in the county of Kent.” Never in my life have I seen such a sight. The man’s face peeled off\nunder the sponge like the bark from a tree. Gone was the coarse brown tint! Gone, too, was the horrid scar which had seamed it across, and the twisted lip\nwhich had given the repulsive sneer to the face! A twitch brought away the\ntangled red hair, and there, sitting up in his bed, was a pale, sad-faced,\nrefined-looking man, black-haired and smooth-skinned, rubbing his eyes and\nstaring about him with sleepy bewilderment."
+        },
+        {
+          "rank": 9,
+          "chunk_uid": "g1661-s06-c0035",
+          "section_order": 6,
+          "section_title": "The Man with the Twisted Lip",
+          "chunk_order": 35,
+          "token_count": 184,
+          "cosine_distance": 0.5298572445085916,
+          "cosine_similarity": 0.4701427554914084,
+          "chunk_text": "This is the man whom we now\nlearn to have been the lodger at the opium den, and to have been the last man\nto see the gentleman of whom we are in quest.” “But a cripple!” said I. “What could he have done\nsingle-handed against a man in the prime of life?” “He is a cripple in the sense that he walks with a limp; but in other\nrespects he appears to be a powerful and well-nurtured man. Surely your medical\nexperience would tell you, Watson, that weakness in one limb is often\ncompensated for by exceptional strength in the others.” “Pray continue your narrative.” “Mrs. St. Clair had fainted at the sight of the blood upon the window,\nand she was escorted home in a cab by the police, as her presence could be of\nno help to them in their investigations."
+        },
+        {
+          "rank": 10,
+          "chunk_uid": "g1661-s06-c0017",
+          "section_order": 6,
+          "section_title": "The Man with the Twisted Lip",
+          "chunk_order": 17,
+          "token_count": 209,
+          "cosine_distance": 0.5305520855722292,
+          "cosine_similarity": 0.4694479144277708,
+          "chunk_text": "Briefly, Watson, I am in the midst of a very remarkable inquiry, and I have\nhoped to find a clue in the incoherent ramblings of these sots, as I have done\nbefore now. Had I been recognised in that den my life would not have been worth\nan hour’s purchase; for I have used it before now for my own purposes,\nand the rascally Lascar who runs it has sworn to have vengeance upon me. There\nis a trap-door at the back of that building, near the corner of Paul’s\nWharf, which could tell some strange tales of what has passed through it upon\nthe moonless nights.” “What! You do not mean bodies?” “Ay, bodies, Watson. We should be rich men if we had £ 1000 for every\npoor devil who has been done to death in that den. It is the vilest murder-trap\non the whole riverside, and I fear that Neville St. Clair has entered it never\nto leave it more."
+        }
+      ]
+    },
+    {
+      "question_id": "q006",
+      "category": "event_chain",
+      "question": "How did the stolen blue carbuncle end up inside a Christmas goose?",
+      "query_token_count": 18,
+      "embedding_duration_ms": 10.042550013167784,
+      "database_duration_ms": 6.203791010193527,
+      "candidate_story_orders": [
+        7
+      ],
+      "retrieved_chunks": [
+        {
+          "rank": 1,
+          "chunk_uid": "g1661-s07-c0055",
+          "section_order": 7,
+          "section_title": "The Adventure of the Blue Carbuncle",
+          "chunk_order": 55,
+          "token_count": 184,
+          "cosine_distance": 0.487764835357666,
+          "cosine_similarity": 0.512235164642334,
+          "chunk_text": "I will just put on my slippers before we\nsettle this little matter of yours. Now, then! You want to know what became of\nthose geese?” “Yes, sir.” “Or rather, I fancy, of that goose. It was one bird, I imagine in which\nyou were interested—white, with a black bar across the tail.” Ryder quivered with emotion. “Oh, sir,” he cried, “can you\ntell me where it went to?” “It came here.” “Here?” “Yes, and a most remarkable bird it proved. I don’t wonder that you\nshould take an interest in it. It laid an egg after it was dead—the\nbonniest, brightest little blue egg that ever was seen. I have it here in my\nmuseum.” Our visitor staggered to his feet and clutched the mantelpiece with his right\nhand."
+        },
+        {
+          "rank": 2,
+          "chunk_uid": "g1661-s07-c0005",
+          "section_order": 7,
+          "section_title": "The Adventure of the Blue Carbuncle",
+          "chunk_order": 5,
+          "token_count": 180,
+          "cosine_distance": 0.4968761505558392,
+          "cosine_similarity": 0.5031238494441608,
+          "chunk_text": "It arrived upon Christmas morning, in company with a good\nfat goose, which is, I have no doubt, roasting at this moment in front of\nPeterson’s fire. The facts are these: about four o’clock on\nChristmas morning, Peterson, who, as you know, is a very honest fellow, was\nreturning from some small jollification and was making his way homeward down\nTottenham Court Road. In front of him he saw, in the gaslight, a tallish man,\nwalking with a slight stagger, and carrying a white goose slung over his\nshoulder. As he reached the corner of Goodge Street, a row broke out between\nthis stranger and a little knot of roughs. One of the latter knocked off the\nman’s hat, on which he raised his stick to defend himself and, swinging\nit over his head, smashed the shop window behind him."
+        },
+        {
+          "rank": 3,
+          "chunk_uid": "g1661-s07-c0029",
+          "section_order": 7,
+          "section_title": "The Adventure of the Blue Carbuncle",
+          "chunk_order": 29,
+          "token_count": 185,
+          "cosine_distance": 0.5035735068575429,
+          "cosine_similarity": 0.4964264931424571,
+          "chunk_text": "It was found in the banks of the Amoy River in southern China and is\nremarkable in having every characteristic of the carbuncle, save that it is\nblue in shade instead of ruby red. In spite of its youth, it has already a\nsinister history. There have been two murders, a vitriol-throwing, a suicide,\nand several robberies brought about for the sake of this forty-grain weight of\ncrystallised charcoal. Who would think that so pretty a toy would be a purveyor\nto the gallows and the prison? I’ll lock it up in my strong box now and\ndrop a line to the Countess to say that we have it.” “Do you think that this man Horner is innocent?” “I cannot tell.” “Well, then, do you imagine that this other one, Henry Baker, had\nanything to do with the matter?”"
+        },
+        {
+          "rank": 4,
+          "chunk_uid": "g1661-s07-c0008",
+          "section_order": 7,
+          "section_title": "The Adventure of the Blue Carbuncle",
+          "chunk_order": 8,
+          "token_count": 183,
+          "cosine_distance": 0.5270763917519805,
+          "cosine_similarity": 0.4729236082480195,
+          "chunk_text": "“What, then, did Peterson do?” “He brought round both hat and goose to me on Christmas morning, knowing\nthat even the smallest problems are of interest to me. The goose we retained\nuntil this morning, when there were signs that, in spite of the slight frost,\nit would be well that it should be eaten without unnecessary delay. Its finder\nhas carried it off, therefore, to fulfil the ultimate destiny of a goose, while\nI continue to retain the hat of the unknown gentleman who lost his Christmas\ndinner.” “Did he not advertise?” “No.” “Then, what clue could you have as to his identity?” “Only as much as we can deduce.” “From his hat?” “Precisely.” “But you are joking. What can you gather from this old battered\nfelt?” “Here is my lens."
+        },
+        {
+          "rank": 5,
+          "chunk_uid": "g1661-s07-c0006",
+          "section_order": 7,
+          "section_title": "The Adventure of the Blue Carbuncle",
+          "chunk_order": 6,
+          "token_count": 175,
+          "cosine_distance": 0.5511421828781249,
+          "cosine_similarity": 0.4488578171218751,
+          "chunk_text": "One of the latter knocked off the\nman’s hat, on which he raised his stick to defend himself and, swinging\nit over his head, smashed the shop window behind him. Peterson had rushed\nforward to protect the stranger from his assailants; but the man, shocked at\nhaving broken the window, and seeing an official-looking person in uniform\nrushing towards him, dropped his goose, took to his heels, and vanished amid\nthe labyrinth of small streets which lie at the back of Tottenham Court Road. The roughs had also fled at the appearance of Peterson, so that he was left in\npossession of the field of battle, and also of the spoils of victory in the\nshape of this battered hat and a most unimpeachable Christmas goose.” “Which surely he restored to their owner?” “My dear fellow, there lies the problem."
+        },
+        {
+          "rank": 6,
+          "chunk_uid": "g1661-s07-c0056",
+          "section_order": 7,
+          "section_title": "The Adventure of the Blue Carbuncle",
+          "chunk_order": 56,
+          "token_count": 190,
+          "cosine_distance": 0.5586580038070679,
+          "cosine_similarity": 0.44134199619293213,
+          "chunk_text": "It laid an egg after it was dead—the\nbonniest, brightest little blue egg that ever was seen. I have it here in my\nmuseum.” Our visitor staggered to his feet and clutched the mantelpiece with his right\nhand. Holmes unlocked his strong-box and held up the blue carbuncle, which\nshone out like a star, with a cold, brilliant, many-pointed radiance. Ryder\nstood glaring with a drawn face, uncertain whether to claim or to disown it. “The game’s up, Ryder,” said Holmes quietly. “Hold up,\nman, or you’ll be into the fire! Give him an arm back into his chair,\nWatson. He’s not got blood enough to go in for felony with impunity. Give\nhim a dash of brandy. So! Now he looks a little more human. What a shrimp it\nis, to be sure!”"
+        },
+        {
+          "rank": 7,
+          "chunk_uid": "g1661-s07-c0004",
+          "section_order": 7,
+          "section_title": "The Adventure of the Blue Carbuncle",
+          "chunk_order": 4,
+          "token_count": 203,
+          "cosine_distance": 0.5607062876224518,
+          "cosine_similarity": 0.4392937123775482,
+          "chunk_text": "“So much so,” I remarked, “that of the last six cases which I\nhave added to my notes, three have been entirely free of any legal\ncrime.” “Precisely. You allude to my attempt to recover the Irene Adler papers,\nto the singular case of Miss Mary Sutherland, and to the adventure of the man\nwith the twisted lip. Well, I have no doubt that this small matter will fall\ninto the same innocent category. You know Peterson, the commissionaire?” “Yes.” “It is to him that this trophy belongs.” “It is his hat.” “No, no, he found it. Its owner is unknown. I beg that you will look upon\nit not as a battered billycock but as an intellectual problem. And, first, as\nto how it came here. It arrived upon Christmas morning, in company with a good\nfat goose, which is, I have no doubt, roasting at this moment in front of\nPeterson’s fire."
+        },
+        {
+          "rank": 8,
+          "chunk_uid": "g1661-s07-c0049",
+          "section_order": 7,
+          "section_title": "The Adventure of the Blue Carbuncle",
+          "chunk_order": 49,
+          "token_count": 184,
+          "cosine_distance": 0.5655659735202789,
+          "cosine_similarity": 0.43443402647972107,
+          "chunk_text": "Turning round we saw a little rat-faced fellow\nstanding in the centre of the circle of yellow light which was thrown by the\nswinging lamp, while Breckinridge, the salesman, framed in the door of his\nstall, was shaking his fists fiercely at the cringing figure. “I’ve had enough of you and your geese,” he shouted. “I\nwish you were all at the devil together. If you come pestering me any more with\nyour silly talk I’ll set the dog at you. You bring Mrs. Oakshott here and\nI’ll answer her, but what have you to do with it? Did I buy the geese off\nyou?” “No; but one of them was mine all the same,” whined the little man. “Well, then, ask Mrs. Oakshott for it.” “She told me to ask you.”"
+        },
+        {
+          "rank": 9,
+          "chunk_uid": "g1661-s07-c0034",
+          "section_order": 7,
+          "section_title": "The Adventure of the Blue Carbuncle",
+          "chunk_order": 34,
+          "token_count": 185,
+          "cosine_distance": 0.565591428613151,
+          "cosine_similarity": 0.43440857138684896,
+          "chunk_text": "By the way, about the bird, we were compelled to eat\nit.” “To eat it!” Our visitor half rose from his chair in his\nexcitement. “Yes, it would have been of no use to anyone had we not done so. But I\npresume that this other goose upon the sideboard, which is about the same\nweight and perfectly fresh, will answer your purpose equally well?” “Oh, certainly, certainly,” answered Mr. Baker with a sigh of\nrelief. “Of course, we still have the feathers, legs, crop, and so on of your own\nbird, so if you wish—” The man burst into a hearty laugh. “They might be useful to me as relics\nof my adventure,” said he, “but beyond that I can hardly see what\nuse the disjecta membra of my late acquaintance are going to be to me."
+        },
+        {
+          "rank": 10,
+          "chunk_uid": "g1661-s07-c0007",
+          "section_order": 7,
+          "section_title": "The Adventure of the Blue Carbuncle",
+          "chunk_order": 7,
+          "token_count": 200,
+          "cosine_distance": 0.5759791731834412,
+          "cosine_similarity": 0.42402082681655884,
+          "chunk_text": "The roughs had also fled at the appearance of Peterson, so that he was left in\npossession of the field of battle, and also of the spoils of victory in the\nshape of this battered hat and a most unimpeachable Christmas goose.” “Which surely he restored to their owner?” “My dear fellow, there lies the problem. It is true that ‘For Mrs.\nHenry Baker’ was printed upon a small card which was tied to the\nbird’s left leg, and it is also true that the initials ‘H.\nB.’ are legible upon the lining of this hat, but as there are some\nthousands of Bakers, and some hundreds of Henry Bakers in this city of ours, it\nis not easy to restore lost property to any one of them.” “What, then, did Peterson do?” “He brought round both hat and goose to me on Christmas morning, knowing\nthat even the smallest problems are of interest to me."
+        }
+      ]
+    },
+    {
+      "question_id": "q007",
+      "category": "indirect_reference",
+      "question": "What was the \"speckled band\" that caused Julia Stoner's death?",
+      "query_token_count": 19,
+      "embedding_duration_ms": 9.81756200781092,
+      "database_duration_ms": 5.798988000606187,
+      "candidate_story_orders": [
+        2,
+        7,
+        8
+      ],
+      "retrieved_chunks": [
+        {
+          "rank": 1,
+          "chunk_uid": "g1661-s08-c0028",
+          "section_order": 8,
+          "section_title": "The Adventure of the Speckled Band",
+          "chunk_order": 28,
+          "token_count": 187,
+          "cosine_distance": 0.5413084030151367,
+          "cosine_similarity": 0.4586915969848633,
+          "chunk_text": "“The doctors examined her for it, but without success.” “What do you think that this unfortunate lady died of, then?” “It is my belief that she died of pure fear and nervous shock, though\nwhat it was that frightened her I cannot imagine.” “Were there gipsies in the plantation at the time?” “Yes, there are nearly always some there.” “Ah, and what did you gather from this allusion to a band—a\nspeckled band?” “Sometimes I have thought that it was merely the wild talk of delirium,\nsometimes that it may have referred to some band of people, perhaps to these\nvery gipsies in the plantation. I do not know whether the spotted handkerchiefs\nwhich so many of them wear over their heads might have suggested the strange\nadjective which she used.” Holmes shook his head like a man who is far from being satisfied."
+        },
+        {
+          "rank": 2,
+          "chunk_uid": "g1661-s08-c0036",
+          "section_order": 8,
+          "section_title": "The Adventure of the Speckled Band",
+          "chunk_order": 36,
+          "token_count": 188,
+          "cosine_distance": 0.5478799882078152,
+          "cosine_similarity": 0.45212001179218475,
+          "chunk_text": "“What becomes, then, of these nocturnal whistles, and what of the very\npeculiar words of the dying woman?” “I cannot think.” “When you combine the ideas of whistles at night, the presence of a band\nof gipsies who are on intimate terms with this old doctor, the fact that we\nhave every reason to believe that the doctor has an interest in preventing his\nstepdaughter’s marriage, the dying allusion to a band, and, finally, the\nfact that Miss Helen Stoner heard a metallic clang, which might have been\ncaused by one of those metal bars that secured the shutters falling back into\nits place, I think that there is good ground to think that the mystery may be\ncleared along those lines.” “But what, then, did the gipsies do?” “I cannot imagine.” “I see many objections to any such theory.”"
+        },
+        {
+          "rank": 3,
+          "chunk_uid": "g1661-s08-c0025",
+          "section_order": 8,
+          "section_title": "The Adventure of the Speckled Band",
+          "chunk_order": 25,
+          "token_count": 198,
+          "cosine_distance": 0.5720958582191423,
+          "cosine_similarity": 0.42790414178085767,
+          "chunk_text": "At first I thought that she had\nnot recognised me, but as I bent over her she suddenly shrieked out in a voice\nwhich I shall never forget, ‘Oh, my God! Helen! It was the band! The\nspeckled band!’ There was something else which she would fain have said,\nand she stabbed with her finger into the air in the direction of the\nDoctor’s room, but a fresh convulsion seized her and choked her words. I\nrushed out, calling loudly for my stepfather, and I met him hastening from his\nroom in his dressing-gown. When he reached my sister’s side she was\nunconscious, and though he poured brandy down her throat and sent for medical\naid from the village, all efforts were in vain, for she slowly sank and died\nwithout having recovered her consciousness. Such was the dreadful end of my\nbeloved sister.” “One moment,” said Holmes, “are you sure about this whistle\nand metallic sound?"
+        },
+        {
+          "rank": 4,
+          "chunk_uid": "g1661-s08-c0077",
+          "section_order": 8,
+          "section_title": "The Adventure of the Speckled Band",
+          "chunk_order": 77,
+          "token_count": 184,
+          "cosine_distance": 0.5792586207389832,
+          "cosine_similarity": 0.42074137926101685,
+          "chunk_text": "Round his brow he had a\npeculiar yellow band, with brownish speckles, which seemed to be bound tightly\nround his head. As we entered he made neither sound nor motion. “The band! the speckled band!” whispered Holmes. I took a step forward. In an instant his strange headgear began to move, and\nthere reared itself from among his hair the squat diamond-shaped head and\npuffed neck of a loathsome serpent. “It is a swamp adder!” cried Holmes; “the deadliest snake in\nIndia. He has died within ten seconds of being bitten. Violence does, in truth,\nrecoil upon the violent, and the schemer falls into the pit which he digs for\nanother. Let us thrust this creature back into its den, and we can then remove\nMiss Stoner to some place of shelter and let the county police know what has\nhappened.”"
+        },
+        {
+          "rank": 5,
+          "chunk_uid": "g1661-s08-c0026",
+          "section_order": 8,
+          "section_title": "The Adventure of the Speckled Band",
+          "chunk_order": 26,
+          "token_count": 202,
+          "cosine_distance": 0.6151884381529222,
+          "cosine_similarity": 0.38481156184707777,
+          "chunk_text": "Such was the dreadful end of my\nbeloved sister.” “One moment,” said Holmes, “are you sure about this whistle\nand metallic sound? Could you swear to it?” “That was what the county coroner asked me at the inquiry. It is my\nstrong impression that I heard it, and yet, among the crash of the gale and the\ncreaking of an old house, I may possibly have been deceived.” “Was your sister dressed?” “No, she was in her night-dress. In her right hand was found the charred\nstump of a match, and in her left a match-box.” “Showing that she had struck a light and looked about her when the alarm\ntook place. That is important. And what conclusions did the coroner come\nto?” “He investigated the case with great care, for Dr. Roylott’s\nconduct had long been notorious in the county, but he was unable to find any\nsatisfactory cause of death."
+        },
+        {
+          "rank": 6,
+          "chunk_uid": "g1661-s07-c0028",
+          "section_order": 7,
+          "section_title": "The Adventure of the Blue Carbuncle",
+          "chunk_order": 28,
+          "token_count": 182,
+          "cosine_distance": 0.6281109154224396,
+          "cosine_similarity": 0.3718890845775604,
+          "chunk_text": "And, I say, Peterson, just\nbuy a goose on your way back and leave it here with me, for we must have one to\ngive to this gentleman in place of the one which your family is now\ndevouring.” When the commissionaire had gone, Holmes took up the stone and held it against\nthe light. “It’s a bonny thing,” said he. “Just see how\nit glints and sparkles. Of course it is a nucleus and focus of crime. Every\ngood stone is. They are the devil’s pet baits. In the larger and older\njewels every facet may stand for a bloody deed. This stone is not yet twenty\nyears old. It was found in the banks of the Amoy River in southern China and is\nremarkable in having every characteristic of the carbuncle, save that it is\nblue in shade instead of ruby red."
+        },
+        {
+          "rank": 7,
+          "chunk_uid": "g1661-s02-c0069",
+          "section_order": 2,
+          "section_title": "The Red-Headed League",
+          "chunk_order": 69,
+          "token_count": 205,
+          "cosine_distance": 0.6436066839929405,
+          "cosine_similarity": 0.3563933160070595,
+          "chunk_text": "Then it lengthened\nout until it became a yellow line, and then, without any warning or sound, a\ngash seemed to open and a hand appeared, a white, almost womanly hand, which\nfelt about in the centre of the little area of light. For a minute or more the\nhand, with its writhing fingers, protruded out of the floor. Then it was\nwithdrawn as suddenly as it appeared, and all was dark again save the single\nlurid spark which marked a chink between the stones. Its disappearance, however, was but momentary. With a rending, tearing sound,\none of the broad, white stones turned over upon its side and left a square,\ngaping hole, through which streamed the light of a lantern. Over the edge there\npeeped a clean-cut, boyish face, which looked keenly about it, and then, with a\nhand on either side of the aperture, drew itself shoulder-high and waist-high,\nuntil one knee rested upon the edge."
+        },
+        {
+          "rank": 8,
+          "chunk_uid": "g1661-s08-c0083",
+          "section_order": 8,
+          "section_title": "The Adventure of the Speckled Band",
+          "chunk_order": 83,
+          "token_count": 184,
+          "cosine_distance": 0.645200122749809,
+          "cosine_similarity": 0.354799877250191,
+          "chunk_text": "An\ninspection of his chair showed me that he had been in the habit of standing on\nit, which of course would be necessary in order that he should reach the\nventilator. The sight of the safe, the saucer of milk, and the loop of whipcord\nwere enough to finally dispel any doubts which may have remained. The metallic\nclang heard by Miss Stoner was obviously caused by her stepfather hastily\nclosing the door of his safe upon its terrible occupant. Having once made up my\nmind, you know the steps which I took in order to put the matter to the proof. I heard the creature hiss as I have no doubt that you did also, and I instantly\nlit the light and attacked it.” “With the result of driving it through the ventilator.” “And also with the result of causing it to turn upon its master at the\nother side."
+        },
+        {
+          "rank": 9,
+          "chunk_uid": "g1661-s08-c0013",
+          "section_order": 8,
+          "section_title": "The Adventure of the Speckled Band",
+          "chunk_order": 13,
+          "token_count": 202,
+          "cosine_distance": 0.6486815721582423,
+          "cosine_similarity": 0.3513184278417577,
+          "chunk_text": "In a fit of anger, however, caused by some\nrobberies which had been perpetrated in the house, he beat his native butler to\ndeath and narrowly escaped a capital sentence. As it was, he suffered a long\nterm of imprisonment and afterwards returned to England a morose and\ndisappointed man. “When Dr. Roylott was in India he married my mother, Mrs. Stoner, the\nyoung widow of Major-General Stoner, of the Bengal Artillery. My sister Julia\nand I were twins, and we were only two years old at the time of my\nmother’s re-marriage. She had a considerable sum of money—not less\nthan £ 1000 a year—and this she bequeathed to Dr. Roylott entirely while\nwe resided with him, with a provision that a certain annual sum should be\nallowed to each of us in the event of our marriage. Shortly after our return to\nEngland my mother died—she was killed eight years ago in a railway\naccident near Crewe."
+        },
+        {
+          "rank": 10,
+          "chunk_uid": "g1661-s08-c0059",
+          "section_order": 8,
+          "section_title": "The Adventure of the Speckled Band",
+          "chunk_order": 59,
+          "token_count": 186,
+          "cosine_distance": 0.6495645046234131,
+          "cosine_similarity": 0.3504354953765869,
+          "chunk_text": "Ah, me! it’s a wicked world,\nand when a clever man turns his brains to crime it is the worst of all. I think\nthat I have seen enough now, Miss Stoner, and with your permission we shall\nwalk out upon the lawn.” I had never seen my friend’s face so grim or his brow so dark as it was\nwhen we turned from the scene of this investigation. We had walked several\ntimes up and down the lawn, neither Miss Stoner nor myself liking to break in\nupon his thoughts before he roused himself from his reverie. “It is very essential, Miss Stoner,” said he, “that you\nshould absolutely follow my advice in every respect.” “I shall most certainly do so.” “The matter is too serious for any hesitation. Your life may depend upon\nyour compliance.” “I assure you that I am in your hands.”"
+        }
+      ]
+    },
+    {
+      "question_id": "q008",
+      "category": "cross_story",
+      "question": "Which two cases involved suspiciously generous employment offers, and what hidden purpose did each offer serve?",
+      "query_token_count": 20,
+      "embedding_duration_ms": 10.060265005449764,
+      "database_duration_ms": 5.7852250029100105,
+      "candidate_story_orders": [
+        2,
+        3,
+        6,
+        7,
+        10,
+        11,
+        12
+      ],
+      "retrieved_chunks": [
+        {
+          "rank": 1,
+          "chunk_uid": "g1661-s02-c0075",
+          "section_order": 2,
+          "section_title": "The Red-Headed League",
+          "chunk_order": 75,
+          "token_count": 188,
+          "cosine_distance": 0.48841172456741333,
+          "cosine_similarity": 0.5115882754325867,
+          "chunk_text": "It was a curious way of managing it, but,\nreally, it would be difficult to suggest a better. The method was no doubt\nsuggested to Clay’s ingenious mind by the colour of his\naccomplice’s hair. The £ 4 a week was a lure which must draw him, and\nwhat was it to them, who were playing for thousands? They put in the\nadvertisement, one rogue has the temporary office, the other rogue incites the\nman to apply for it, and together they manage to secure his absence every\nmorning in the week. From the time that I heard of the assistant having come\nfor half wages, it was obvious to me that he had some strong motive for\nsecuring the situation.” “But how could you guess what the motive was?” “Had there been women in the house, I should have suspected a mere vulgar\nintrigue. That, however, was out of the question."
+        },
+        {
+          "rank": 2,
+          "chunk_uid": "g1661-s06-c0073",
+          "section_order": 6,
+          "section_title": "The Man with the Twisted Lip",
+          "chunk_order": 73,
+          "token_count": 209,
+          "cosine_distance": 0.5460226210342267,
+          "cosine_similarity": 0.4539773789657733,
+          "chunk_text": "I painted my face, and to make myself as pitiable as possible I made a good\nscar and fixed one side of my lip in a twist by the aid of a small slip of\nflesh-coloured plaster. Then with a red head of hair, and an appropriate dress,\nI took my station in the business part of the city, ostensibly as a\nmatch-seller but really as a beggar. For seven hours I plied my trade, and when\nI returned home in the evening I found to my surprise that I had received no\nless than 26s. 4d. “I wrote my articles and thought little more of the matter until, some\ntime later, I backed a bill for a friend and had a writ served upon me for £\n25. I was at my wit’s end where to get the money, but a sudden idea came\nto me. I begged a fortnight’s grace from the creditor, asked for a\nholiday from my employers, and spent the time in begging in the City under my\ndisguise."
+        },
+        {
+          "rank": 3,
+          "chunk_uid": "g1661-s02-c0028",
+          "section_order": 2,
+          "section_title": "The Red-Headed League",
+          "chunk_order": 28,
+          "token_count": 182,
+          "cosine_distance": 0.5471889972686768,
+          "cosine_similarity": 0.45281100273132324,
+          "chunk_text": "“‘Well, it is a little awkward, for I have a business\nalready,’ said I. “‘Oh, never mind about that, Mr. Wilson!’ said Vincent\nSpaulding. ‘I should be able to look after that for you.’ “‘What would be the hours?’ I asked. “‘Ten to two.’ “Now a pawnbroker’s business is mostly done of an evening, Mr.\nHolmes, especially Thursday and Friday evening, which is just before pay-day;\nso it would suit me very well to earn a little in the mornings. Besides, I knew\nthat my assistant was a good man, and that he would see to anything that turned\nup. “‘That would suit me very well,’ said I. ‘And the\npay?’ “‘Is £ 4 a week.’ “‘And the work?’"
+        },
+        {
+          "rank": 4,
+          "chunk_uid": "g1661-s02-c0040",
+          "section_order": 2,
+          "section_title": "The Red-Headed League",
+          "chunk_order": 40,
+          "token_count": 182,
+          "cosine_distance": 0.5586643780073887,
+          "cosine_similarity": 0.44133562199261134,
+          "chunk_text": "On\nthe contrary, you are, as I understand, richer by some £ 30, to say nothing of\nthe minute knowledge which you have gained on every subject which comes under\nthe letter A. You have lost nothing by them.” “No, sir. But I want to find out about them, and who they are, and what\ntheir object was in playing this prank—if it was a prank—upon me. It was a pretty expensive joke for them, for it cost them two and thirty\npounds.” “We shall endeavour to clear up these points for you. And, first, one or\ntwo questions, Mr. Wilson. This assistant of yours who first called your\nattention to the advertisement—how long had he been with you?” “About a month then.” “How did he come?” “In answer to an advertisement.” “Was he the only applicant?”"
+        },
+        {
+          "rank": 5,
+          "chunk_uid": "g1661-s02-c0076",
+          "section_order": 2,
+          "section_title": "The Red-Headed League",
+          "chunk_order": 76,
+          "token_count": 189,
+          "cosine_distance": 0.5637400708353469,
+          "cosine_similarity": 0.43625992916465306,
+          "chunk_text": "“Had there been women in the house, I should have suspected a mere vulgar\nintrigue. That, however, was out of the question. The man’s business was\na small one, and there was nothing in his house which could account for such\nelaborate preparations, and such an expenditure as they were at. It must, then,\nbe something out of the house. What could it be? I thought of the\nassistant’s fondness for photography, and his trick of vanishing into the\ncellar. The cellar! There was the end of this tangled clue. Then I made\ninquiries as to this mysterious assistant and found that I had to deal with one\nof the coolest and most daring criminals in London. He was doing something in\nthe cellar—something which took many hours a day for months on end. What\ncould it be, once more? I could think of nothing save that he was running a\ntunnel to some other building."
+        },
+        {
+          "rank": 6,
+          "chunk_uid": "g1661-s03-c0061",
+          "section_order": 3,
+          "section_title": "A Case of Identity",
+          "chunk_order": 61,
+          "token_count": 214,
+          "cosine_distance": 0.5839573740959167,
+          "cosine_similarity": 0.41604262590408325,
+          "chunk_text": "Then the fact that the two men were never together, but\nthat the one always appeared when the other was away, was suggestive. So were\nthe tinted spectacles and the curious voice, which both hinted at a disguise,\nas did the bushy whiskers. My suspicions were all confirmed by his peculiar\naction in typewriting his signature, which, of course, inferred that his\nhandwriting was so familiar to her that she would recognise even the smallest\nsample of it. You see all these isolated facts, together with many minor ones,\nall pointed in the same direction.” “And how did you verify them?” “Having once spotted my man, it was easy to get corroboration. I knew the\nfirm for which this man worked. Having taken the printed description. I\neliminated everything from it which could be the result of a disguise—the\nwhiskers, the glasses, the voice, and I sent it to the firm, with a request\nthat they would inform me whether it answered to the description of any of\ntheir travellers."
+        },
+        {
+          "rank": 7,
+          "chunk_uid": "g1661-s10-c0003",
+          "section_order": 10,
+          "section_title": "The Adventure of the Noble Bachelor",
+          "chunk_order": 3,
+          "token_count": 180,
+          "cosine_distance": 0.5874440915915904,
+          "cosine_similarity": 0.4125559084084096,
+          "chunk_text": "“Yes, my correspondence has certainly the charm of variety,” he\nanswered, smiling, “and the humbler are usually the more interesting. This looks like one of those unwelcome social summonses which call upon a man\neither to be bored or to lie.” He broke the seal and glanced over the contents. “Oh, come, it may prove to be something of interest, after all.” “Not social, then?” “No, distinctly professional.” “And from a noble client?” “One of the highest in England.” “My dear fellow, I congratulate you.” “I assure you, Watson, without affectation, that the status of my client\nis a matter of less moment to me than the interest of his case. It is just\npossible, however, that that also may not be wanting in this new investigation."
+        },
+        {
+          "rank": 8,
+          "chunk_uid": "g1661-s07-c0040",
+          "section_order": 7,
+          "section_title": "The Adventure of the Blue Carbuncle",
+          "chunk_order": 40,
+          "token_count": 192,
+          "cosine_distance": 0.5903732072862111,
+          "cosine_similarity": 0.4096267927137889,
+          "chunk_text": "It is possible that our inquiry may but confirm his\nguilt; but, in any case, we have a line of investigation which has been missed\nby the police, and which a singular chance has placed in our hands. Let us\nfollow it out to the bitter end. Faces to the south, then, and quick\nmarch!” We passed across Holborn, down Endell Street, and so through a zigzag of slums\nto Covent Garden Market. One of the largest stalls bore the name of\nBreckinridge upon it, and the proprietor a horsey-looking man, with a sharp\nface and trim side-whiskers was helping a boy to put up the shutters. “Good-evening. It’s a cold night,” said Holmes. The salesman nodded and shot a questioning glance at my companion. “Sold out of geese, I see,” continued Holmes, pointing at the bare\nslabs of marble."
+        },
+        {
+          "rank": 9,
+          "chunk_uid": "g1661-s12-c0011",
+          "section_order": 12,
+          "section_title": "The Adventure of the Copper Beeches",
+          "chunk_order": 11,
+          "token_count": 219,
+          "cosine_distance": 0.5905678164282036,
+          "cosine_similarity": 0.40943218357179645,
+          "chunk_text": "“I have been a governess for five years,” said she, “in the\nfamily of Colonel Spence Munro, but two months ago the colonel received an\nappointment at Halifax, in Nova Scotia, and took his children over to America\nwith him, so that I found myself without a situation. I advertised, and I\nanswered advertisements, but without success. At last the little money which I\nhad saved began to run short, and I was at my wit’s end as to what I\nshould do. “There is a well-known agency for governesses in the West End called\nWestaway’s, and there I used to call about once a week in order to see\nwhether anything had turned up which might suit me. Westaway was the name of\nthe founder of the business, but it is really managed by Miss Stoper. She sits\nin her own little office, and the ladies who are seeking employment wait in an\nanteroom, and are then shown in one by one, when she consults her ledgers and\nsees whether she has anything which would suit them."
+        },
+        {
+          "rank": 10,
+          "chunk_uid": "g1661-s11-c0040",
+          "section_order": 11,
+          "section_title": "The Adventure of the Beryl Coronet",
+          "chunk_order": 40,
+          "token_count": 206,
+          "cosine_distance": 0.591544229800194,
+          "cosine_similarity": 0.40845577019980595,
+          "chunk_text": "I confess that the guilt of the banker’s\nson appeared to me to be as obvious as it did to his unhappy father, but still\nI had such faith in Holmes’ judgment that I felt that there must be some\ngrounds for hope as long as he was dissatisfied with the accepted explanation. He hardly spoke a word the whole way out to the southern suburb, but sat with\nhis chin upon his breast and his hat drawn over his eyes, sunk in the deepest\nthought. Our client appeared to have taken fresh heart at the little glimpse of\nhope which had been presented to him, and he even broke into a desultory chat\nwith me over his business affairs. A short railway journey and a shorter walk\nbrought us to Fairbank, the modest residence of the great financier. Fairbank was a good-sized square house of white stone, standing back a little\nfrom the road. A double carriage-sweep, with a snow-clad lawn, stretched down\nin front to two large iron gates which closed the entrance."
+        }
+      ]
+    }
+  ]
+}

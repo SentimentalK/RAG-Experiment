@@ -143,7 +143,15 @@ def test_ingest_successful(connection, service, sample_document, sample_sections
         assert rows[2] == ("chk-3", 2, "Second Section")
 
         # 4. Verify embeddings count remains 0
-        cur.execute("SELECT COUNT(*) FROM minilm_embeddings;")
+        cur.execute(
+            """
+            SELECT COUNT(*) FROM minilm_embeddings e
+            JOIN chunks c ON c.chunk_id = e.chunk_id
+            JOIN sections s ON s.section_id = c.section_id
+            WHERE s.document_id = %s;
+            """,
+            (sample_document["document_id"],)
+        )
         assert cur.fetchone()[0] == 0
 
 def test_ingest_already_exists_behavior(connection, service, sample_document, sample_sections, sample_chunks):

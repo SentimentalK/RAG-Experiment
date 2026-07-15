@@ -190,7 +190,15 @@ def test_ingest_embeddings_successful(connection, service, doc_id, pre_ingested_
 
     # Double check Postgres counts
     with connection.cursor() as cur:
-        cur.execute("SELECT COUNT(*) FROM minilm_embeddings;")
+        cur.execute(
+            """
+            SELECT COUNT(*) FROM minilm_embeddings e
+            JOIN chunks c ON c.chunk_id = e.chunk_id
+            JOIN sections s ON s.section_id = c.section_id
+            WHERE s.document_id = %s;
+            """,
+            (doc_id,)
+        )
         assert cur.fetchone()[0] == 3
 
 def test_ingest_embeddings_replace_and_duplicate(connection, service, doc_id, pre_ingested_db):
@@ -220,9 +228,24 @@ def test_ingest_embeddings_replace_and_duplicate(connection, service, doc_id, pr
     service.ingest(doc_id, matrix, index_records, expected_chunks, "all-MiniLM-L6-v2", replace=True)
 
     with connection.cursor() as cur:
-        cur.execute("SELECT COUNT(*) FROM minilm_embeddings;")
+        cur.execute(
+            """
+            SELECT COUNT(*) FROM minilm_embeddings e
+            JOIN chunks c ON c.chunk_id = e.chunk_id
+            JOIN sections s ON s.section_id = c.section_id
+            WHERE s.document_id = %s;
+            """,
+            (doc_id,)
+        )
         assert cur.fetchone()[0] == 3
-        cur.execute("SELECT COUNT(*) FROM chunks;")
+        cur.execute(
+            """
+            SELECT COUNT(*) FROM chunks c
+            JOIN sections s ON s.section_id = c.section_id
+            WHERE s.document_id = %s;
+            """,
+            (doc_id,)
+        )
         assert cur.fetchone()[0] == 3
 
 class BrokenEmbeddingIngestionService(EmbeddingIngestionService):
