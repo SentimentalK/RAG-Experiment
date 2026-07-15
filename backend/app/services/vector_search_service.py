@@ -4,6 +4,11 @@ import numpy as np
 import psycopg
 from app.db.connection import get_connection
 from app.providers.minilm_provider import MiniLMProvider
+from app.core.exceptions import (
+    InvalidRagRequestError,
+    DocumentNotFoundError,
+    RetrievalUnavailableError,
+)
 
 @dataclass(frozen=True)
 class VectorSearchResult:
@@ -33,20 +38,20 @@ class VectorSearchService:
         """
         # 1. Question validation
         if not isinstance(question, str):
-            raise TypeError("Question must be a string.")
+            raise InvalidRagRequestError("Question must be a string.")
 
         question = question.strip()
         if not question:
-            raise ValueError("Question cannot be empty.")
+            raise InvalidRagRequestError("Question cannot be empty.")
 
         # 2. top_k validation
         if not (1 <= top_k <= 50):
-            raise ValueError("top_k must be between 1 and 50.")
+            raise InvalidRagRequestError("top_k must be between 1 and 50.")
 
         # 3. Question Token length validation
         query_token_count = self._provider.count_tokens(question)
         if query_token_count > self._provider.max_sequence_length:
-            raise ValueError(
+            raise InvalidRagRequestError(
                 f"Question contains {query_token_count} tokens, "
                 f"but the model limit is {self._provider.max_sequence_length}."
             )
@@ -61,7 +66,7 @@ class VectorSearchService:
                 doc_exists = cur.fetchone()[0]
 
             if not doc_exists:
-                raise ValueError(f"Document not found: {document_id}")
+                raise DocumentNotFoundError(f"Document not found: {document_id}")
 
             # 5. Database coverage checks filtered by document and model name
             with conn.cursor() as cur:
@@ -82,10 +87,10 @@ class VectorSearchService:
                 chunk_count, embedding_count = cur.fetchone()
 
             if chunk_count == 0:
-                raise ValueError(f"Document contains no chunks: {document_id}")
+                raise RetrievalUnavailableError(f"Document contains no chunks: {document_id}")
 
             if embedding_count != chunk_count:
-                raise ValueError(
+                raise RetrievalUnavailableError(
                     f"Embedding coverage incomplete: chunks={chunk_count}, "
                     f"embeddings={embedding_count} for model '{self._provider.model_name}'."
                 )

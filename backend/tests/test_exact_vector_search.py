@@ -8,6 +8,12 @@ from app.services.vector_search_service import VectorSearchService
 from app.services.content_ingestion_service import ContentIngestionService
 from app.services.embedding_ingestion_service import EmbeddingIngestionService
 from app.core.config import settings
+from app.core.exceptions import (
+    InvalidRagRequestError,
+    DocumentNotFoundError,
+    RetrievalUnavailableError,
+)
+
 
 @pytest.fixture(autouse=True)
 def clean_test_documents():
@@ -124,29 +130,29 @@ def loaded_production_data():
 # ----------------- Input validations tests -----------------
 
 def test_search_invalid_question_type(service):
-    with pytest.raises(TypeError, match="Question must be a string"):
+    with pytest.raises(InvalidRagRequestError, match="Question must be a string"):
         service.search(None, "gutenberg-1661")
 
 def test_search_empty_question(service):
-    with pytest.raises(ValueError, match="Question cannot be empty"):
+    with pytest.raises(InvalidRagRequestError, match="Question cannot be empty"):
         service.search("   ", "gutenberg-1661")
 
 def test_search_invalid_top_k(service):
-    with pytest.raises(ValueError, match="top_k must be between 1 and 50"):
+    with pytest.raises(InvalidRagRequestError, match="top_k must be between 1 and 50"):
         service.search("Query", "gutenberg-1661", top_k=0)
-    with pytest.raises(ValueError, match="top_k must be between 1 and 50"):
+    with pytest.raises(InvalidRagRequestError, match="top_k must be between 1 and 50"):
         service.search("Query", "gutenberg-1661", top_k=51)
 
 def test_search_too_long_question(service, provider):
     # Construct a question that has more than 256 tokens
     long_question = "word " * 300
-    with pytest.raises(ValueError, match="Question contains .* tokens, but the model limit is"):
+    with pytest.raises(InvalidRagRequestError, match="Question contains .* tokens, but the model limit is"):
         service.search(long_question, "gutenberg-1661")
 
 # ----------------- Database Coverage validations tests -----------------
 
 def test_search_document_not_found(service):
-    with pytest.raises(ValueError, match="Document not found: test-vector-search-non-existent"):
+    with pytest.raises(DocumentNotFoundError, match="Document not found: test-vector-search-non-existent"):
         service.search("Sherlock Holmes", "test-vector-search-non-existent")
 
 def test_search_document_no_chunks(service):
@@ -163,7 +169,7 @@ def test_search_document_no_chunks(service):
             )
         conn.commit()
 
-    with pytest.raises(ValueError, match="contains no chunks"):
+    with pytest.raises(RetrievalUnavailableError, match="contains no chunks"):
         service.search("Sherlock Holmes", doc_id)
 
 def test_search_incomplete_embeddings(service):
@@ -208,7 +214,7 @@ def test_search_incomplete_embeddings(service):
         conn.commit()
 
     # 3. Assert search fails due to incomplete coverage
-    with pytest.raises(ValueError, match="Embedding coverage incomplete: chunks=3, embeddings=2"):
+    with pytest.raises(RetrievalUnavailableError, match="Embedding coverage incomplete: chunks=3, embeddings=2"):
         service.search("Sherlock Holmes", doc_id)
 
 # ----------------- Exact vector search behavior tests -----------------

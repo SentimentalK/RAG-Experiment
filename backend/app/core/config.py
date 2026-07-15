@@ -27,6 +27,9 @@ class Settings(BaseSettings):
     GROQ_MODEL: str = "openai/gpt-oss-120b"
     GROQ_BASE_URL: str = "https://api.groq.com/openai/v1"
 
+    # CORS Settings
+    CORS_ORIGINS: list[str] = ["http://localhost:5173"]
+
     @property
     def raw_html_path(self) -> Path:
         return self.RAW_DATA_DIR / self.SHERLOCK_RAW_HTML_FILENAME
