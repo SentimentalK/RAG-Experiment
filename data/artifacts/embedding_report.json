@@ -1,0 +1,29 @@
+{
+  "model_name": "sentence-transformers/all-MiniLM-L6-v2",
+  "model_max_sequence_length": 256,
+  "device": "cpu",
+  "dimensions": 384,
+  "normalized": true,
+  "dtype": "float32",
+  "batch_size": 32,
+  "chunk_count": 909,
+  "matrix_shape": [
+    909,
+    384
+  ],
+  "finite_value_count": 349056,
+  "invalid_value_count": 0,
+  "minimum_vector_norm": 0.9999999,
+  "maximum_vector_norm": 1.0000001,
+  "average_vector_norm": 1.0,
+  "minimum_token_count": 60,
+  "maximum_token_count": 220,
+  "token_count_mismatches": 0,
+  "duration_seconds": 31.78,
+  "input_chunks_sha256": "ad1ba3003ceb81589683d0b560f5ee934ceae671e5505674fbb21f696d7b2a04",
+  "embeddings_file_sha256": "e9cdab6e99ac9de3b8690822be4628472de62118719fba283e179d1ae331b641",
+  "index_file_sha256": "9005c23d59c5964940a426d6c6ee9ca4dcff8771cda049da74b335e709dcd4cd",
+  "sentence_transformers_version": "5.6.0",
+  "numpy_version": "1.26.4",
+  "python_version": "3.12.6"
+}

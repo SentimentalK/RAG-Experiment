@@ -4,9 +4,5 @@ cache/
 *.pyc
 .DS_Store
 
-# RAG Experiment generated local cache artifacts
-data/artifacts/*.npy
-data/artifacts/*_index.jsonl
-data/artifacts/embedding_report.json
 .env
 .env.*
