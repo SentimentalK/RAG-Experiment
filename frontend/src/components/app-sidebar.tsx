@@ -57,7 +57,7 @@ export function AppSidebar() {
                 <SidebarMenuButton render={<Link to="/ask" />} tooltip="Ask a Question" isActive={location.pathname.startsWith("/ask")}>
                   <MessageSquare className="h-4 w-4" />
                   <span className="flex-1">Ask a Question</span>
-                  <Badge variant="secondary" className="text-[10px] uppercase font-bold py-0 h-4">Soon</Badge>
+                  <Badge variant="outline" className="text-[10px] uppercase font-bold py-0 h-4 bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 border-green-200 dark:border-green-800">Live</Badge>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>

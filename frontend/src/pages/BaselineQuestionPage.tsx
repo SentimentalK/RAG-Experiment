@@ -84,10 +84,42 @@ export default function BaselineQuestionPage() {
           )}
         </CardHeader>
         <CardContent className="pt-6">
-          <h3 className="font-semibold text-sm mb-2 text-muted-foreground uppercase tracking-wider">Reference Answer</h3>
-          <p className="text-sm bg-primary/5 border border-primary/10 rounded-md p-4 text-foreground/90">
-            {question.reference_answer}
-          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider">Reference Answer</h3>
+                <span className="text-xs text-muted-foreground bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">
+                  LLM-assisted · Human-reviewed
+                </span>
+              </div>
+              <p className="text-sm bg-primary/5 border border-primary/10 rounded-md p-4 text-foreground/90 min-h-[120px]">
+                {question.reference_answer}
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider">Generated RAG Answer</h3>
+                <span className="text-xs text-muted-foreground bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">
+                  GPT-OSS-120B · Based only on Top 10
+                </span>
+              </div>
+              {question.rag_answer ? (
+                <div className="text-sm bg-blue-50/30 dark:bg-blue-950/10 border border-blue-100 dark:border-blue-900/30 rounded-md p-4 text-foreground/90 min-h-[120px] flex flex-col justify-between">
+                  <p>{question.rag_answer.answer}</p>
+                  <div className="mt-4 pt-3 border-t border-blue-100/50 dark:border-blue-900/20 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+                    <span>Evidence: {question.rag_answer.evidence_sufficient ? "Sufficient" : "Insufficient"}</span>
+                    <span>Confidence: {(question.rag_answer.confidence * 100).toFixed(0)}%</span>
+                    <span>Time: {question.rag_answer.generation_duration_ms.toFixed(0)}ms</span>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-sm bg-slate-50 border border-dashed rounded-md p-4 text-muted-foreground min-h-[120px] flex items-center justify-center">
+                  No RAG answer generated for this question.
+                </p>
+              )}
+            </div>
+          </div>
           
           <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
             <TooltipProvider>
@@ -121,16 +153,34 @@ export default function BaselineQuestionPage() {
       <div className="space-y-4 mt-8">
         <h2 className="text-xl font-bold tracking-tight">Top 10 Retrieved Chunks</h2>
         <div className="space-y-4">
-          {question.retrieved_chunks.map((chunk) => (
-            <ChunkCard key={chunk.chunk_uid} chunk={chunk} />
-          ))}
+          {question.retrieved_chunks.map((chunk) => {
+            const citation = question.rag_answer?.citations?.find(c => c.chunk_uid === chunk.chunk_uid);
+            const isCited = !!citation;
+            const citationReason = citation?.reason;
+            return (
+              <ChunkCard 
+                key={chunk.chunk_uid} 
+                chunk={chunk} 
+                isCited={isCited}
+                citationReason={citationReason}
+              />
+            );
+          })}
         </div>
       </div>
     </div>
   );
 }
 
-function ChunkCard({ chunk }: { chunk: EvaluatedChunk }) {
+function ChunkCard({ 
+  chunk, 
+  isCited, 
+  citationReason 
+}: { 
+  chunk: EvaluatedChunk; 
+  isCited?: boolean; 
+  citationReason?: string; 
+}) {
   const getLabelColor = (label: string) => {
     switch (label) {
       case "direct_evidence":
@@ -156,7 +206,7 @@ function ChunkCard({ chunk }: { chunk: EvaluatedChunk }) {
   };
 
   return (
-    <Card className="border-slate-200 shadow-sm dark:border-slate-800 overflow-hidden group">
+    <Card className={`border-slate-200 shadow-sm dark:border-slate-800 overflow-hidden group transition-all ${isCited ? "border-blue-500 ring-1 ring-blue-100 dark:ring-blue-950/30" : ""}`}>
       <div className="flex flex-col md:flex-row md:items-center justify-between p-4 bg-slate-50 dark:bg-slate-900/50 border-b gap-4">
         <div className="flex items-center gap-3">
           <div className="flex items-center justify-center h-8 w-8 rounded-full bg-primary/10 text-primary font-bold text-sm">
@@ -179,9 +229,16 @@ function ChunkCard({ chunk }: { chunk: EvaluatedChunk }) {
           </div>
         </div>
         
-        <Badge variant="outline" className={`${getLabelColor(chunk.judgment.label)} whitespace-nowrap`}>
-          {getLabelText(chunk.judgment.label)}
-        </Badge>
+        <div className="flex items-center gap-2 flex-wrap">
+          <Badge variant="outline" className={`${getLabelColor(chunk.judgment.label)} whitespace-nowrap`}>
+            {getLabelText(chunk.judgment.label)}
+          </Badge>
+          {isCited && (
+            <Badge variant="outline" className="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 border-blue-200 dark:border-blue-800 whitespace-nowrap">
+              Cited by RAG
+            </Badge>
+          )}
+        </div>
       </div>
       
       <CardContent className="p-0">
@@ -196,6 +253,12 @@ function ChunkCard({ chunk }: { chunk: EvaluatedChunk }) {
                   <span className="font-semibold text-foreground not-italic block mb-1">Judge Reasoning:</span>
                   {chunk.judgment.reason}
                 </div>
+                {isCited && citationReason && (
+                  <div className="bg-blue-50/50 dark:bg-blue-950/20 rounded-md p-3 text-sm text-muted-foreground italic border border-blue-100/50 dark:border-blue-900/20">
+                    <span className="font-semibold text-foreground not-italic block mb-1">RAG Citation Reason:</span>
+                    {citationReason}
+                  </div>
+                )}
                 <div>
                   <p className="text-sm leading-relaxed text-foreground whitespace-pre-wrap font-serif">
                     {chunk.chunk_text}

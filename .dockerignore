@@ -1,0 +1,13 @@
+.git
+**/node_modules
+**/dist
+.DS_Store
+.env
+.env.*
+
+# Ignore data directory as it is not needed for building images
+data/
+
+# Ignore experiments except the baseline evaluation JSON needed by frontend build
+experiments/
+!experiments/baseline_v1/generated/baseline_evaluation.json

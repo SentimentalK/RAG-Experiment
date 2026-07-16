@@ -138,6 +138,7 @@ export interface QuestionEvaluation {
   missing_evidence_within_candidate_stories: MissingEvidence[];
   judge_assessment: JudgeAssessment;
   computed_metrics: QuestionMetrics;
+  rag_answer?: BaselineRagAnswer | null;
 }
 
 export interface SourceProvenance {
@@ -159,4 +160,66 @@ export interface BaselineEvaluation {
   aggregate_metrics: AggregateMetrics;
   questions: QuestionEvaluation[];
   source_provenance: SourceProvenance;
+}
+
+export interface RagCitation {
+  chunk_uid: string;
+  reason: string;
+}
+
+export interface TokenUsage {
+  prompt_tokens: number;
+  completion_tokens: number;
+  total_tokens: number;
+}
+
+export interface BaselineRagAnswer {
+  generation_id: string;
+  prompt_version: string;
+  model_name: string;
+  answer: string;
+  evidence_sufficient: boolean;
+  citations: RagCitation[];
+  confidence: number;
+  generation_duration_ms: number;
+  attempt_count: number;
+  usage: TokenUsage | null;
+  context_chunk_uids: string[];
+}
+
+export interface LiveRetrievalResult {
+  rank: number;
+  chunk_uid: string;
+  section_order: number;
+  section_title: string;
+  chunk_order: number;
+  token_count: number;
+  chunk_text: string;
+  cosine_distance: number;
+  cosine_similarity: number;
+}
+
+export interface LiveRagAnswerResponse {
+  request_id: string;
+  question: string;
+  document_id: string;
+
+  retrieval: {
+    model_name: string;
+    top_k: number;
+    embedding_duration_ms: number;
+    database_duration_ms: number;
+    results: LiveRetrievalResult[];
+  };
+
+  generation: {
+    model_name: string;
+    answer: string;
+    evidence_sufficient: boolean;
+    citations: RagCitation[];
+    confidence: number;
+    generation_duration_ms: number;
+    attempt_count: number;
+    usage: TokenUsage | null;
+  };
 }
