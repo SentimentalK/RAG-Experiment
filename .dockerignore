@@ -5,8 +5,19 @@
 .env
 .env.*
 
-# Ignore data directory as it is not needed for building images
-data/
+# Ignore data directory contents except for deterministic dataset artifacts
+data/*
+!data/processed/
+!data/processed/document.json
+!data/processed/sections.jsonl
+!data/processed/chunks.jsonl
+!data/artifacts/
+!data/artifacts/minilm_embeddings.npy
+!data/artifacts/minilm_embedding_index.jsonl
+!data/artifacts/embedding_report.json
+!data/artifacts/content_ingestion_report.json
+!data/artifacts/embedding_ingestion_report.json
+
 
 # Ignore experiments except the baseline evaluation JSON needed by frontend build
 experiments/

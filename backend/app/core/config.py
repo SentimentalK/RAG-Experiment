@@ -1,8 +1,15 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pathlib import Path
 
-# Base directory of the workspace
-BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
+# Base directory of the workspace (handles container directory structures gracefully)
+_config_dir = Path(__file__).resolve().parent
+if len(_config_dir.parents) >= 2 and _config_dir.parents[1].name == "backend":
+    BASE_DIR = _config_dir.parents[2]
+else:
+    BASE_DIR = _config_dir.parents[1]
+
+
+
 
 class Settings(BaseSettings):
     # App Settings

@@ -14,6 +14,18 @@ RUN poetry install --only main --no-root
 
 COPY backend/ ./
 
+# Copy deterministic dataset artifacts
+COPY data/processed/document.json ./data/processed/document.json
+COPY data/processed/sections.jsonl ./data/processed/sections.jsonl
+COPY data/processed/chunks.jsonl ./data/processed/chunks.jsonl
+
+COPY data/artifacts/minilm_embeddings.npy ./data/artifacts/minilm_embeddings.npy
+COPY data/artifacts/minilm_embedding_index.jsonl ./data/artifacts/minilm_embedding_index.jsonl
+COPY data/artifacts/embedding_report.json ./data/artifacts/embedding_report.json
+COPY data/artifacts/content_ingestion_report.json ./data/artifacts/content_ingestion_report.json
+COPY data/artifacts/embedding_ingestion_report.json ./data/artifacts/embedding_ingestion_report.json
+
+
 EXPOSE 8000
 
 CMD [ \

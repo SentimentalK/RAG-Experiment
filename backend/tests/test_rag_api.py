@@ -76,7 +76,8 @@ def test_readiness_endpoint_when_not_ready():
         app.state.ready = False
         response = local_client.get("/api/health/ready")
         assert response.status_code == 503
-        assert response.json()["status"] == "degraded"
+        assert response.json()["status"] == "not_ready"
+        assert response.json()["dataset"] == "not_initialized"
 
 def test_readiness_endpoint_db_failure(client):
     # Mock connection failure by replacing get_connection with a failure mock
@@ -87,7 +88,8 @@ def test_readiness_endpoint_db_failure(client):
     try:
         response = client.get("/api/health/ready")
         assert response.status_code == 503
-        assert "Database connection failed" in response.json()["detail"]
+        assert response.json()["status"] == "not_ready"
+        assert response.json()["database"] == "disconnected"
     finally:
         health_module.get_connection = old_get_conn
 
