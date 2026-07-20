@@ -1,0 +1,46 @@
+{
+  "accepted_count": 10398,
+  "configuration_hash": "3787a8f238134a3fd691cda0e51f3e8e7b36f3f8c26d42a60a0b43d3c1e33e43",
+  "experiment_id": "noun-units-v2a",
+  "generated_at": "2026-07-20T02:08:57Z",
+  "input_hashes": {
+    "chunks": "ad1ba3003ceb81589683d0b560f5ee934ceae671e5505674fbb21f696d7b2a04",
+    "sections": "49fdcfeb58bd9d811aa574323966182515131256083a41ccaf001b7a045d0ff5"
+  },
+  "input_paths": {
+    "chunks": "/Users/sentimentalk/codes/RAG-Experiment/data/processed/chunks.jsonl",
+    "sections": "/Users/sentimentalk/codes/RAG-Experiment/data/processed/sections.jsonl"
+  },
+  "model_name": "en_core_web_sm",
+  "model_version": "3.7.1",
+  "normalized_unit_count": 13365,
+  "output_hashes": {
+    "corpus_noun_report.md": "05e3bb8e9aabaceefa856682af07a696b9a8176f4769f049513e64b2aa330b3c",
+    "manual_evaluation_sample.jsonl": "8240178a4ef20ccf7db287a55d3ac728296ad2e1e9668c01f25fe22e1848c8f9",
+    "noun_occurrences_raw.jsonl": "66d79594c9e692d5420bc6c5fcf4d96acc93231121b3d3239f68892dda3ac242",
+    "noun_unit_statistics.json": "4e5b5ab8456c5b0ca0e636636aaf23960612423ffd0f724e71d1a3cd4b21b380",
+    "noun_units_accepted.jsonl": "fba75d08a425dfce0b45421a01471d10d911a43d10814ab45fac5187096b2384",
+    "noun_units_normalized.jsonl": "e05ed6213783c753b75592b38784f9190e071b15d0f180a2ad1a2bffd8ce8054",
+    "noun_units_rejected.jsonl": "996a8b767c30e5658c0caee5907112167fcdde12ac406ccccaa81359a0e02fab",
+    "noun_units_review.jsonl": "48eca1a82bf65d53d8f0ca790f55bf1c2062d41b5b3230b14e33d58e74c9c708"
+  },
+  "random_seed": 1661,
+  "raw_occurrence_count": 47314,
+  "rejected_count": 129,
+  "reproducibility": {
+    "configuration_hash": "3787a8f238134a3fd691cda0e51f3e8e7b36f3f8c26d42a60a0b43d3c1e33e43",
+    "content_hash": "68b61e0f5ae46668c0d69eb846cb00ef119f128d052f8266aa8a34ee93ea41d3",
+    "input_hashes": {
+      "chunks": "ad1ba3003ceb81589683d0b560f5ee934ceae671e5505674fbb21f696d7b2a04",
+      "sections": "49fdcfeb58bd9d811aa574323966182515131256083a41ccaf001b7a045d0ff5"
+    },
+    "model_name": "en_core_web_sm",
+    "model_version": "3.7.1"
+  },
+  "review_count": 2838,
+  "schema_version": "1.0",
+  "sentence_count": 5966,
+  "spacy_version": "3.7.5",
+  "story_count": 12,
+  "token_count": 136294
+}

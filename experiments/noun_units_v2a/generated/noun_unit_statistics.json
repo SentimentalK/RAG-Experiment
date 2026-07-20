@@ -1,0 +1,46 @@
+{
+  "chunk_count": 909,
+  "classification_counts": {
+    "accepted": 10398,
+    "rejected": 129,
+    "review": 2838
+  },
+  "frequency_thresholds": {
+    "frequency_gte_10": 567,
+    "frequency_gte_2": 3858,
+    "frequency_gte_3": 2354,
+    "frequency_gte_5": 1332
+  },
+  "mapping": {
+    "chunk_mapping_failures": [],
+    "mapping_success_percentage": 100.0,
+    "successfully_mapped_occurrences": 47314,
+    "unmapped_occurrences": 0
+  },
+  "normalized_unit_count": 13365,
+  "occurrences_by_type": {
+    "common_noun": 15008,
+    "named_entity": 2086,
+    "noun_phrase": 28830,
+    "proper_noun": 1390
+  },
+  "phrase_length_distribution": {
+    "1": 4437,
+    "2": 4923,
+    "3": 3025,
+    "4": 766,
+    "5": 153,
+    "6-8": 60,
+    ">8": 1
+  },
+  "raw_occurrence_count": 47314,
+  "sentence_count": 5966,
+  "story_count": 12,
+  "token_count": 136294,
+  "units_by_type": {
+    "common_noun": 2789,
+    "named_entity": 662,
+    "noun_phrase": 9385,
+    "proper_noun": 529
+  }
+}

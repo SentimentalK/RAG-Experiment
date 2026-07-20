@@ -1,0 +1,29 @@
+{
+  "accept_phrase_token_max": 6,
+  "accept_phrase_token_min": 2,
+  "entity_types": [
+    "EVENT",
+    "FAC",
+    "GPE",
+    "LOC",
+    "ORG",
+    "PERSON",
+    "PRODUCT",
+    "WORK_OF_ART"
+  ],
+  "experiment_id": "noun-units-v2a",
+  "max_phrase_tokens": 8,
+  "random_seed": 1661,
+  "schema_version": "1.0",
+  "title_prefixes": [
+    "Count",
+    "Dr.",
+    "King",
+    "Lady",
+    "Lord",
+    "Miss",
+    "Mr.",
+    "Mrs.",
+    "Sir"
+  ]
+}
