@@ -1,0 +1,73 @@
+{
+  "baseline_coverage_counts": {
+    "no_coverage_count": 0,
+    "partial_coverage_count": 10,
+    "strong_coverage_count": 33
+  },
+  "boundary_noise_reason_counts": {
+    "currency_expression": 11,
+    "determiner": 11,
+    "empty": 1,
+    "excessive_punctuation": 12,
+    "generic_single_noun": 21,
+    "isolated_abbreviation": 7,
+    "leading_discourse_marker": 190,
+    "leading_punctuation_removed": 24,
+    "numeric_expression": 10,
+    "ordinal_expression": 6,
+    "pronoun": 15,
+    "punctuation_only": 1,
+    "stop_word_only": 13
+  },
+  "candidate_counts_by_frequency_threshold": {
+    "frequency_gte_10": 548,
+    "frequency_gte_2": 3686,
+    "frequency_gte_3": 2296,
+    "frequency_gte_5": 1309
+  },
+  "candidate_counts_by_story_count": {
+    "1": 9628,
+    "2-3": 1844,
+    "4-6": 626,
+    "7+": 419
+  },
+  "candidate_counts_by_token_length": {
+    "0": 1,
+    "1": 3732,
+    "2": 4823,
+    "3": 2992,
+    "4": 757,
+    "5": 152,
+    "6-8": 59,
+    ">8": 1
+  },
+  "candidate_counts_by_unit_type": {
+    "common_noun": 2781,
+    "named_entity": 587,
+    "noun_phrase": 9343,
+    "proper_noun": 529
+  },
+  "candidates_created_from_multiple_source_units": 736,
+  "candidates_with_conflicting_entity_labels": 61,
+  "candidates_with_repaired_punctuation": 28,
+  "conflicting_entity_label_group_count": 61,
+  "consolidated_lexical_candidate_count": 12517,
+  "cross_type_duplicate_count": 673,
+  "generic_single_nouns_excluded": 21,
+  "input_normalized_unit_count": 13365,
+  "lexical_duplicate_group_count": 736,
+  "normalization_action_counts": {
+    "case_folded": 2132,
+    "ligature_expanded": 8,
+    "quote_normalized": 24,
+    "quote_punctuation_removed": 24,
+    "surrounding_punctuation_removed": 28,
+    "unicode_normalized": 52
+  },
+  "tier_counts": {
+    "excluded": 76,
+    "review": 8753,
+    "tier_a": 2105,
+    "tier_b": 1583
+  }
+}

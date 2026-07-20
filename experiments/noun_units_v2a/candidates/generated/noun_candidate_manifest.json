@@ -1,0 +1,74 @@
+{
+  "candidate_configuration_hash": "7ed22c978dbfa55e15c6134a2f82c7e1da1844053566b97646acda8a2bf731de",
+  "candidate_counts": {
+    "excluded": 76,
+    "review": 8753,
+    "tier_a": 2105,
+    "tier_b": 1583
+  },
+  "experiment_id": "noun-units-v2a-candidate-pool",
+  "generated_at": "2026-07-20T03:22:39Z",
+  "generic_noun_list_hash": "358256a758305e79aa03407aaeedfcc50edecbb8d8848d2f6a32689e130de079",
+  "normalization_map_hash": "b90efc28384c25bda5a717dd99bb4f3c947e2c11df7155d00af9b7183399274f",
+  "output_hashes": {
+    "embedding_candidate_report.md": "4abfca8298c77297b666ade7104599a7c4d7813fe232006ca57005496a7e7082",
+    "noun_candidate_manual_sample.jsonl": "02476c9f50fda259215ae1627791e52289fe613d47ccef502fddaf4544582a0b",
+    "noun_candidate_merge_map.jsonl": "88d32587ccc30dd288535addd775de4c12d3cff8010fb2e5a6308ab718430d1b",
+    "noun_candidate_statistics.json": "8ddeb8b4f97f02387de5ed3796adf83cb178dd05d6a60b658b68c34a5c56f2c9",
+    "noun_embedding_candidates_all.jsonl": "9e05fe887ac27cf3d2d1fe195d01392905bcc8452e3fcdface083bd40c8c9c49",
+    "noun_embedding_candidates_excluded.jsonl": "6cb594e90fcaafa15bd532f6f58fbdcc925947919722c6fe6d7cb1e9cd5bebb9",
+    "noun_embedding_candidates_review.jsonl": "b36e736533042f3fac9c90284e30a70c22af348dd20f6b91290cf615f0f6f9e2",
+    "noun_embedding_candidates_tier_a.jsonl": "f7c121e262ba57f22de8a5996f17bc5ee27d0562198734a7a015ef43eff332f8",
+    "noun_embedding_candidates_tier_b.jsonl": "8bb5b42a1a1afdd63f97997780cbc60f838f636430cead278360831c49d1d576"
+  },
+  "random_seed": 1661,
+  "reproducibility": {
+    "candidate_configuration_hash": "7ed22c978dbfa55e15c6134a2f82c7e1da1844053566b97646acda8a2bf731de",
+    "candidate_counts": {
+      "excluded": 76,
+      "review": 8753,
+      "tier_a": 2105,
+      "tier_b": 1583
+    },
+    "generic_noun_list_hash": "358256a758305e79aa03407aaeedfcc50edecbb8d8848d2f6a32689e130de079",
+    "normalization_map_hash": "b90efc28384c25bda5a717dd99bb4f3c947e2c11df7155d00af9b7183399274f",
+    "output_hashes": {
+      "embedding_candidate_report.md": "4abfca8298c77297b666ade7104599a7c4d7813fe232006ca57005496a7e7082",
+      "noun_candidate_manual_sample.jsonl": "02476c9f50fda259215ae1627791e52289fe613d47ccef502fddaf4544582a0b",
+      "noun_candidate_merge_map.jsonl": "88d32587ccc30dd288535addd775de4c12d3cff8010fb2e5a6308ab718430d1b",
+      "noun_candidate_statistics.json": "8ddeb8b4f97f02387de5ed3796adf83cb178dd05d6a60b658b68c34a5c56f2c9",
+      "noun_embedding_candidates_all.jsonl": "9e05fe887ac27cf3d2d1fe195d01392905bcc8452e3fcdface083bd40c8c9c49",
+      "noun_embedding_candidates_excluded.jsonl": "6cb594e90fcaafa15bd532f6f58fbdcc925947919722c6fe6d7cb1e9cd5bebb9",
+      "noun_embedding_candidates_review.jsonl": "b36e736533042f3fac9c90284e30a70c22af348dd20f6b91290cf615f0f6f9e2",
+      "noun_embedding_candidates_tier_a.jsonl": "f7c121e262ba57f22de8a5996f17bc5ee27d0562198734a7a015ef43eff332f8",
+      "noun_embedding_candidates_tier_b.jsonl": "8bb5b42a1a1afdd63f97997780cbc60f838f636430cead278360831c49d1d576"
+    },
+    "random_seed": 1661,
+    "source_artifact_hashes": {
+      "accepted_units": "fba75d08a425dfce0b45421a01471d10d911a43d10814ab45fac5187096b2384",
+      "generic_nouns": "358256a758305e79aa03407aaeedfcc50edecbb8d8848d2f6a32689e130de079",
+      "manifest": "0c67d17cc650af81c96ea310dea4be6cb64866fb0957b715df3d4ba63f5d4691",
+      "normalized_units": "e05ed6213783c753b75592b38784f9190e071b15d0f180a2ad1a2bffd8ce8054",
+      "review_units": "48eca1a82bf65d53d8f0ca790f55bf1c2062d41b5b3230b14e33d58e74c9c708",
+      "statistics": "4e5b5ab8456c5b0ca0e636636aaf23960612423ffd0f724e71d1a3cd4b21b380"
+    }
+  },
+  "reproducibility_content_hash": "916f5e126a53b0edf65d5e5b5b5b445a1eaa2782c9a00fd0f046b64a8008ebe6",
+  "schema_version": "1.0",
+  "source_artifact_hashes": {
+    "accepted_units": "fba75d08a425dfce0b45421a01471d10d911a43d10814ab45fac5187096b2384",
+    "generic_nouns": "358256a758305e79aa03407aaeedfcc50edecbb8d8848d2f6a32689e130de079",
+    "manifest": "0c67d17cc650af81c96ea310dea4be6cb64866fb0957b715df3d4ba63f5d4691",
+    "normalized_units": "e05ed6213783c753b75592b38784f9190e071b15d0f180a2ad1a2bffd8ce8054",
+    "review_units": "48eca1a82bf65d53d8f0ca790f55bf1c2062d41b5b3230b14e33d58e74c9c708",
+    "statistics": "4e5b5ab8456c5b0ca0e636636aaf23960612423ffd0f724e71d1a3cd4b21b380"
+  },
+  "source_artifact_paths": {
+    "accepted_units": "experiments/noun_units_v2a/generated/noun_units_accepted.jsonl",
+    "generic_nouns": "experiments/noun_units_v2a/config/generic_nouns.txt",
+    "manifest": "experiments/noun_units_v2a/generated/noun_unit_manifest.json",
+    "normalized_units": "experiments/noun_units_v2a/generated/noun_units_normalized.jsonl",
+    "review_units": "experiments/noun_units_v2a/generated/noun_units_review.jsonl",
+    "statistics": "experiments/noun_units_v2a/generated/noun_unit_statistics.json"
+  }
+}

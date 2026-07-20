@@ -1,0 +1,7 @@
+{
+  "exclude_generic_single_nouns": true,
+  "experiment_id": "noun-units-v2a-candidate-pool",
+  "max_example_contexts_per_candidate": 5,
+  "random_seed": 1661,
+  "schema_version": "1.0"
+}
