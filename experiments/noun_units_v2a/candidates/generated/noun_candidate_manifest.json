@@ -1,47 +1,47 @@
 {
-  "candidate_configuration_hash": "7ed22c978dbfa55e15c6134a2f82c7e1da1844053566b97646acda8a2bf731de",
+  "candidate_configuration_hash": "64da4b3dbb61be3b0f6b7c7550c24eb00880717b0316cfee922805bdfabc33aa",
   "candidate_counts": {
-    "excluded": 76,
-    "review": 8753,
-    "tier_a": 2105,
-    "tier_b": 1583
+    "excluded": 2706,
+    "review": 210,
+    "tier_a": 4749,
+    "tier_b": 4852
   },
   "experiment_id": "noun-units-v2a-candidate-pool",
-  "generated_at": "2026-07-20T03:22:39Z",
+  "generated_at": "2026-07-20T03:47:24Z",
   "generic_noun_list_hash": "358256a758305e79aa03407aaeedfcc50edecbb8d8848d2f6a32689e130de079",
   "normalization_map_hash": "b90efc28384c25bda5a717dd99bb4f3c947e2c11df7155d00af9b7183399274f",
   "output_hashes": {
-    "embedding_candidate_report.md": "4abfca8298c77297b666ade7104599a7c4d7813fe232006ca57005496a7e7082",
-    "noun_candidate_manual_sample.jsonl": "02476c9f50fda259215ae1627791e52289fe613d47ccef502fddaf4544582a0b",
+    "embedding_candidate_report.md": "9840a923f06a430a399afaef1ccee8cc8efc772903fc2bfce99664f92df2a4f4",
+    "noun_candidate_manual_sample.jsonl": "443a9436a800027acd3aed13bfc5db2e9e041031e31ad67659161b1a1bece891",
     "noun_candidate_merge_map.jsonl": "88d32587ccc30dd288535addd775de4c12d3cff8010fb2e5a6308ab718430d1b",
-    "noun_candidate_statistics.json": "8ddeb8b4f97f02387de5ed3796adf83cb178dd05d6a60b658b68c34a5c56f2c9",
-    "noun_embedding_candidates_all.jsonl": "9e05fe887ac27cf3d2d1fe195d01392905bcc8452e3fcdface083bd40c8c9c49",
-    "noun_embedding_candidates_excluded.jsonl": "6cb594e90fcaafa15bd532f6f58fbdcc925947919722c6fe6d7cb1e9cd5bebb9",
-    "noun_embedding_candidates_review.jsonl": "b36e736533042f3fac9c90284e30a70c22af348dd20f6b91290cf615f0f6f9e2",
-    "noun_embedding_candidates_tier_a.jsonl": "f7c121e262ba57f22de8a5996f17bc5ee27d0562198734a7a015ef43eff332f8",
-    "noun_embedding_candidates_tier_b.jsonl": "8bb5b42a1a1afdd63f97997780cbc60f838f636430cead278360831c49d1d576"
+    "noun_candidate_statistics.json": "72b3d8a8d197576c234fbeed73c6f991d0dd52062d1014bd791c7559ca3f9272",
+    "noun_embedding_candidates_all.jsonl": "9b75515cedda973826cab82ee6b8d96d0da9bc59d6d8c6dff2b2f1d94f653b4c",
+    "noun_embedding_candidates_excluded.jsonl": "743a012ef02be74fe92017b3dc41e6a3a18f74985932b1b6286c4ede65bf28de",
+    "noun_embedding_candidates_review.jsonl": "cb7e44d7a48a56d799ace71477d0719e8623d93bbd62487105595e325e2dfc40",
+    "noun_embedding_candidates_tier_a.jsonl": "e2f97ad08ac60f20ca87f4da434da78db0a4e663442bac14395b89753c6277d0",
+    "noun_embedding_candidates_tier_b.jsonl": "854624284cc353a3775ce2b47abd38244f012f8ad86269e80c1e343b8936d352"
   },
   "random_seed": 1661,
   "reproducibility": {
-    "candidate_configuration_hash": "7ed22c978dbfa55e15c6134a2f82c7e1da1844053566b97646acda8a2bf731de",
+    "candidate_configuration_hash": "64da4b3dbb61be3b0f6b7c7550c24eb00880717b0316cfee922805bdfabc33aa",
     "candidate_counts": {
-      "excluded": 76,
-      "review": 8753,
-      "tier_a": 2105,
-      "tier_b": 1583
+      "excluded": 2706,
+      "review": 210,
+      "tier_a": 4749,
+      "tier_b": 4852
     },
     "generic_noun_list_hash": "358256a758305e79aa03407aaeedfcc50edecbb8d8848d2f6a32689e130de079",
     "normalization_map_hash": "b90efc28384c25bda5a717dd99bb4f3c947e2c11df7155d00af9b7183399274f",
     "output_hashes": {
-      "embedding_candidate_report.md": "4abfca8298c77297b666ade7104599a7c4d7813fe232006ca57005496a7e7082",
-      "noun_candidate_manual_sample.jsonl": "02476c9f50fda259215ae1627791e52289fe613d47ccef502fddaf4544582a0b",
+      "embedding_candidate_report.md": "9840a923f06a430a399afaef1ccee8cc8efc772903fc2bfce99664f92df2a4f4",
+      "noun_candidate_manual_sample.jsonl": "443a9436a800027acd3aed13bfc5db2e9e041031e31ad67659161b1a1bece891",
       "noun_candidate_merge_map.jsonl": "88d32587ccc30dd288535addd775de4c12d3cff8010fb2e5a6308ab718430d1b",
-      "noun_candidate_statistics.json": "8ddeb8b4f97f02387de5ed3796adf83cb178dd05d6a60b658b68c34a5c56f2c9",
-      "noun_embedding_candidates_all.jsonl": "9e05fe887ac27cf3d2d1fe195d01392905bcc8452e3fcdface083bd40c8c9c49",
-      "noun_embedding_candidates_excluded.jsonl": "6cb594e90fcaafa15bd532f6f58fbdcc925947919722c6fe6d7cb1e9cd5bebb9",
-      "noun_embedding_candidates_review.jsonl": "b36e736533042f3fac9c90284e30a70c22af348dd20f6b91290cf615f0f6f9e2",
-      "noun_embedding_candidates_tier_a.jsonl": "f7c121e262ba57f22de8a5996f17bc5ee27d0562198734a7a015ef43eff332f8",
-      "noun_embedding_candidates_tier_b.jsonl": "8bb5b42a1a1afdd63f97997780cbc60f838f636430cead278360831c49d1d576"
+      "noun_candidate_statistics.json": "72b3d8a8d197576c234fbeed73c6f991d0dd52062d1014bd791c7559ca3f9272",
+      "noun_embedding_candidates_all.jsonl": "9b75515cedda973826cab82ee6b8d96d0da9bc59d6d8c6dff2b2f1d94f653b4c",
+      "noun_embedding_candidates_excluded.jsonl": "743a012ef02be74fe92017b3dc41e6a3a18f74985932b1b6286c4ede65bf28de",
+      "noun_embedding_candidates_review.jsonl": "cb7e44d7a48a56d799ace71477d0719e8623d93bbd62487105595e325e2dfc40",
+      "noun_embedding_candidates_tier_a.jsonl": "e2f97ad08ac60f20ca87f4da434da78db0a4e663442bac14395b89753c6277d0",
+      "noun_embedding_candidates_tier_b.jsonl": "854624284cc353a3775ce2b47abd38244f012f8ad86269e80c1e343b8936d352"
     },
     "random_seed": 1661,
     "source_artifact_hashes": {
@@ -53,8 +53,8 @@
       "statistics": "4e5b5ab8456c5b0ca0e636636aaf23960612423ffd0f724e71d1a3cd4b21b380"
     }
   },
-  "reproducibility_content_hash": "916f5e126a53b0edf65d5e5b5b5b445a1eaa2782c9a00fd0f046b64a8008ebe6",
-  "schema_version": "1.0",
+  "reproducibility_content_hash": "06a0b0a03ef16a574b4fc49501dde6c865ae23dbbec69f8ef854c7687841383c",
+  "schema_version": "1.1",
   "source_artifact_hashes": {
     "accepted_units": "fba75d08a425dfce0b45421a01471d10d911a43d10814ab45fac5187096b2384",
     "generic_nouns": "358256a758305e79aa03407aaeedfcc50edecbb8d8848d2f6a32689e130de079",

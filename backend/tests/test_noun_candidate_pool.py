@@ -91,59 +91,91 @@ def test_boundary_filtering_examples():
     assert "leading_discourse_marker" in quality_flags("Again Holmes", "again holmes", generic, noise)
     assert "leading_discourse_marker" in quality_flags("And Irene Adler", "and irene adler", generic, noise)
     assert "leading_discourse_marker" in quality_flags("Ah, Watson", "ah, watson", generic, noise)
-    assert "numeric_expression" in quality_flags("10s", "10s", generic, noise)
+    assert "currency_expression" in quality_flags("10s", "10s", generic, noise)
     assert "ordinal_expression" in quality_flags("22nd", "22nd", generic, noise)
     assert "isolated_abbreviation" in quality_flags("No", "no", generic, noise)
     assert "pronoun" in quality_flags("I.", "i.", generic, noise)
+    assert "address_like" in quality_flags("221B", "221b", generic, noise)
+    assert "numeric_expression" not in quality_flags("221B", "221b", generic, noise)
+    assert "address_like" in quality_flags("226 Gordon Square", "226 gordon square", generic, noise)
+    assert "currency_expression" in quality_flags("4d", "4d", generic, noise)
 
 
 def test_generic_logic_and_tiering():
-    def candidate(text, unit_type, flags=None, count=1):
+    def candidate(text, unit_type, flags=None, count=1, classes=None, possessors=None, possessor_type="none"):
         data = {
             "candidate_text": text,
             "comparison_form": comparison_form(text, {})[0],
             "observed_unit_types": [unit_type],
             "quality_flags": flags or [],
             "occurrence_count": count,
-            "possessors": [],
+            "possessors": possessors or [],
+            "possessor_type": possessor_type,
+            "original_v2a_classes": classes or ["accepted"],
+            "upstream_rejected_only": (classes or ["accepted"]) == ["rejected"],
         }
         data["token_count"] = len(text.split())
+        from app.experiments.noun_units_v2a.candidates.comparison_normalizer import content_tokens
+        data["content_tokens"] = content_tokens(text)
+        data["content_token_count"] = len(data["content_tokens"])
         return data
 
-    assert classify_tier(candidate("Sherlock Holmes", "named_entity"), True)[0] == "tier_a"
-    assert classify_tier(candidate("the blue carbuncle", "noun_phrase", count=3), True)[0] == "tier_a"
-    assert classify_tier(candidate("tunnel", "common_noun", count=2), True)[0] == "tier_b"
-    assert classify_tier(candidate("thing", "common_noun", ["generic_single_noun"], count=10), True)[0] == "excluded"
-    assert classify_tier(candidate("uncertain malformed phrase", "noun_phrase", ["leading_discourse_marker"]), True)[0] == "review"
-    assert classify_tier(candidate("the woman", "noun_phrase", count=2), True)[0] == "tier_a"
-    assert classify_tier(candidate("red-haired woman", "noun_phrase", count=2), True)[0] == "tier_a"
-    assert classify_tier(candidate("case", "common_noun", ["generic_single_noun"], count=5), True)[0] == "excluded"
-    assert classify_tier(candidate("murder case", "noun_phrase", count=2), True)[0] == "tier_a"
+    config = {"exclude_generic_single_nouns": True, "tier_a_min_content_tokens": 2, "tier_a_single_name_min_frequency": 2, "tier_b_common_noun_min_frequency": 2, "pronoun_possessive_min_frequency": 2, "max_clean_phrase_tokens": 6, "eligible_tiers": ["tier_a", "tier_b"]}
+    assert classify_tier(candidate("Sherlock Holmes", "named_entity"), config)[0] == "tier_a"
+    assert classify_tier(candidate("Holmes", "named_entity", count=2), config)[0] == "tier_a"
+    assert classify_tier(candidate("Awake", "proper_noun", count=1, classes=["review"]), config)[0] != "tier_a"
+    assert classify_tier(candidate("Well", "named_entity", count=1, classes=["rejected"]), config)[0] == "excluded"
+    assert classify_tier(candidate("Who", "noun_phrase", ["function_word_only"], classes=["rejected"]), config)[0] == "excluded"
+    assert classify_tier(candidate("the blue carbuncle", "noun_phrase", count=1), config)[0] == "tier_a"
+    assert classify_tier(candidate("the deadliest snake", "noun_phrase", count=1), config)[0] == "tier_a"
+    assert classify_tier(candidate("a bed", "noun_phrase", count=3), config)[0] == "tier_b"
+    assert classify_tier(candidate("the morning", "noun_phrase", count=3), config)[0] == "tier_b"
+    assert classify_tier(candidate("tunnel", "common_noun", count=2), config)[0] == "tier_b"
+    assert classify_tier(candidate("thing", "common_noun", ["generic_single_noun"], count=10), config)[0] == "excluded"
+    assert classify_tier(candidate("uncertain malformed phrase", "noun_phrase", ["leading_discourse_marker"]), config)[0] == "review"
+    assert classify_tier(candidate("case", "common_noun", ["generic_single_noun"], count=5), config)[0] == "excluded"
+    assert classify_tier(candidate("murder case", "noun_phrase", count=1), config)[0] == "tier_a"
+    assert classify_tier(candidate("Wilson's shop", "noun_phrase", count=1, possessors=["Wilson"], possessor_type="named"), config)[0] == "tier_a"
+    assert classify_tier(candidate("his hand", "noun_phrase", count=3, possessors=["his"], possessor_type="pronoun"), config)[0] == "tier_b"
+    assert classify_tier(candidate("my visitor", "noun_phrase", count=1, possessors=["my"], possessor_type="pronoun"), config)[0] == "excluded"
+    assert classify_tier(candidate("odd shop", "noun_phrase", count=1, possessors=["?", "his"], possessor_type="mixed"), config)[0] == "review"
 
 
 def test_baseline_coverage_levels():
     candidates = [
-        {"candidate_uid": "nc1", "candidate_text": "Encyclopædia Britannica", "comparison_form": "encyclopaedia britannica", "surface_forms": ["Encyclopædia Britannica"], "tier": "tier_a", "occurrence_count": 1},
-        {"candidate_uid": "nc2", "candidate_text": "the speckled band", "comparison_form": "the speckled band", "surface_forms": ["the speckled band"], "tier": "tier_a", "occurrence_count": 1},
-        {"candidate_uid": "nc3", "candidate_text": "the blue carbuncle", "comparison_form": "the blue carbuncle", "surface_forms": ["the blue carbuncle"], "tier": "tier_a", "occurrence_count": 1},
+        {"candidate_uid": "nc0", "candidate_text": "Mr. Sherlock Holmes", "comparison_form": "mr. sherlock holmes", "surface_forms": ["Sherlock Holmes"], "tier": "tier_a", "occurrence_count": 1, "embedding_eligible": True},
+        {"candidate_uid": "nc1", "candidate_text": "Sherlock Holmes", "comparison_form": "sherlock holmes", "surface_forms": ["Sherlock Holmes"], "tier": "tier_a", "occurrence_count": 1, "embedding_eligible": True},
+        {"candidate_uid": "nc2", "candidate_text": "Encyclopædia Britannica", "comparison_form": "encyclopaedia britannica", "surface_forms": ["Encyclopædia Britannica"], "tier": "tier_a", "occurrence_count": 1, "embedding_eligible": True},
+        {"candidate_uid": "nc3", "candidate_text": "the speckled band", "comparison_form": "the speckled band", "surface_forms": ["the speckled band"], "tier": "tier_a", "occurrence_count": 1, "embedding_eligible": True},
+        {"candidate_uid": "nc4", "candidate_text": "the blue carbuncle", "comparison_form": "the blue carbuncle", "surface_forms": ["the blue carbuncle"], "tier": "tier_a", "occurrence_count": 1, "embedding_eligible": True},
+        {"candidate_uid": "nc5", "candidate_text": "woman", "comparison_form": "woman", "surface_forms": ["woman"], "tier": "excluded", "occurrence_count": 1, "embedding_eligible": False},
+        {"candidate_uid": "nc6", "candidate_text": "them", "comparison_form": "them", "surface_forms": ["they"], "tier": "excluded", "occurrence_count": 1, "embedding_eligible": False},
     ]
     question_units = [
+        {"question_id": "q0", "question": "", "surface_text": "Sherlock Holmes"},
         {"question_id": "q1", "question": "", "surface_text": "Encyclopaedia Britannica"},
         {"question_id": "q2", "question": "", "surface_text": "the speckled band"},
         {"question_id": "q3", "question": "", "surface_text": "the stolen blue carbuncle"},
-        {"question_id": "q4", "question": "", "surface_text": "unknown item"},
+        {"question_id": "q4", "question": "", "surface_text": "woman"},
+        {"question_id": "q5", "question": "", "surface_text": "they"},
     ]
 
     rows, matches = analyze_question_units(question_units, candidates, default_orthographic_map())
-    levels = {row["question_id"]: row["coverage_level"] for row in rows}
-    types = {row["question_id"]: row["match_type"] for row in rows}
+    levels = {row["question_id"]: row["inventory_coverage_level"] for row in rows}
+    eligible = {row["question_id"]: row["eligible_coverage_level"] for row in rows}
+    types = {row["question_id"]: row["inventory_match_type"] for row in rows}
+    inventory_candidates = {row["question_id"]: row["inventory_matching_candidate_text"] for row in rows}
 
+    assert types["q0"] == "candidate_text_exact_match"
+    assert inventory_candidates["q0"] == "Sherlock Holmes"
     assert levels["q1"] == "strong"
     assert types["q1"] == "comparison_form_match"
     assert levels["q2"] == "strong"
-    assert levels["q3"] == "partial"
-    assert types["q3"] == "longest_contained_candidate"
-    assert levels["q4"] == "none"
+    assert levels["q3"] == "partial_phrase"
+    assert types["q3"] == "contiguous_contained_candidate"
+    assert levels["q4"] == "strong"
+    assert eligible["q4"] == "none"
+    assert types["q5"] == "alternate_surface_match"
 
 
 def test_pipeline_preserves_source_hashes_and_outputs(tmp_path):

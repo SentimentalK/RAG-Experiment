@@ -68,6 +68,26 @@ def token_count(text: str) -> int:
     return len([part for part in text.split(" ") if part])
 
 
+CONTENT_FUNCTION_WORDS = {
+    "a", "an", "the", "this", "that", "these", "those", "my", "your", "his", "her", "its", "our", "their",
+    "of", "to", "in", "on", "at", "by", "for", "with", "from", "and", "or", "but",
+    "who", "whom", "whose", "what", "which", "each", "all",
+}
+
+
+def content_tokens(text: str) -> list[str]:
+    clean, _ = normalize_display(text)
+    tokens = []
+    for raw in re.findall(r"[A-Za-z0-9]+(?:[.'-][A-Za-z0-9]+)*", clean):
+        token = raw.casefold().strip(".")
+        if token in CONTENT_FUNCTION_WORDS:
+            continue
+        if token in {"mr", "mrs", "dr"} and len(clean.split()) > 1:
+            continue
+        tokens.append(raw)
+    return tokens
+
+
 def is_natural_capitalization(text: str) -> bool:
     letters = [char for char in text if char.isalpha()]
     if not letters:

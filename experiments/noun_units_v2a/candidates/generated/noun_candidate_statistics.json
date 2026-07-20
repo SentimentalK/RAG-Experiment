@@ -1,23 +1,20 @@
 {
-  "baseline_coverage_counts": {
-    "no_coverage_count": 0,
-    "partial_coverage_count": 10,
-    "strong_coverage_count": 33
-  },
   "boundary_noise_reason_counts": {
-    "currency_expression": 11,
+    "address_like": 3,
+    "all_caps_fragment": 18,
+    "currency_expression": 13,
     "determiner": 11,
     "empty": 1,
     "excessive_punctuation": 12,
+    "function_word_only": 28,
     "generic_single_noun": 21,
+    "heading_fragment": 4,
     "isolated_abbreviation": 7,
-    "leading_discourse_marker": 190,
-    "leading_punctuation_removed": 24,
-    "numeric_expression": 10,
+    "leading_discourse_marker": 194,
+    "numeric_expression": 9,
     "ordinal_expression": 6,
     "pronoun": 15,
-    "punctuation_only": 1,
-    "stop_word_only": 13
+    "punctuation_only": 1
   },
   "candidate_counts_by_frequency_threshold": {
     "frequency_gte_10": 548,
@@ -52,9 +49,43 @@
   "candidates_with_repaired_punctuation": 28,
   "conflicting_entity_label_group_count": 61,
   "consolidated_lexical_candidate_count": 12517,
+  "content_token_count_distribution": {
+    "0": 30,
+    "1": 7259,
+    "2": 3916,
+    "3": 1084,
+    "4": 187,
+    "5": 31,
+    "6": 7,
+    "7": 3
+  },
   "cross_type_duplicate_count": 673,
+  "eligible_candidates_with_hard_flags": 0,
+  "eligible_candidates_with_unresolved_boundary_flags": 0,
+  "eligible_coverage_counts": {
+    "eligible_head_only": 0,
+    "eligible_none": 9,
+    "eligible_partial_phrase": 13,
+    "eligible_strong": 21
+  },
+  "exclusion_reason_counts": {
+    "currency_expression": 12,
+    "generic_single_noun": 18,
+    "isolated_abbreviation": 5,
+    "low_priority_pronoun_possessive": 1417,
+    "numeric_expression": 9,
+    "ordinal_expression": 6,
+    "singleton_common_noun_low_priority": 1140,
+    "upstream_rejected_only": 108
+  },
   "generic_single_nouns_excluded": 21,
   "input_normalized_unit_count": 13365,
+  "inventory_coverage_counts": {
+    "inventory_head_only": 0,
+    "inventory_none": 0,
+    "inventory_partial_phrase": 10,
+    "inventory_strong": 33
+  },
   "lexical_duplicate_group_count": 736,
   "normalization_action_counts": {
     "case_folded": 2132,
@@ -64,10 +95,82 @@
     "surrounding_punctuation_removed": 28,
     "unicode_normalized": 52
   },
+  "original_v2a_class_by_tier": {
+    "excluded|accepted": 1156,
+    "excluded|accepted,review": 1,
+    "excluded|rejected": 108,
+    "excluded|review": 1441,
+    "review|accepted": 172,
+    "review|accepted,review": 1,
+    "review|review": 37,
+    "tier_a|accepted": 3991,
+    "tier_a|accepted,rejected": 1,
+    "tier_a|accepted,review": 84,
+    "tier_a|rejected,review": 2,
+    "tier_a|review": 671,
+    "tier_b|accepted": 4266,
+    "tier_b|accepted,rejected": 1,
+    "tier_b|review": 585
+  },
+  "possessor_type_distribution": {
+    "common": 175,
+    "mixed": 1,
+    "named": 164,
+    "none": 10372,
+    "pronoun": 1805
+  },
+  "review_reason_counts": {
+    "excessive_punctuation": 12,
+    "heading_fragment": 1,
+    "leading_discourse_marker": 187,
+    "long_or_complex_phrase": 10,
+    "mixed_possessor": 1
+  },
+  "tier_by_possessor_type": {
+    "excluded|common": 8,
+    "excluded|none": 1281,
+    "excluded|pronoun": 1417,
+    "review|common": 1,
+    "review|mixed": 1,
+    "review|named": 1,
+    "review|none": 198,
+    "review|pronoun": 9,
+    "tier_a|common": 110,
+    "tier_a|named": 149,
+    "tier_a|none": 4490,
+    "tier_b|common": 56,
+    "tier_b|named": 14,
+    "tier_b|none": 4403,
+    "tier_b|pronoun": 379
+  },
   "tier_counts": {
-    "excluded": 76,
-    "review": 8753,
-    "tier_a": 2105,
-    "tier_b": 1583
-  }
+    "excluded": 2706,
+    "review": 210,
+    "tier_a": 4749,
+    "tier_b": 4852
+  },
+  "tier_reason_counts": {
+    "clean_common_noun_frequency_gte_threshold": 1109,
+    "clean_multiword_named_or_proper_expression": 393,
+    "clean_repeated_single_token_name": 322,
+    "currency_expression": 12,
+    "excessive_punctuation": 12,
+    "generic_single_noun": 18,
+    "heading_fragment": 1,
+    "isolated_abbreviation": 5,
+    "leading_discourse_marker": 187,
+    "long_or_complex_phrase": 10,
+    "low_priority_pronoun_possessive": 1417,
+    "mixed_possessor": 1,
+    "numeric_expression": 9,
+    "ordinal_expression": 6,
+    "pronoun_possessive_frequency_gte_threshold": 379,
+    "rare_clean_single_token_name": 268,
+    "singleton_common_noun_low_priority": 1140,
+    "specific_content_phrase": 4034,
+    "upstream_rejected_only": 108,
+    "valid_one_content_token_phrase": 3096
+  },
+  "upstream_rejected_candidates_in_tier_a": 0,
+  "upstream_rejected_candidates_in_tier_b": 0
 }

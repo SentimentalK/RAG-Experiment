@@ -35,6 +35,16 @@ def deterministic_sample(candidates: list[dict[str, Any]], seed: int) -> list[di
                 "comparison_form": candidate["comparison_form"],
                 "tier": candidate["tier"],
                 "tier_reasons": candidate["tier_reasons"],
+                "occurrence_count": candidate["occurrence_count"],
+                "story_count": candidate["story_count"],
+                "observed_unit_types": candidate["observed_unit_types"],
+                "observed_entity_types": candidate["observed_entity_types"],
+                "original_v2a_classes": candidate["original_v2a_classes"],
+                "content_tokens": candidate["content_tokens"],
+                "content_token_count": candidate["content_token_count"],
+                "possessor_type": candidate["possessor_type"],
+                "quality_flags": candidate["quality_flags"],
+                "quality_gate_failures": candidate["quality_gate_failures"],
                 "example_contexts": candidate["example_contexts"],
                 "sampling_stratum": stratum,
                 "sampling_seed": seed,
@@ -68,16 +78,24 @@ def build_report(stats: dict[str, Any], candidates: list[dict[str, Any]], merge_
         for c in sorted(candidates, key=lambda c: (c["tier"], -c["occurrence_count"], c["candidate_text"].casefold()))[:50]
     ]
     coverage_display = [
-        [r["question_id"], r["question_unit"], r["comparison_form"], r["match_type"], r["coverage_level"], r.get("matching_candidate_text") or "", r.get("candidate_tier") or ""]
+        [
+            r["question_id"], r["question_unit"], r["comparison_form"],
+            r["inventory_match_type"], r["inventory_coverage_level"], r.get("inventory_matching_candidate_text") or "", r.get("inventory_candidate_tier") or "",
+            r["eligible_match_type"], r["eligible_coverage_level"], r.get("eligible_matching_candidate_text") or "", r.get("eligible_candidate_tier") or "",
+            r["token_coverage_ratio"],
+        ]
         for r in coverage_rows
     ]
     tier_a = stats["tier_counts"].get("tier_a", 0)
     tier_b = stats["tier_counts"].get("tier_b", 0)
-    recommendation = "Proceed with Tier A embedding experiment"
-    if tier_a + tier_b <= 3000 and tier_b:
-        recommendation = "Proceed with Tier A and sampled Tier B"
-    if tier_a > 2500:
-        recommendation = "Revise candidate consolidation rules"
+    structural_failures = []
+    if stats.get("upstream_rejected_candidates_in_tier_a", 0) or stats.get("upstream_rejected_candidates_in_tier_b", 0):
+        structural_failures.append("rejected-only candidates are embedding eligible")
+    if stats.get("eligible_candidates_with_hard_flags", 0):
+        structural_failures.append("hard-noise candidates are embedding eligible")
+    recommendation = "Structural gates passed - complete manual sample review before embedding"
+    if structural_failures:
+        recommendation = "Structural gates failed - revise rules: " + "; ".join(structural_failures)
     return "\n".join([
         "# Embedding Candidate Report",
         "",
@@ -110,13 +128,34 @@ def build_report(stats: dict[str, Any], candidates: list[dict[str, Any]], merge_
         "",
         "By token length: `" + json.dumps(stats["candidate_counts_by_token_length"], sort_keys=True) + "`",
         "",
+        "By content-token count: `" + json.dumps(stats["content_token_count_distribution"], sort_keys=True) + "`",
+        "",
+        "By possessor type: `" + json.dumps(stats["possessor_type_distribution"], sort_keys=True) + "`",
+        "",
+        "Tier reasons: `" + json.dumps(stats["tier_reason_counts"], sort_keys=True) + "`",
+        "",
+        "Review reasons: `" + json.dumps(stats["review_reason_counts"], sort_keys=True) + "`",
+        "",
+        "Exclusion reasons: `" + json.dumps(stats["exclusion_reason_counts"], sort_keys=True) + "`",
+        "",
         "By story count: `" + json.dumps(stats["candidate_counts_by_story_count"], sort_keys=True) + "`",
         "",
         "## Candidate Examples",
         table(examples, ["Candidate", "Tier", "Frequency", "Stories", "Reasons"]),
         "## Baseline Coverage",
-        table(coverage_display, ["Question", "Question Unit", "Comparison", "Match Type", "Coverage", "Candidate", "Tier"]),
-        "`" + json.dumps(stats["baseline_coverage_counts"], sort_keys=True) + "`",
+        table(coverage_display, ["Question", "Question Unit", "Comparison", "Inventory Match", "Inventory Coverage", "Inventory Candidate", "Inventory Tier", "Eligible Match", "Eligible Coverage", "Eligible Candidate", "Eligible Tier", "Token Ratio"]),
+        "Inventory: `" + json.dumps(stats["inventory_coverage_counts"], sort_keys=True) + "`",
+        "",
+        "Eligible: `" + json.dumps(stats["eligible_coverage_counts"], sort_keys=True) + "`",
+        "",
+        "## Structural Quality Gates",
+        table([
+            ["Rejected-only in Tier A", stats.get("upstream_rejected_candidates_in_tier_a", 0)],
+            ["Rejected-only in Tier B", stats.get("upstream_rejected_candidates_in_tier_b", 0)],
+            ["Eligible candidates with hard flags", stats.get("eligible_candidates_with_hard_flags", 0)],
+            ["Eligible candidates with unresolved boundary flags", stats.get("eligible_candidates_with_unresolved_boundary_flags", 0)],
+        ], ["Gate", "Count"]),
+        "Manual quality decision pending. Suggested future Go criteria: Tier A boundary correctness >= 95%, appropriate-for-embedding precision >= 90%, and tier-correct precision >= 85%.",
         "",
         "## Estimated Next-Stage Workload",
         table([

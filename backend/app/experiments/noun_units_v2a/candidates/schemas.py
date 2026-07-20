@@ -20,6 +20,13 @@ class CandidateRecord(TypedDict, total=False):
     source_chunk_uids: list[str]
     source_chunk_count: int
     example_contexts: list[dict[str, Any]]
+    content_tokens: list[str]
+    content_token_count: int
+    possessor_type: str
+    upstream_rejected_only: bool
+    embedding_eligible: bool
+    quality_gate_failures: list[str]
+    surface_quality_flags: dict[str, list[str]]
     quality_flags: list[str]
     normalization_actions: list[str]
     original_v2a_classes: list[str]

@@ -1,7 +1,18 @@
 {
+  "eligible_tiers": [
+    "tier_a",
+    "tier_b"
+  ],
   "exclude_generic_single_nouns": true,
   "experiment_id": "noun-units-v2a-candidate-pool",
+  "max_clean_phrase_tokens": 6,
   "max_example_contexts_per_candidate": 5,
+  "pronoun_possessive_min_frequency": 2,
   "random_seed": 1661,
-  "schema_version": "1.0"
+  "schema_version": "1.1",
+  "singleton_common_noun_policy": "exclude",
+  "tier_a_min_content_tokens": 2,
+  "tier_a_single_name_min_frequency": 2,
+  "tier_b_common_noun_min_frequency": 2,
+  "upstream_rejected_only_policy": "exclude"
 }

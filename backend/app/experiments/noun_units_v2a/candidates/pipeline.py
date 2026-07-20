@@ -15,7 +15,7 @@ from app.experiments.noun_units_v2a.candidates.writer import load_json, load_jso
 
 
 EXPERIMENT_ID = "noun-units-v2a-candidate-pool"
-SCHEMA_VERSION = "1.0"
+SCHEMA_VERSION = "1.1"
 DEFAULT_SEED = 1661
 REPO_ROOT = settings.DATA_DIR.parent
 
@@ -26,7 +26,15 @@ def default_candidate_config() -> dict[str, Any]:
         "schema_version": SCHEMA_VERSION,
         "random_seed": DEFAULT_SEED,
         "exclude_generic_single_nouns": True,
+        "upstream_rejected_only_policy": "exclude",
+        "tier_a_min_content_tokens": 2,
+        "tier_a_single_name_min_frequency": 2,
+        "tier_b_common_noun_min_frequency": 2,
+        "singleton_common_noun_policy": "exclude",
+        "pronoun_possessive_min_frequency": 2,
+        "max_clean_phrase_tokens": 6,
         "max_example_contexts_per_candidate": 5,
+        "eligible_tiers": ["tier_a", "tier_b"],
     }
 
 
@@ -43,6 +51,12 @@ def ensure_candidate_config(output_root: Path) -> tuple[dict[str, Any], dict[str
     if not ortho_path.exists():
         write_json(ortho_path, default_orthographic_map())
     config = load_json(config_path)
+    merged_config = default_candidate_config()
+    merged_config.update(config)
+    merged_config["schema_version"] = SCHEMA_VERSION
+    if merged_config != config:
+        write_json(config_path, merged_config)
+        config = merged_config
     orthographic_map = load_json(ortho_path)
     leading_noise_terms = {line.strip().casefold() for line in noise_path.read_text(encoding="utf-8").splitlines() if line.strip() and not line.startswith("#")}
     return config, orthographic_map, leading_noise_terms
