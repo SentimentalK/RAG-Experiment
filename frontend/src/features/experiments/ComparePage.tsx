@@ -15,7 +15,7 @@ export default function ExperimentComparePage() {
   const [capabilities, setCapabilities] = useState<ExperimentCapabilities | null>(null);
   const [query, setQuery] = useState("What did Mr. Holmes discover?");
   const [modes, setModes] = useState<RetrievalMode[]>(["baseline", "strong_only", "strong_story"]);
-  const [persist, setPersist] = useState(true);
+  const [persist, setPersist] = useState(false);
   const [includeTrace, setIncludeTrace] = useState(false);
   const [maxVariants, setMaxVariants] = useState(8);
   const [allowStoryScoped, setAllowStoryScoped] = useState(true);
@@ -34,7 +34,7 @@ export default function ExperimentComparePage() {
         setMaxVariants(value.expansion.max_query_variants);
         setAllowStoryScoped(value.expansion.allow_story_scoped);
         setAllowSingleToken(value.expansion.allow_story_scoped_single_token);
-        if (value.persistence.required) setPersist(true);
+        setPersist(value.persistence.required);
       })
       .catch((err) => setError(err instanceof Error ? err : new Error("Unable to load capabilities.")));
     return () => controller.abort();
@@ -209,6 +209,9 @@ export default function ExperimentComparePage() {
           <AlertTitle>{(error as ExperimentApiError).detail?.error_code ?? "Experiment failed"}</AlertTitle>
           <AlertDescription className="space-y-2">
             <p>{(error as ExperimentApiError).detail?.message ?? error.message}</p>
+            {(error as ExperimentApiError).detail?.error_code === "experiment_persistence_failed" && (
+              <p>Turn off Save experiment for an unsaved run, or apply database migration 003 before saving sessions.</p>
+            )}
             {(error as ExperimentApiError).detail?.session_id && (
               <Button variant="outline" size="sm" render={<Link to={`/experiments/sessions/${(error as ExperimentApiError).detail?.session_id}`} />}>
                 Open saved session
