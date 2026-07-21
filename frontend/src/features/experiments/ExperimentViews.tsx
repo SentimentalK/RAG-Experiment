@@ -82,7 +82,7 @@ export function ModeResultCard({
         <AnswerBlock answer={detail.answer} contextCount={detail.contexts.length} invalidCitations={invalidCitations} />
         {detailError && <p className="text-sm text-red-600">{detailError}</p>}
         <div className="flex flex-wrap gap-2">
-          {!hasInlineTrace && canLazyFetch && (
+          {detail.mode !== "baseline" && !hasInlineTrace && canLazyFetch && (
             <Button type="button" variant="outline" size="sm" onClick={() => loadDetail({ include_trace: true })} disabled={loadingTrace}>
               {loadingTrace ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <FileSearch className="mr-2 h-4 w-4" />}
               Load Trace

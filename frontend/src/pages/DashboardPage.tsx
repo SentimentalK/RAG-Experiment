@@ -67,7 +67,7 @@ export default function DashboardPage() {
         <MetricCard title="Direct Hit Rate @1" value={(metrics.direct_hit_rate_at_1 * 100).toFixed(1) + "%"} icon={<Target className="h-4 w-4 text-primary" />} />
         <MetricCard title="Answer Sufficiency @3" value={(metrics.answer_sufficiency_rate_at_3 * 100).toFixed(1) + "%"} icon={<CheckCircle2 className="h-4 w-4 text-green-500" />} />
         <MetricCard title="Mean Reciprocal Rank" value={metrics.mrr.toFixed(3)} icon={<TrendingUp className="h-4 w-4 text-blue-500" />} />
-        <MetricCard title="Avg Noise @10" value={(metrics.average_noise_rate_at_10 * 100).toFixed(1) + "%"} icon={<Filter className="h-4 w-4 text-orange-500" />} />
+        <MetricCard title="Avg Noise @10" value={formatPercent(metrics.average_noise_rate_at_10)} icon={<Filter className="h-4 w-4 text-orange-500" />} />
         <MetricCard title="Total Questions" value={data.questions.length.toString()} icon={<HelpCircle className="h-4 w-4 text-purple-500" />} />
         <MetricCard title="Total Chunks" value={data.chunks.length.toString()} icon={<Database className="h-4 w-4 text-indigo-500" />} />
       </div>
@@ -191,7 +191,7 @@ export default function DashboardPage() {
                       )}
                     </TableCell>
                     <TableCell className="text-right">{q.computed_metrics.reciprocal_rank.toFixed(2)}</TableCell>
-                    <TableCell className="text-right">{(q.computed_metrics.noise_rate_at_10 * 100).toFixed(0)}%</TableCell>
+                    <TableCell className="text-right">{formatPercent(q.computed_metrics.noise_rate_at_10, 0)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -215,4 +215,9 @@ function MetricCard({ title, value, icon }: { title: string, value: string, icon
       </CardContent>
     </Card>
   );
+}
+
+function formatPercent(value: number | null | undefined, digits = 1): string {
+  if (value == null || !Number.isFinite(value)) return "n/a";
+  return `${(value * 100).toFixed(digits)}%`;
 }

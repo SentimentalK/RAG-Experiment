@@ -226,16 +226,20 @@ export default function ExperimentComparePage() {
             <span>{result.answer_generation_count} answer generation(s)</span>
             {result.session_id && <Link className="text-primary underline-offset-4 hover:underline" to={`/experiments/sessions/${result.session_id}`}>Open saved session</Link>}
           </div>
-          {result.comparisons.map((comparison) => (
-            <Card key={comparison.compared_mode}>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm">{MODE_LABELS[comparison.compared_mode]} context comparison</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ComparisonStrip comparison={comparison} />
-              </CardContent>
-            </Card>
-          ))}
+          {result.comparisons.length > 0 && (
+            <div className={comparisonGridClass(result.comparisons.length)}>
+              {result.comparisons.map((comparison) => (
+                <Card key={comparison.compared_mode}>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-sm">{MODE_LABELS[comparison.compared_mode]} context comparison</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ComparisonStrip comparison={comparison} />
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
           <div className={modeGridClass(resultModes.length)}>
             {resultModes.map((mode) => (
               <ModeResultCard
@@ -255,4 +259,9 @@ function modeGridClass(count: number): string {
   if (count <= 1) return "grid gap-4";
   if (count === 2) return "grid gap-4 xl:grid-cols-2";
   return "grid gap-4 2xl:grid-cols-3";
+}
+
+function comparisonGridClass(count: number): string {
+  if (count <= 1) return "grid gap-4";
+  return "grid gap-4 xl:grid-cols-2";
 }
