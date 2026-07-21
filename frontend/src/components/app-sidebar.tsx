@@ -11,7 +11,7 @@ import {
   SidebarMenuItem 
 } from "@/components/ui/sidebar";
 import { useBaselineEvaluation } from "@/hooks/use-baseline-evaluation";
-import { LayoutDashboard, CheckSquare, Database, MessageSquare, FlaskConical, Tags, History, BarChart3 } from "lucide-react";
+import { LayoutDashboard, CheckSquare, Database, MessageSquare, FlaskConical, History, BarChart3 } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
@@ -58,7 +58,7 @@ export function AppSidebar() {
               </SidebarMenuItem>
               
               <SidebarMenuItem>
-                <SidebarMenuButton render={<Link to="/data" />} tooltip="Data Explorer" isActive={location.pathname.startsWith("/data")}>
+                <SidebarMenuButton render={<Link to="/data" />} tooltip="Data Explorer" isActive={location.pathname.startsWith("/data") || location.pathname.startsWith("/aliases")}>
                   <Database className="h-4 w-4" />
                   <span>Data Explorer</span>
                 </SidebarMenuButton>
@@ -83,13 +83,6 @@ export function AppSidebar() {
                 <SidebarMenuButton render={<Link to="/experiments/sessions" />} tooltip="Experiment Sessions" isActive={location.pathname.startsWith("/experiments/sessions") || location.pathname.startsWith("/experiments/mode-runs")}>
                   <History className="h-4 w-4" />
                   <span>Experiment Sessions</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
-              <SidebarMenuItem>
-                <SidebarMenuButton render={<Link to="/aliases" />} tooltip="Alias Explorer" isActive={location.pathname.startsWith("/aliases")}>
-                  <Tags className="h-4 w-4" />
-                  <span>Alias Explorer</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
 

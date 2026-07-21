@@ -194,7 +194,7 @@ export default function AliasExplorerPage() {
               {sortedGroups.map((group) => (
                 <TableRow key={group.group_id}>
                   <TableCell>
-                    <Link className="text-primary underline-offset-4 hover:underline" to={`/aliases/groups/${group.group_id}`}>
+                    <Link className="text-primary underline-offset-4 hover:underline" to={`/data/aliases/groups/${group.group_id}`}>
                       {group.canonical_name}
                     </Link>
                     {!group.canonical_name_is_generatable && <Badge className="ml-2" variant="outline">Display only</Badge>}
@@ -318,7 +318,7 @@ function LookupColumn({ title, members }: { title: string; members: AliasLookupR
         <div className="mt-2 space-y-2">
           {members.map((member) => (
             <div key={member.candidate_uid} className="text-sm">
-              <Link className="text-primary underline-offset-4 hover:underline" to={`/aliases/groups/${member.group_id}`}>
+              <Link className="text-primary underline-offset-4 hover:underline" to={`/data/aliases/groups/${member.group_id}`}>
                 {member.candidate_text}
               </Link>
               <p className="text-xs text-muted-foreground">{member.canonical_name} · {member.relation_type}</p>

@@ -29,7 +29,7 @@ export default function AliasGroupDetailPage() {
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
-      <Button variant="outline" render={<Link to="/aliases" />}>
+      <Button variant="outline" render={<Link to="/data?tab=aliases" />}>
         <ArrowLeft className="mr-2 h-4 w-4" />
         Alias Explorer
       </Button>

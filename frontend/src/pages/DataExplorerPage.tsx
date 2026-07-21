@@ -1,16 +1,27 @@
 import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "react-router";
 import { useBaselineEvaluation } from "@/hooks/use-baseline-evaluation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { AlertCircle, BookOpen, Database, Search } from "lucide-react";
+import { AlertCircle, BookOpen, Database, Search, Tags } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import AliasExplorerPage from "@/features/aliases/AliasExplorerPage";
 
 export default function DataExplorerPage() {
   const { data, loading, error } = useBaselineEvaluation();
+  const [params, setParams] = useSearchParams();
+  const activeTab = params.get("tab") === "chunks" || params.get("tab") === "aliases" ? params.get("tab")! : "stories";
+
+  function setActiveTab(value: string | null) {
+    const next = new URLSearchParams(params);
+    if (value && value !== "stories") next.set("tab", value);
+    else next.delete("tab");
+    setParams(next);
+  }
 
   if (loading) {
     return (
@@ -34,7 +45,7 @@ export default function DataExplorerPage() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <Tabs defaultValue="stories" className="w-full flex flex-col gap-6">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex flex-col gap-6">
         <div className="flex items-center justify-between gap-4 border-b pb-4">
           <div>
             <h1 className="text-2xl font-bold tracking-tight">Data Explorer</h1>
@@ -51,6 +62,10 @@ export default function DataExplorerPage() {
               <Database className="h-4 w-4" />
               Cleaned Chunks ({data.chunks.length})
             </TabsTrigger>
+            <TabsTrigger value="aliases" className="flex items-center gap-2">
+              <Tags className="h-4 w-4" />
+              Alias Explorer
+            </TabsTrigger>
           </TabsList>
         </div>
         
@@ -60,6 +75,10 @@ export default function DataExplorerPage() {
         
         <TabsContent value="chunks" className="mt-0 w-full">
           <ChunksTab chunks={data.chunks} />
+        </TabsContent>
+
+        <TabsContent value="aliases" className="mt-0 w-full">
+          <AliasExplorerPage />
         </TabsContent>
       </Tabs>
     </div>
