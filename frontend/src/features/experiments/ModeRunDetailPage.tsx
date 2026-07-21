@@ -32,7 +32,7 @@ export default function ExperimentModeRunDetailPage() {
         <ArrowLeft className="mr-2 h-4 w-4" />
         Session History
       </Button>
-      <ModeResultCard result={detail} persisted={true} />
+      <ModeResultCard result={detail} />
     </div>
   );
 }

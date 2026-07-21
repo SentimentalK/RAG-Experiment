@@ -16,7 +16,6 @@ export default function ExperimentComparePage() {
   const [query, setQuery] = useState("What did Mr. Holmes discover?");
   const [modes, setModes] = useState<RetrievalMode[]>(["baseline", "strong_only", "strong_story"]);
   const [persist, setPersist] = useState(false);
-  const [includeTrace, setIncludeTrace] = useState(false);
   const [maxVariants, setMaxVariants] = useState(8);
   const [allowStoryScoped, setAllowStoryScoped] = useState(true);
   const [allowSingleToken, setAllowSingleToken] = useState(true);
@@ -41,7 +40,6 @@ export default function ExperimentComparePage() {
   }, []);
 
   const storyControlsEnabled = modes.includes("strong_story") && !!capabilities?.expansion.allow_story_scoped;
-  const effectiveIncludeTrace = !persist ? includeTrace : false;
   const comparisonsByMode = useMemo(
     () => new Map(result?.comparisons.map((comparison) => [comparison.compared_mode, comparison]) ?? []),
     [result],
@@ -71,7 +69,7 @@ export default function ExperimentComparePage() {
           query,
           modes,
           persist,
-          include_trace: effectiveIncludeTrace,
+          include_trace: true,
           expansion_options: {
             max_query_variants: Math.min(maxVariants, capabilities?.expansion.max_query_variants ?? maxVariants),
             allow_story_scoped: storyControlsEnabled ? allowStoryScoped : false,
@@ -187,12 +185,6 @@ export default function ExperimentComparePage() {
                 ) : (
                   <Badge variant="outline">Persistence unavailable</Badge>
                 )}
-                {!persist && (
-                  <label className="flex items-center gap-2">
-                    <input type="checkbox" checked={includeTrace} onChange={(event) => setIncludeTrace(event.target.checked)} />
-                    <span>Return trace for unsaved run</span>
-                  </label>
-                )}
               </div>
               <Button type="submit" disabled={loading || modes.length === 0 || !query.trim()}>
                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -245,7 +237,6 @@ export default function ExperimentComparePage() {
                 key={mode}
                 result={result.results[mode]!}
                 comparison={comparisonsByMode.get(mode)}
-                persisted={result.persisted}
               />
             ))}
           </div>

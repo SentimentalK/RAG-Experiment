@@ -55,7 +55,7 @@ export default function ExperimentSessionDetailPage() {
       </Card>
       <div className="grid gap-4 xl:grid-cols-3">
         {detail.modes.map((mode) => (
-          <ModeResultCard key={mode.mode} result={mode} persisted={true} />
+          <ModeResultCard key={mode.mode} result={mode} />
         ))}
       </div>
     </div>

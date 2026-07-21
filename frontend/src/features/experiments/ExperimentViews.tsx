@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import { AlertCircle, Boxes, ChevronDown, FileSearch, Loader2, Route, SearchCheck } from "lucide-react";
+import { AlertCircle, ChevronDown, FileSearch, Loader2 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getExperimentModeRun } from "./api";
 import { enumLabel, extractCitations, formatDuration, modeLabel, normalizeModeRunDetail, variantStatusLabel } from "./adapters";
 import type { ExperimentContextRecord, ExperimentModeResult, ModeComparisonSummary } from "./types";
@@ -14,11 +12,9 @@ import type { ExperimentContextRecord, ExperimentModeResult, ModeComparisonSumma
 export function ModeResultCard({
   result,
   comparison,
-  persisted,
 }: {
   result: ExperimentModeResult;
   comparison?: ModeComparisonSummary;
-  persisted: boolean;
 }) {
   const [detail, setDetail] = useState<ExperimentModeResult>(result);
   const [loadingTrace, setLoadingTrace] = useState(false);
@@ -88,7 +84,6 @@ export function ModeResultCard({
       </CardHeader>
       <CardContent className="space-y-4">
         <AnswerBlock answer={detail.answer} contextCount={detail.contexts.length} invalidCitations={invalidCitations} />
-        <ContextList contexts={detail.contexts} comparison={comparison} onLoadText={() => loadDetail({ include_context_text: true })} loading={loadingText} />
         {detailError && <p className="text-sm text-red-600">{detailError}</p>}
         <div className="flex flex-wrap gap-2">
           {detail.mode_run_id && (
@@ -103,11 +98,7 @@ export function ModeResultCard({
             </Button>
           )}
         </div>
-        {hasInlineTrace ? (
-          <TraceInspectors result={detail} />
-        ) : !persisted && !detail.mode_run_id ? (
-          <p className="text-sm text-muted-foreground">Detailed trace is unavailable because this experiment was not saved or returned with trace data.</p>
-        ) : null}
+        {hasInlineTrace ? <TraceInspectors result={detail} /> : null}
         {view.unsupportedTraceSchema && (
           <Alert>
             <AlertCircle className="h-4 w-4" />
@@ -117,6 +108,8 @@ export function ModeResultCard({
             </AlertDescription>
           </Alert>
         )}
+        <AnswerModelInputSummary result={detail} />
+        <ContextList contexts={detail.contexts} comparison={comparison} onLoadText={() => loadDetail({ include_context_text: true })} loading={loadingText} />
       </CardContent>
     </Card>
   );
@@ -204,79 +197,284 @@ export function TraceInspectors({ result }: { result: ExperimentModeResult }) {
   const trace = result.trace as any;
   const view = normalizeModeRunDetail(result);
   if (!trace) return null;
+  const expansion = trace.expansion_trace ?? {};
+  const variants = (expansion.generated_variants ?? []) as TraceRecord[];
+  const retrievals = (trace.variant_retrievals ?? []) as TraceRecord[];
+  const retrievalByVariantId = new Map(retrievals.map((item) => [String(item.variant_id), item]));
+  const statusByVariantId = new Map(view.variantStatuses.map((status) => [status.variant_id, status]));
+  const selectedMentions = (expansion.selected_mentions ?? []) as TraceRecord[];
+  const alternativesByMention = (expansion.alternatives_by_mention ?? {}) as Record<string, TraceRecord[]>;
   return (
-    <Tabs defaultValue="expansion" className="w-full">
-      <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="expansion">
-          <Route className="mr-2 h-4 w-4" />
-          Expansion
-        </TabsTrigger>
-        <TabsTrigger value="retrieval">
-          <Boxes className="mr-2 h-4 w-4" />
-          Retrieval
-        </TabsTrigger>
-      </TabsList>
-      <TabsContent value="expansion" className="space-y-3 pt-3">
-        <VariantStatusList statuses={view.variantStatuses} />
-        <Separator />
-        <TraceList title="Mentions" items={(trace.expansion_trace?.detected_mentions ?? []) as TraceRecord[]} render={(item) => String(item.original_text ?? item.normalized_surface ?? item.mention_id ?? "mention")} />
-        <TraceList title="Blocked Mentions" items={(trace.expansion_trace?.blocked_mentions ?? []) as TraceRecord[]} render={(item) => `${String(item.original_text ?? item.mention_id ?? "mention")}: ${String(item.blocked_reason ?? "blocked")}`} />
-      </TabsContent>
-      <TabsContent value="retrieval" className="space-y-3 pt-3">
+    <div className="space-y-5">
+      <section className="space-y-3 rounded-md border p-4">
+        <h3 className="text-sm font-semibold">Retrieval Summary</h3>
         <div className="grid grid-cols-2 gap-2 text-xs md:grid-cols-4">
-          <Metric label="Reason" value={trace.retrieval_reason ?? "n/a"} />
-          <Metric label="Calls" value={String(trace.vector_search_call_count ?? 0)} />
-          <Metric label="Variants" value={String(trace.total_variant_count ?? 0)} />
-          <Metric label="Final" value={String(trace.final_result_count ?? 0)} />
+          <Metric label="Status" value={humanRetrievalReason(String(trace.retrieval_reason ?? ""))} />
+          <Metric label="Query variants" value={String(trace.total_variant_count ?? variants.length)} />
+          <Metric label="Vector searches" value={String(trace.vector_search_call_count ?? retrievals.length)} />
+          <Metric label="Final contexts" value={String(trace.final_result_count ?? result.contexts.length)} />
         </div>
-        <TraceList title="Variant Retrievals" items={(trace.variant_retrievals ?? []) as TraceRecord[]} render={(item) => `${String(item.variant_index ?? "?")}. ${String(item.variant_kind ?? "variant")} · ${item.success ? "searched" : "failed"} · top ${String(item.requested_top_k ?? "?")}`} />
-        <TraceList title="Fused Results" items={(trace.fused_results ?? []) as TraceRecord[]} render={(item) => `#${String(item.final_rank ?? "?")} ${String(item.chunk_id ?? "chunk")} · ${Number(item.fusion_score ?? 0).toFixed(4)}`} />
-      </TabsContent>
-    </Tabs>
+      </section>
+
+      <section className="space-y-4 rounded-md border p-4">
+        <div>
+          <h3 className="text-sm font-semibold">Expansion Trace</h3>
+          <p className="mt-1 text-sm text-muted-foreground">Input question</p>
+          <p className="mt-1 rounded-md bg-slate-50 p-3 font-medium dark:bg-slate-900/50">{String(expansion.original_query ?? trace.original_query ?? "")}</p>
+        </div>
+        <div className="grid gap-3 md:grid-cols-2">
+          {((expansion.detected_mentions ?? []) as TraceRecord[]).map((mention) => (
+            <div key={String(mention.mention_id)} className="rounded-md border bg-white p-3 dark:bg-slate-950">
+              <p className="text-xs text-muted-foreground">Detected mention</p>
+              <p className="text-base font-semibold">“{String(mention.original_text ?? "")}”</p>
+              <div className="mt-2 grid grid-cols-2 gap-2 text-xs text-muted-foreground">
+                <span>Characters {String(mention.start_offset)}-{String(mention.end_offset)}</span>
+                <span>{scopeLabel(String(mention.approval_status ?? mention.scope ?? ""))}</span>
+                <span>Alias group: {String(mention.canonical_name ?? "Unknown")}</span>
+                <span>Status: {selectedMentions.some((item) => item.mention_id === mention.mention_id) ? "Selected" : enumLabel(String(mention.eligibility ?? "blocked"))}</span>
+              </div>
+              <p className="mt-2 text-xs text-muted-foreground">
+                Safe alternatives: {(alternativesByMention[String(mention.mention_id)] ?? []).length}
+              </p>
+            </div>
+          ))}
+        </div>
+        {selectedMentions.map((mention, index) => (
+          <ExpansionSlot
+            key={String(mention.mention_id)}
+            index={index + 1}
+            mention={mention}
+            alternatives={alternativesByMention[String(mention.mention_id)] ?? []}
+          />
+        ))}
+        <p className="text-sm text-muted-foreground">
+          {selectedMentions.length} slot{selectedMentions.length === 1 ? "" : "s"} · {String(expansion.candidate_combination_count ?? 0)} alias candidate combination{Number(expansion.candidate_combination_count ?? 0) === 1 ? "" : "s"} · maximum allowed variants {String(expansion.config_snapshot?.max_query_variants ?? "n/a")} · generated variants {variants.length}
+        </p>
+        <GeneratedQueries variants={variants} retrievalByVariantId={retrievalByVariantId} statusByVariantId={statusByVariantId} />
+      </section>
+
+      <section className="space-y-4 rounded-md border p-4">
+        <h3 className="text-sm font-semibold">Queries sent to embedding/vector retrieval</h3>
+        <div className="space-y-3">
+          {retrievals.map((retrieval, index) => (
+            <VectorSearchCard key={String(retrieval.variant_id)} retrieval={retrieval} index={index + 1} />
+          ))}
+        </div>
+      </section>
+
+      <section className="space-y-4 rounded-md border p-4">
+        <h3 className="text-sm font-semibold">Weighted RRF fused results</h3>
+        <FusedResults results={(trace.fused_results ?? []) as TraceRecord[]} />
+      </section>
+
+      <details className="rounded-md border p-3">
+        <summary className="cursor-pointer text-sm font-medium">Technical details</summary>
+        <pre className="mt-3 max-h-72 overflow-auto rounded bg-slate-950 p-3 text-xs text-slate-100">
+          {JSON.stringify({ retrieval_reason: trace.retrieval_reason, variant_statuses: view.variantStatuses }, null, 2)}
+        </pre>
+      </details>
+    </div>
   );
 }
 
-function VariantStatusList({ statuses }: { statuses: ReturnType<typeof normalizeModeRunDetail>["variantStatuses"] }) {
-  if (statuses.length === 0) return <p className="text-sm text-muted-foreground">No explicit variant status metadata is available.</p>;
+function ExpansionSlot({ index, mention, alternatives }: { index: number; mention: TraceRecord; alternatives: TraceRecord[] }) {
   return (
-    <div className="grid gap-2 text-xs md:grid-cols-2">
-      {statuses.map((status) => (
-        <div key={status.variant_id} className="rounded-md border p-2">
-          <div className="flex items-center justify-between gap-2">
-            <span className="font-mono">{status.variant_id}</span>
-            <Badge variant={status.status === "failed" ? "destructive" : "outline"}>{variantStatusLabel(status)}</Badge>
+    <div className="rounded-md border bg-slate-50 p-3 dark:bg-slate-900/40">
+      <h4 className="text-sm font-semibold">Expansion slot {index}</h4>
+      <p className="mt-1 text-sm">Source mention: <span className="font-medium">{String(mention.original_text ?? "")}</span></p>
+      <div className="mt-2 grid gap-2 text-sm md:grid-cols-2">
+        <Choice label={`Keep original: ${String(mention.original_text ?? "")}`} />
+        {alternatives.map((alternative) => (
+          <Choice
+            key={String(alternative.candidate_uid)}
+            label={String(alternative.candidate_text ?? "")}
+            detail={enumLabel(String(alternative.relation_type ?? ""))}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Choice({ label, detail }: { label: string; detail?: string }) {
+  return (
+    <div className="rounded-md border bg-white px-3 py-2 dark:bg-slate-950">
+      <span className="mr-2 text-muted-foreground">○</span>
+      <span>{label}</span>
+      {detail && <span className="ml-2 text-xs text-muted-foreground">{detail}</span>}
+    </div>
+  );
+}
+
+function GeneratedQueries({
+  variants,
+  retrievalByVariantId,
+  statusByVariantId,
+}: {
+  variants: TraceRecord[];
+  retrievalByVariantId: Map<string, TraceRecord>;
+  statusByVariantId: Map<string, ReturnType<typeof normalizeModeRunDetail>["variantStatuses"][number]>;
+}) {
+  return (
+    <div className="space-y-3">
+      <h4 className="text-sm font-semibold">Generated full queries</h4>
+      {variants.map((variant) => {
+        const retrieval = retrievalByVariantId.get(String(variant.variant_id));
+        const status = statusByVariantId.get(String(variant.variant_id));
+        const replacements = (variant.replacements ?? []) as TraceRecord[];
+        return (
+          <div key={String(variant.variant_id)} className="rounded-md border bg-white p-3 dark:bg-slate-950">
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge variant="outline">Variant {String(variant.variant_index)}</Badge>
+              <Badge variant={String(variant.variant_kind) === "original" ? "secondary" : "outline"}>{humanVariantKind(String(variant.variant_kind))}</Badge>
+              {status && <Badge variant={status.status === "failed" ? "destructive" : "outline"}>{variantStatusLabel(status)}</Badge>}
+            </div>
+            <p className="mt-2 text-base font-medium">{String(variant.query_text ?? "")}</p>
+            <div className="mt-2 grid gap-2 text-sm md:grid-cols-2">
+              <span>Top K: {String(retrieval?.requested_top_k ?? (String(variant.variant_kind) === "original" ? 10 : 5))}</span>
+              <span>Replacement: {replacements.length === 0 ? "None" : replacements.map((r) => `${String(r.source_text)} → ${String(r.target_text)}`).join(", ")}</span>
+              {replacements.map((replacement) => (
+                <span key={`${String(variant.variant_id)}-${String(replacement.target_candidate_uid)}`} className="text-muted-foreground">
+                  {String(replacement.canonical_name)} · target relation {enumLabel(String(replacement.target_relation_type))}
+                </span>
+              ))}
+            </div>
+            <details className="mt-2">
+              <summary className="cursor-pointer text-xs text-muted-foreground">Technical metadata</summary>
+              <p className="mt-1 font-mono text-xs text-muted-foreground">variant_id: {String(variant.variant_id)}</p>
+            </details>
           </div>
-          <p className="mt-1 text-muted-foreground">
-            {status.variant_index}. {status.variant_kind}
-          </p>
+        );
+      })}
+    </div>
+  );
+}
+
+function VectorSearchCard({ retrieval, index }: { retrieval: TraceRecord; index: number }) {
+  const hits = (retrieval.hits ?? []) as TraceRecord[];
+  return (
+    <details className="rounded-md border bg-white p-3 open:bg-slate-50 dark:bg-slate-950 dark:open:bg-slate-900/40">
+      <summary className="cursor-pointer list-none">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p className="text-xs text-muted-foreground">Search {index} · {humanVariantKind(String(retrieval.variant_kind))}</p>
+            <p className="mt-1 font-medium">{String(retrieval.query_text ?? "")}</p>
+          </div>
+          <div className="flex flex-wrap gap-2 text-xs">
+            <Badge variant="outline">Top {String(retrieval.requested_top_k ?? "?")}</Badge>
+            <Badge variant={retrieval.success ? "outline" : "destructive"}>{retrieval.success ? "Completed" : "Failed"}</Badge>
+            <Badge variant="outline">Weight {Number(retrieval.variant_weight ?? 0).toFixed(2)}</Badge>
+            <Badge variant="outline">{hits.length} chunks</Badge>
+          </div>
         </div>
-      ))}
+      </summary>
+      <div className="mt-3 overflow-x-auto">
+        <table className="w-full text-left text-xs">
+          <thead className="text-muted-foreground">
+            <tr>
+              <th className="py-1 pr-3">Rank</th>
+              <th className="py-1 pr-3">Story</th>
+              <th className="py-1 pr-3">Chunk</th>
+              <th className="py-1 pr-3">Preview</th>
+            </tr>
+          </thead>
+          <tbody>
+            {hits.map((hit) => (
+              <tr key={`${String(retrieval.variant_id)}-${String(hit.chunk_id)}`} className="border-t">
+                <td className="py-1 pr-3">{String(hit.rank)}</td>
+                <td className="py-1 pr-3">{String(hit.section_title ?? "Unknown")}</td>
+                <td className="py-1 pr-3 font-mono">{String(hit.chunk_id)}</td>
+                <td className="py-1 pr-3">{preview(String(hit.chunk_text ?? ""))}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </details>
+  );
+}
+
+function FusedResults({ results }: { results: TraceRecord[] }) {
+  return (
+    <div className="space-y-2">
+      {results.map((result) => {
+        const contributions = (result.contributions ?? []) as TraceRecord[];
+        return (
+          <details key={String(result.chunk_id)} className="rounded-md border bg-white p-3 dark:bg-slate-950">
+            <summary className="cursor-pointer list-none">
+              <div className="grid gap-2 text-sm md:grid-cols-[4rem_1fr_6rem_6rem_6rem] md:items-center">
+                <span className="font-semibold">#{String(result.final_rank)}</span>
+                <span>
+                  <span className="font-medium">{String(result.section_title ?? "Unknown story")}</span>
+                  <span className="ml-2 font-mono text-xs text-muted-foreground">{String(result.chunk_id)}</span>
+                  <span className="mt-1 block text-xs text-muted-foreground">{preview(String(result.chunk_text ?? ""))}</span>
+                </span>
+                <span>{String(result.contributing_variant_count ?? contributions.length)} queries</span>
+                <span>Orig {result.original_query_rank == null ? "–" : String(result.original_query_rank)}</span>
+                <span>{Number(result.fusion_score ?? 0).toFixed(4)}</span>
+              </div>
+            </summary>
+            <div className="mt-3 space-y-2 text-xs">
+              <p className="font-medium">Why this chunk ranked #{String(result.final_rank)}</p>
+              {contributions.map((contribution) => (
+                <div key={`${String(result.chunk_id)}-${String(contribution.variant_id)}`} className="rounded border p-2">
+                  <p className="font-medium">{String(contribution.query_text ?? "")}</p>
+                  <p className="text-muted-foreground">
+                    {humanVariantKind(String(contribution.variant_kind))} · rank {String(contribution.rank)} × weight {Number(contribution.variant_weight ?? 0).toFixed(2)} · contribution {Number(contribution.rrf_contribution ?? 0).toFixed(5)}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </details>
+        );
+      })}
     </div>
   );
 }
 
 type TraceRecord = Record<string, unknown>;
 
-function TraceList<T>({ title, items, render }: { title: string; items: T[]; render: (item: T) => string }) {
+function AnswerModelInputSummary({ result }: { result: ExperimentModeResult }) {
   return (
-    <div className="space-y-2">
-      <h4 className="flex items-center gap-2 text-sm font-semibold">
-        <SearchCheck className="h-4 w-4" />
-        {title}
-      </h4>
-      {items.length === 0 ? (
-        <p className="text-sm text-muted-foreground">None recorded.</p>
-      ) : (
-        <div className="max-h-64 space-y-1 overflow-auto rounded-md border p-2">
-          {items.map((item, index) => (
-            <p key={index} className="text-xs text-muted-foreground">
-              {render(item)}
-            </p>
-          ))}
-        </div>
-      )}
+    <div className="space-y-3 rounded-md border p-4">
+      <h3 className="text-sm font-semibold">What was sent to the answer model</h3>
+      <div className="grid gap-2 text-xs md:grid-cols-3">
+        <Metric label="Question" value="Original only" />
+        <Metric label="Final contexts" value={String(result.contexts.length)} />
+        <Metric label="Prompt hash" value={result.rendered_prompt_sha256?.slice(0, 10) ?? "n/a"} />
+      </div>
+      <p className="text-sm text-muted-foreground">
+        Query variants are used only for embedding/vector retrieval. The answer model receives the original user question plus the final fused contexts shown below.
+      </p>
     </div>
   );
+}
+
+function humanRetrievalReason(reason: string): string {
+  if (reason === "alias_expanded_retrieval") return "Alias expansion applied";
+  if (reason === "baseline_only_expansion_disabled") return "Baseline only";
+  if (reason === "baseline_only_no_variants") return "No alias variants";
+  if (reason === "baseline_only_retrieval_disabled") return "Alias retrieval disabled";
+  return enumLabel(reason || "unknown");
+}
+
+function humanVariantKind(kind: string): string {
+  if (kind === "original") return "Original query";
+  if (kind === "strong_single") return "Strong single replacement";
+  if (kind === "strong_multi") return "Strong multi replacement";
+  if (kind === "story_scoped_single") return "Story-scoped replacement";
+  if (kind === "mixed") return "Mixed replacements";
+  return enumLabel(kind || "variant");
+}
+
+function scopeLabel(value: string): string {
+  if (value === "approved_strong" || value === "global") return "Global strong alias";
+  if (value === "approved_story_scoped" || value === "story_scoped") return "Story-scoped alias";
+  return enumLabel(value || "alias");
+}
+
+function preview(text: string): string {
+  return text.replace(/\s+/g, " ").trim().slice(0, 120) + (text.trim().length > 120 ? "..." : "");
 }
 
 export function ComparisonStrip({ comparison }: { comparison: ModeComparisonSummary }) {
