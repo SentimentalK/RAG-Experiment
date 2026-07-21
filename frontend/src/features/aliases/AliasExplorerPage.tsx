@@ -70,10 +70,10 @@ export default function AliasExplorerPage() {
       {error && <p className="text-sm text-red-600">{error}</p>}
       {status && (
         <div className="grid gap-3 md:grid-cols-4">
-          <Stat label="Dataset" value={status.dataset_filename} />
-          <Stat label="Groups" value={String(status.group_count)} />
+          <Stat label="Dataset" value={status.file_name} />
+          <Stat label="Groups" value={String(status.approved_group_count)} />
           <Stat label="Generatable" value={String(status.generatable_member_count)} />
-          <Stat label="SHA" value={status.dataset_sha256.slice(0, 12)} />
+          <Stat label="SHA" value={status.sha256.slice(0, 12)} />
         </div>
       )}
       <Card>

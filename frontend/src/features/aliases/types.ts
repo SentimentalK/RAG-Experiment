@@ -1,17 +1,17 @@
 export interface AliasStatus {
   loaded: boolean;
-  dataset_filename: string;
-  dataset_sha256: string;
+  file_name: string;
+  sha256: string;
   expected_sha256: string | null;
   strict_validation: boolean;
-  group_count: number;
+  approved_group_count: number;
   approved_strong_group_count: number;
   approved_story_scoped_group_count: number;
   generatable_member_count: number;
   normalization_only_member_count: number;
   final_disposition_count: number;
-  warning_count: number;
-  warnings: string[];
+  validation_warning_count: number;
+  loaded_at: string;
 }
 
 export interface AliasMember {
@@ -46,7 +46,7 @@ export interface AliasGroupSummary {
   scope: string;
   story_ids: string[];
   approval_status: string;
-  group_confidence: number | null;
+  group_confidence: string | null;
   safe_for_query_substitution: boolean;
   member_count: number;
   generatable_member_count: number;
