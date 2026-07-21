@@ -275,8 +275,8 @@ export function TraceInspectors({ result }: { result: ExperimentModeResult }) {
   const selectedMentions = (expansion.selected_mentions ?? []) as TraceRecord[];
   const alternativesByMention = (expansion.alternatives_by_mention ?? {}) as Record<string, TraceRecord[]>;
   return (
-    <div className="space-y-5">
-      <section className="space-y-3 rounded-md border p-4">
+    <div className="space-y-6">
+      <section className="space-y-3">
         <h3 className="text-sm font-semibold">Retrieval Summary</h3>
         <div className="grid grid-cols-2 gap-2 text-xs md:grid-cols-4">
           <Metric label="Status" value={humanRetrievalReason(String(trace.retrieval_reason ?? ""))} />
@@ -286,11 +286,11 @@ export function TraceInspectors({ result }: { result: ExperimentModeResult }) {
         </div>
       </section>
 
-      <section className="space-y-4 rounded-md border p-4">
+      <section className="space-y-3">
         <div>
           <h3 className="text-sm font-semibold">Expansion Trace</h3>
-          <p className="mt-1 text-sm text-muted-foreground">Input question</p>
-          <p className="mt-1 rounded-md bg-slate-50 p-3 font-medium dark:bg-slate-900/50">{String(expansion.original_query ?? trace.original_query ?? "")}</p>
+          <p className="mt-1 text-xs text-muted-foreground">Input question</p>
+          <p className="mt-1 rounded-md bg-slate-50 px-3 py-2 text-sm font-medium dark:bg-slate-900/50">{String(expansion.original_query ?? trace.original_query ?? "")}</p>
         </div>
         <div className="grid gap-3 md:grid-cols-2">
           {((expansion.detected_mentions ?? []) as TraceRecord[]).map((mention) => (
@@ -320,10 +320,11 @@ export function TraceInspectors({ result }: { result: ExperimentModeResult }) {
         <p className="text-sm text-muted-foreground">
           {selectedMentions.length} slot{selectedMentions.length === 1 ? "" : "s"} · {String(expansion.candidate_combination_count ?? 0)} alias candidate combination{Number(expansion.candidate_combination_count ?? 0) === 1 ? "" : "s"} · maximum allowed variants {String(expansion.config_snapshot?.max_query_variants ?? "n/a")} · generated variants {variants.length}
         </p>
-        <GeneratedQueries variants={variants} retrievalByVariantId={retrievalByVariantId} statusByVariantId={statusByVariantId} />
       </section>
 
-      <section className="space-y-4 rounded-md border p-4">
+      <GeneratedQueries variants={variants} retrievalByVariantId={retrievalByVariantId} statusByVariantId={statusByVariantId} />
+
+      <section className="space-y-3">
         <h3 className="text-sm font-semibold">Queries sent to embedding/vector retrieval</h3>
         <div className="space-y-3">
           {retrievals.map((retrieval, index) => (
@@ -332,7 +333,7 @@ export function TraceInspectors({ result }: { result: ExperimentModeResult }) {
         </div>
       </section>
 
-      <section className="space-y-4 rounded-md border p-4">
+      <section className="space-y-3">
         <h3 className="text-sm font-semibold">Weighted RRF fused results</h3>
         <FusedResults results={(trace.fused_results ?? []) as TraceRecord[]} />
       </section>
@@ -349,10 +350,10 @@ export function TraceInspectors({ result }: { result: ExperimentModeResult }) {
 
 function ExpansionSlot({ index, mention, alternatives }: { index: number; mention: TraceRecord; alternatives: TraceRecord[] }) {
   return (
-    <div className="rounded-md border bg-slate-50 p-3 dark:bg-slate-900/40">
+    <div className="rounded-md bg-slate-50 p-3 dark:bg-slate-900/40">
       <h4 className="text-sm font-semibold">Expansion slot {index}</h4>
       <p className="mt-1 text-sm">Source mention: <span className="font-medium">{String(mention.original_text ?? "")}</span></p>
-      <div className="mt-2 grid gap-2 text-sm md:grid-cols-2">
+      <div className="mt-2 space-y-1 text-sm">
         <Choice label={`Keep original: ${String(mention.original_text ?? "")}`} />
         {alternatives.map((alternative) => (
           <Choice
@@ -368,7 +369,7 @@ function ExpansionSlot({ index, mention, alternatives }: { index: number; mentio
 
 function Choice({ label, detail }: { label: string; detail?: string }) {
   return (
-    <div className="rounded-md border bg-white px-3 py-2 dark:bg-slate-950">
+    <div className="rounded px-2 py-1.5 hover:bg-white dark:hover:bg-slate-950">
       <span className="mr-2 text-muted-foreground">○</span>
       <span>{label}</span>
       {detail && <span className="ml-2 text-xs text-muted-foreground">{detail}</span>}
