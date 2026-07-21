@@ -5,6 +5,13 @@ import DashboardPage from "../pages/DashboardPage";
 import BaselineQuestionPage from "../pages/BaselineQuestionPage";
 import DataExplorerPage from "../pages/DataExplorerPage";
 import AskQuestionPage from "../pages/AskQuestionPage";
+import ExperimentComparePage from "../features/experiments/ComparePage";
+import ExperimentSessionsPage from "../features/experiments/SessionsPage";
+import ExperimentSessionDetailPage from "../features/experiments/SessionDetailPage";
+import ExperimentModeRunDetailPage from "../features/experiments/ModeRunDetailPage";
+import AliasExplorerPage from "../features/aliases/AliasExplorerPage";
+import AliasGroupDetailPage from "../features/aliases/AliasGroupDetailPage";
+import EvaluationUnavailablePage from "../features/experiments/EvaluationUnavailablePage";
 
 function App() {
   return (
@@ -16,6 +23,13 @@ function App() {
             <Route path="/baseline/:questionId" element={<BaselineQuestionPage />} />
             <Route path="/data" element={<DataExplorerPage />} />
             <Route path="/ask" element={<AskQuestionPage />} />
+            <Route path="/experiments/compare" element={<ExperimentComparePage />} />
+            <Route path="/experiments/sessions" element={<ExperimentSessionsPage />} />
+            <Route path="/experiments/sessions/:sessionId" element={<ExperimentSessionDetailPage />} />
+            <Route path="/experiments/mode-runs/:modeRunId" element={<ExperimentModeRunDetailPage />} />
+            <Route path="/aliases" element={<AliasExplorerPage />} />
+            <Route path="/aliases/groups/:groupId" element={<AliasGroupDetailPage />} />
+            <Route path="/evaluation" element={<EvaluationUnavailablePage />} />
           </Route>
         </Routes>
       </BrowserRouter>

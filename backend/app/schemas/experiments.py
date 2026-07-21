@@ -10,6 +10,44 @@ from app.services.query_expansion_service import QueryExpansionRequestOptions
 RetrievalMode = Literal["baseline", "strong_only", "strong_story"]
 SessionStatus = Literal["running", "completed", "partial", "failed"]
 ModeRunStatus = Literal["pending", "running", "retrieval_completed", "completed", "failed"]
+VariantExecutionStatus = Literal["generated", "searched", "skipped", "failed"]
+
+
+class ExperimentPersistenceCapabilities(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    enabled: bool
+    required: bool
+
+
+class ExperimentExpansionCapabilities(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    enabled: bool
+    max_query_variants: int
+    allow_story_scoped: bool
+    allow_story_scoped_single_token: bool
+
+
+class ExperimentCapabilities(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    available_modes: tuple[RetrievalMode, ...]
+    persistence: ExperimentPersistenceCapabilities
+    expansion: ExperimentExpansionCapabilities
+    trace_persistence_enabled: bool
+    evaluation_catalog_available: bool = False
+
+
+class ExperimentVariantStatus(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    variant_id: str
+    variant_index: int
+    variant_kind: str
+    status: VariantExecutionStatus
+    error_code: str | None = None
+    error_message: str | None = None
 
 
 class ExperimentalAnswerRequest(BaseModel):
@@ -88,6 +126,8 @@ class ExperimentRetrievalSummary(BaseModel):
     final_context_count: int
     retrieval_executed: bool
     retrieval_source_mode: RetrievalMode | None = None
+    retrieval_reused: bool = False
+    variant_statuses: tuple[ExperimentVariantStatus, ...] = ()
 
 
 class ExperimentTiming(BaseModel):
@@ -191,4 +231,3 @@ class ExperimentSessionDetail(BaseModel):
     query_expansion_config: dict[str, Any]
     retrieval_config: dict[str, Any]
     generation_config: dict[str, Any]
-

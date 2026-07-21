@@ -13,13 +13,17 @@ from app.core.config import settings
 from app.evaluation.alias_retrieval.corpus import compute_corpus_content_sha256, load_chunks_jsonl
 from app.repositories.experiment_repository import ExperimentPersistenceError, ExperimentRepository
 from app.schemas.experiments import (
+    ExperimentCapabilities,
     ExperimentCompareResponse,
     ExperimentContextRecord,
+    ExperimentExpansionCapabilities,
     ExperimentModeResult,
+    ExperimentPersistenceCapabilities,
     ExperimentRetrievalSummary,
     ExperimentSessionDetail,
     ExperimentSessionSummary,
     ExperimentTiming,
+    ExperimentVariantStatus,
     ExperimentalAnswerResponse,
     ModeComparisonSummary,
     RetrievalMode,
@@ -100,6 +104,24 @@ class ExperimentalAnswerService:
         self._answer_generation_service = answer_generation_service
         self._repository = experiment_repository
         self._config = config
+
+    def get_capabilities(self) -> ExperimentCapabilities:
+        expansion_config = self._expanded_retrieval_service._query_expansion_service._config
+        return ExperimentCapabilities(
+            available_modes=("baseline", "strong_only", "strong_story"),
+            persistence=ExperimentPersistenceCapabilities(
+                enabled=self._config.persistence_enabled,
+                required=self._config.persistence_required,
+            ),
+            expansion=ExperimentExpansionCapabilities(
+                enabled=expansion_config.enabled,
+                max_query_variants=expansion_config.max_query_variants,
+                allow_story_scoped=expansion_config.allow_story_scoped,
+                allow_story_scoped_single_token=expansion_config.allow_story_scoped_single_token,
+            ),
+            trace_persistence_enabled=self._config.persist_full_trace,
+            evaluation_catalog_available=False,
+        )
 
     def answer(
         self,
@@ -614,6 +636,8 @@ def _mode_result(item: WorkItem, *, include_trace: bool) -> ExperimentModeResult
             final_context_count=len(item.contexts),
             retrieval_executed=item.retrieval_executed,
             retrieval_source_mode=item.retrieval_source_mode,
+            retrieval_reused=not item.retrieval_executed and item.retrieval_source_mode is not None,
+            variant_statuses=_variant_statuses(item.trace, include_skipped=item.retrieval_executed) if item.trace and item.retrieval_executed else (),
         ),
         timing=ExperimentTiming(
             retrieval_duration_ms=item.retrieval_duration_ms,
@@ -635,6 +659,7 @@ def _mode_result_from_row(row: dict[str, Any], *, include_trace: bool, include_c
             payload["chunk_text"] = None
         contexts.append(ExperimentContextRecord.model_validate(payload))
     trace_payload = row.get("retrieval_trace") if include_trace else None
+    retrieval_summary_payload = row.get("retrieval_summary") or {}
     return ExperimentModeResult(
         mode=row["mode"],
         mode_run_id=row["id"],
@@ -654,6 +679,11 @@ def _mode_result_from_row(row: dict[str, Any], *, include_trace: bool, include_c
             final_context_count=row.get("final_context_count") or 0,
             retrieval_executed=row.get("retrieval_executed"),
             retrieval_source_mode=row.get("retrieval_source_mode"),
+            retrieval_reused=not row.get("retrieval_executed") and row.get("retrieval_source_mode") is not None,
+            variant_statuses=tuple(
+                ExperimentVariantStatus.model_validate(status)
+                for status in retrieval_summary_payload.get("variant_statuses", [])
+            ),
         ),
         timing=ExperimentTiming(
             retrieval_duration_ms=row.get("retrieval_duration_ms"),
@@ -731,7 +761,38 @@ def _retrieval_summary(trace: ExpandedRetrievalTrace, item: WorkItem, *, derived
         "retrieval_executed": item.retrieval_executed,
         "retrieval_source_mode": item.retrieval_source_mode,
         "retrieval_source_mode_run_id": str(item.retrieval_source_mode_run_id) if item.retrieval_source_mode_run_id else None,
+        "retrieval_reused": derived,
+        "variant_statuses": [] if derived else [status.model_dump(mode="json") for status in _variant_statuses(trace, include_skipped=True)],
     }
+
+
+def _variant_statuses(trace: ExpandedRetrievalTrace, *, include_skipped: bool) -> tuple[ExperimentVariantStatus, ...]:
+    retrievals_by_id = {result.variant_id: result for result in trace.variant_retrievals}
+    statuses: list[ExperimentVariantStatus] = []
+    for variant in sorted(trace.expansion_trace.generated_variants, key=lambda item: item.variant_index):
+        result = retrievals_by_id.get(variant.variant_id)
+        if result is None:
+            status = "skipped" if include_skipped and trace.skipped_variant_count else "generated"
+            statuses.append(
+                ExperimentVariantStatus(
+                    variant_id=variant.variant_id,
+                    variant_index=variant.variant_index,
+                    variant_kind=variant.variant_kind,
+                    status=status,
+                )
+            )
+            continue
+        statuses.append(
+            ExperimentVariantStatus(
+                variant_id=variant.variant_id,
+                variant_index=variant.variant_index,
+                variant_kind=variant.variant_kind,
+                status="searched" if result.success else "failed",
+                error_code=result.error_code,
+                error_message=result.error_message,
+            )
+        )
+    return tuple(statuses)
 
 
 def _session_status(*, completed_count: int, failed_count: int, requested_count: int) -> str:

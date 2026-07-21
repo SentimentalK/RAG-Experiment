@@ -59,9 +59,13 @@ def _member_payload(member: AliasMemberReference) -> dict:
 
 
 def _group_summary(group: CompiledAliasGroup) -> dict:
+    canonical_surface = normalize_alias_surface(group.canonical_name)
     return {
         "group_id": group.group_id,
         "canonical_name": group.canonical_name,
+        "canonical_name_is_generatable": any(
+            member.normalized_surface == canonical_surface for member in group.generatable_members
+        ),
         "entity_type": group.entity_type,
         "scope": group.scope,
         "story_ids": list(group.story_ids),

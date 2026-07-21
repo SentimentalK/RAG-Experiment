@@ -7,10 +7,14 @@ from fastapi.testclient import TestClient
 from app.api.dependencies import get_experimental_answer_service
 from app.api.main import app
 from app.schemas.experiments import (
+    ExperimentCapabilities,
     ExperimentCompareResponse,
     ExperimentContextRecord,
+    ExperimentExpansionCapabilities,
     ExperimentModeResult,
+    ExperimentPersistenceCapabilities,
     ExperimentRetrievalSummary,
+    ExperimentVariantStatus,
     ExperimentSessionDetail,
     ExperimentSessionSummary,
     ExperimentTiming,
@@ -52,6 +56,34 @@ def test_experimental_answer_and_compare_api_serialize_compact_results():
         compare_response = client.post("/api/experiments/compare", json={"query": "Question?", "modes": ["strong_story"]})
         assert compare_response.status_code == 200
         assert compare_response.json()["retrieval_execution_count"] == 1
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_experiment_capabilities_api_serializes_server_policy():
+    service = MagicMock()
+    service.get_capabilities.return_value = ExperimentCapabilities(
+        available_modes=("baseline", "strong_only", "strong_story"),
+        persistence=ExperimentPersistenceCapabilities(enabled=True, required=False),
+        expansion=ExperimentExpansionCapabilities(
+            enabled=True,
+            max_query_variants=8,
+            allow_story_scoped=True,
+            allow_story_scoped_single_token=True,
+        ),
+        trace_persistence_enabled=True,
+        evaluation_catalog_available=False,
+    )
+    app.dependency_overrides[get_experimental_answer_service] = lambda: service
+    try:
+        client = TestClient(app)
+        response = client.get("/api/experiments/capabilities")
+        assert response.status_code == 200
+        payload = response.json()
+        assert payload["available_modes"] == ["baseline", "strong_only", "strong_story"]
+        assert payload["persistence"] == {"enabled": True, "required": False}
+        assert payload["expansion"]["max_query_variants"] == 8
+        assert payload["evaluation_catalog_available"] is False
     finally:
         app.dependency_overrides.clear()
 
@@ -151,7 +183,10 @@ def _mode_result(chunk_text="Text"):
             vector_search_call_count=2,
             final_context_count=1,
             retrieval_executed=True,
+            variant_statuses=(
+                ExperimentVariantStatus(variant_id="original", variant_index=0, variant_kind="original", status="searched"),
+                ExperimentVariantStatus(variant_id="v1", variant_index=1, variant_kind="strong_single", status="searched"),
+            ),
         ),
         timing=ExperimentTiming(retrieval_duration_ms=1.0, generation_duration_ms=2.0, total_duration_ms=3.0),
     )
-

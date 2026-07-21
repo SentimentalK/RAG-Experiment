@@ -12,6 +12,13 @@ from app.services.experimental_answer_service import ExperimentalAnswerError, Ex
 router = APIRouter(prefix="/experiments", tags=["experiments"])
 
 
+@router.get("/capabilities")
+def experiment_capabilities(
+    service: ExperimentalAnswerService = Depends(get_experimental_answer_service),
+) -> dict:
+    return service.get_capabilities().model_dump(mode="json")
+
+
 @router.post("/answer")
 def experimental_answer(
     payload: ExperimentalAnswerRequest,
@@ -117,4 +124,3 @@ def _http_error(exc: ExperimentalAnswerError) -> HTTPException:
             "failed_mode": exc.failed_mode,
         },
     )
-
