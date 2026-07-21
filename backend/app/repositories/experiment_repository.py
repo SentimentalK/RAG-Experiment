@@ -15,6 +15,19 @@ class ExperimentPersistenceError(RuntimeError):
 
 
 class ExperimentRepository:
+    def experiment_schema_ready(self) -> bool:
+        with get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """
+                    SELECT
+                        to_regclass('public.experiment_sessions') IS NOT NULL
+                        AND to_regclass('public.experiment_mode_runs') IS NOT NULL;
+                    """
+                )
+                row = cur.fetchone()
+                return bool(row[0]) if row else False
+
     def create_session(
         self,
         *,

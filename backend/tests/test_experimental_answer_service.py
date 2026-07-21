@@ -80,6 +80,31 @@ def test_persistence_required_rejects_persist_false():
     assert exc.value.error_code == "persistence_required"
 
 
+def test_capabilities_disable_persistence_when_schema_is_missing():
+    service, _, _, repo = service_for()
+    repo.schema_ready = False
+
+    capabilities = service.get_capabilities()
+
+    assert capabilities.persistence.enabled is False
+    assert capabilities.persistence.required is False
+
+
+def test_answer_generation_failure_preserves_retrieved_contexts():
+    service, _, answer, _ = service_for(answer_fail_modes={"strong_story"})
+
+    result = service.compare(query="Question", modes=("baseline", "strong_story"), persist=False)
+
+    assert result.status == "partial"
+    assert result.answer_generation_count == 1
+    assert result.results["strong_story"].status == "failed"
+    assert result.results["strong_story"].answer is None
+    assert result.results["strong_story"].contexts
+    assert result.results["strong_story"].error_code == "answer_generation_failed"
+    assert "strong_story" in result.warnings[0]
+    assert len(answer.calls) == 2
+
+
 def test_comparison_metrics_use_chunk_sets_and_answer_equality():
     service, _, _, _ = service_for()
 
@@ -130,8 +155,9 @@ class FakeRetrievalService:
 
 
 class FakeAnswerGenerationService:
-    def __init__(self):
+    def __init__(self, fail_modes=None):
         self.calls = []
+        self.fail_modes = set(fail_modes or ())
 
     def generation_config(self):
         return {"model": "test-model", "temperature": 0.0}
@@ -141,6 +167,10 @@ class FakeAnswerGenerationService:
 
     def generate(self, question, contexts):
         self.calls.append({"question": question, "contexts": contexts})
+        chunk_ids = {context.chunk_uid for context in contexts}
+        inferred_mode = "strong_story" if "alias" in chunk_ids else "baseline"
+        if inferred_mode in self.fail_modes:
+            raise RuntimeError("Invalid model response")
         return GeneratedAnswer(
             answer_text="Same answer.",
             evidence_sufficient=True,
@@ -168,6 +198,10 @@ class FakeRepo:
         self.mode_ids = {}
         self.mode_rows = {}
         self.finalized = {}
+        self.schema_ready = True
+
+    def experiment_schema_ready(self):
+        return self.schema_ready
 
     def create_session(self, **kwargs):
         self.session = kwargs
@@ -220,10 +254,10 @@ class FakeRepo:
         return next(row for row in self.mode_rows.values() if row["id"] == mode_run_id)
 
 
-def service_for(*, story_variant_in_strong_only=False, config=None):
+def service_for(*, story_variant_in_strong_only=False, config=None, answer_fail_modes=None):
     registry = type("Registry", (), {"snapshot": type("Snapshot", (), {"sha256": "alias-sha"})()})()
     retrieval = FakeRetrievalService(story_variant_in_strong_only=story_variant_in_strong_only)
-    answer = FakeAnswerGenerationService()
+    answer = FakeAnswerGenerationService(fail_modes=answer_fail_modes)
     repo = FakeRepo()
     service = ExperimentalAnswerService(
         alias_registry=registry,

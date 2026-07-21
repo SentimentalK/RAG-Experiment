@@ -107,11 +107,12 @@ class ExperimentalAnswerService:
 
     def get_capabilities(self) -> ExperimentCapabilities:
         expansion_config = self._expanded_retrieval_service._query_expansion_service._config
+        persistence_ready = self._persistence_ready()
         return ExperimentCapabilities(
             available_modes=("baseline", "strong_only", "strong_story"),
             persistence=ExperimentPersistenceCapabilities(
-                enabled=self._config.persistence_enabled,
-                required=self._config.persistence_required,
+                enabled=self._config.persistence_enabled and persistence_ready,
+                required=self._config.persistence_required and persistence_ready,
             ),
             expansion=ExperimentExpansionCapabilities(
                 enabled=expansion_config.enabled,
@@ -228,20 +229,17 @@ class ExperimentalAnswerService:
                 item = work[mode]
                 if item.status == "failed":
                     continue
-                self._generate_answer_for_item(query, item, persist_effective)
-                answer_generation_count += 1
+                try:
+                    self._generate_answer_for_item(query, item, persist_effective)
+                    answer_generation_count += 1
+                except ExperimentalAnswerError as exc:
+                    if exc.error_code != "answer_generation_failed":
+                        raise
+                    warnings.append(f"{mode}: answer generation failed after retrieval completed.")
 
             completed = [item for item in work.values() if item.status == "completed"]
             failed = [item for item in work.values() if item.status == "failed"]
             status = _session_status(completed_count=len(completed), failed_count=len(failed), requested_count=len(work))
-            if status != "completed":
-                first_failed = failed[0] if failed else None
-                raise ExperimentalAnswerError(
-                    first_failed.error_code or "experiment_failed" if first_failed else "experiment_failed",
-                    first_failed.error_message or "Experiment failed." if first_failed else "Experiment failed.",
-                    session_id=session_id,
-                    failed_mode=first_failed.mode if first_failed else None,
-                )
 
             if persist_effective and session_id is not None:
                 self._finalize_session(
@@ -317,7 +315,21 @@ class ExperimentalAnswerService:
             return False
         if self._config.persistence_required and not persist_requested:
             raise ExperimentalAnswerError("persistence_required", "Experiment persistence is required by server configuration.")
+        if persist_requested and not self._persistence_ready():
+            raise ExperimentalAnswerError(
+                "experiment_persistence_failed",
+                "Experiment persistence is configured but the experiment tables are not available.",
+            )
         return persist_requested
+
+    def _persistence_ready(self) -> bool:
+        if not self._config.persistence_enabled:
+            return False
+        try:
+            return bool(self._repository.experiment_schema_ready())
+        except Exception:
+            logger.warning("Experiment persistence schema readiness check failed", exc_info=True)
+            return False
 
     def _create_session(self, query: str, modes: tuple[RetrievalMode, ...], document_id: str) -> UUID:
         try:
