@@ -1,6 +1,7 @@
 from fastapi import Request
 from app.services.rag_answer_service import RagAnswerService
 from app.services.alias_registry import AliasRegistry
+from app.services.expanded_retrieval_service import ExpandedRetrievalService
 from app.services.query_expansion_service import QueryExpansionService
 
 def get_rag_service(request: Request) -> RagAnswerService:
@@ -21,4 +22,11 @@ def get_query_expansion_service(request: Request) -> QueryExpansionService:
     service = getattr(request.app.state, "query_expansion_service", None)
     if service is None:
         raise RuntimeError("Query expansion service is not initialized.")
+    return service
+
+
+def get_expanded_retrieval_service(request: Request) -> ExpandedRetrievalService:
+    service = getattr(request.app.state, "expanded_retrieval_service", None)
+    if service is None:
+        raise RuntimeError("Expanded retrieval service is not initialized.")
     return service

@@ -3,13 +3,14 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.api.dependencies import get_alias_registry, get_query_expansion_service
+from app.api.dependencies import get_alias_registry, get_expanded_retrieval_service, get_query_expansion_service
 from app.services.alias_registry import (
     AliasMemberReference,
     AliasRegistry,
     CompiledAliasGroup,
     normalize_alias_surface,
 )
+from app.services.expanded_retrieval_service import ExpandedRetrievalError, ExpandedRetrievalService
 from app.services.query_expansion_service import QueryExpansionRequestOptions, QueryExpansionService
 
 
@@ -21,6 +22,14 @@ class AliasExpandRequest(BaseModel):
 
     query: str = Field(min_length=1)
     options: QueryExpansionRequestOptions | None = None
+
+
+class AliasRetrieveRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    query: str = Field(min_length=1)
+    document_id: str = Field(default="gutenberg-1661", min_length=1)
+    expansion_options: QueryExpansionRequestOptions | None = None
 
 
 def _member_payload(member: AliasMemberReference) -> dict:
@@ -154,4 +163,22 @@ def expand_alias_query(
     service: QueryExpansionService = Depends(get_query_expansion_service),
 ) -> dict:
     trace = service.expand(payload.query, config_override=payload.options)
+    return trace.model_dump(mode="json")
+
+
+@router.post("/retrieve")
+def retrieve_alias_query(
+    payload: AliasRetrieveRequest,
+    service: ExpandedRetrievalService = Depends(get_expanded_retrieval_service),
+) -> dict:
+    try:
+        trace = service.retrieve(
+            payload.query,
+            document_id=payload.document_id,
+            expansion_options=payload.expansion_options,
+        )
+    except ExpandedRetrievalError as exc:
+        raise HTTPException(status_code=503, detail=str(exc))
+    except Exception:
+        raise HTTPException(status_code=503, detail="Expanded retrieval failed.")
     return trace.model_dump(mode="json")

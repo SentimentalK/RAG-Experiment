@@ -10,6 +10,7 @@ from app.db.connection import get_connection
 from app.providers.minilm_provider import MiniLMProvider
 from app.services.rag_answer_service import RagAnswerService
 from app.services.alias_registry import AliasRegistry
+from app.services.expanded_retrieval_service import ExpandedRetrievalConfig, ExpandedRetrievalService
 from app.services.query_expansion_service import QueryExpansionConfig, QueryExpansionService
 from app.services.vector_search_service import VectorSearchService
 
@@ -59,6 +60,12 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     # 4. Instantiate client and services
     groq_client = GroqGptOssClient(settings)
     search_service = VectorSearchService(provider)
+    expanded_retrieval_service = ExpandedRetrievalService(
+        alias_registry=alias_registry,
+        query_expansion_service=query_expansion_service,
+        vector_search_service=search_service,
+        config=ExpandedRetrievalConfig.from_settings(settings),
+    )
 
     rag_service = RagAnswerService(
         search_service=search_service,
@@ -68,6 +75,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     # 5. Save to app state
     app.state.alias_registry = alias_registry
     app.state.query_expansion_service = query_expansion_service
+    app.state.expanded_retrieval_service = expanded_retrieval_service
     app.state.rag_service = rag_service
     app.state.embedding_provider = provider
     app.state.ready = True
