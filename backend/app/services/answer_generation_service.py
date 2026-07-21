@@ -2,6 +2,7 @@ import hashlib
 import json
 import logging
 import re
+import time
 from time import perf_counter
 from typing import Any
 
@@ -76,16 +77,30 @@ class AnswerGenerationService:
 
         attempt_count = 0
         max_attempts = 2
+        max_api_attempts_per_validation_attempt = 3
         last_duration_ms = 0.0
 
         while attempt_count < max_attempts:
             attempt_count += 1
             start_time = perf_counter()
-            try:
-                response = self._groq_client.chat_completion(messages)
-            except GroqApiError:
-                logger.exception("Groq API error during answer generation attempt=%s", attempt_count)
-                raise
+            response = None
+            for api_attempt in range(1, max_api_attempts_per_validation_attempt + 1):
+                try:
+                    response = self._groq_client.chat_completion(messages)
+                    break
+                except GroqApiError as exc:
+                    retry_after = _groq_retry_after_seconds(str(exc))
+                    if retry_after is None or api_attempt == max_api_attempts_per_validation_attempt:
+                        logger.exception("Groq API error during answer generation attempt=%s api_attempt=%s", attempt_count, api_attempt)
+                        raise
+                    logger.warning(
+                        "Groq rate limit during answer generation attempt=%s api_attempt=%s retry_after_seconds=%.2f",
+                        attempt_count,
+                        api_attempt,
+                        retry_after,
+                    )
+                    time.sleep(retry_after)
+            assert response is not None
             last_duration_ms = (perf_counter() - start_time) * 1000
             content = response.get("content", "")
             usage_data = response.get("usage", {})
@@ -250,6 +265,15 @@ def _validate_model_output(model_output: RagModelOutput, allowed_chunk_uids: set
     if model_output.evidence_sufficient and not model_output.citations:
         errors.append("evidence_sufficient is true but no citations were provided.")
     return errors
+
+
+def _groq_retry_after_seconds(message: str) -> float | None:
+    if "status 429" not in message and "rate_limit" not in message:
+        return None
+    match = re.search(r"try again in ([0-9]+(?:\.[0-9]+)?)s", message, flags=re.IGNORECASE)
+    if match:
+        return min(30.0, max(0.5, float(match.group(1)) + 0.25))
+    return 2.0
 
 
 def _prompt_template_sha256() -> str:

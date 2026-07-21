@@ -233,7 +233,7 @@ class ExperimentalAnswerService:
                     self._generate_answer_for_item(query, item, persist_effective)
                     answer_generation_count += 1
                 except ExperimentalAnswerError as exc:
-                    if exc.error_code != "answer_generation_failed":
+                    if exc.error_code not in {"answer_generation_failed", "answer_rate_limited"}:
                         raise
                     warnings.append(f"{mode}: answer generation failed after retrieval completed.")
 
@@ -460,8 +460,8 @@ class ExperimentalAnswerService:
                 )
         except Exception as exc:
             item.status = "failed"
-            item.error_code = "answer_generation_failed"
-            item.error_message = "Answer generation failed."
+            item.error_code = "answer_rate_limited" if _is_rate_limit_error(exc) else "answer_generation_failed"
+            item.error_message = "Answer generation was rate limited by the provider." if item.error_code == "answer_rate_limited" else "Answer generation failed."
             if persist_effective and item.mode_run_id is not None:
                 self._repository.save_mode_failed(
                     mode_run_id=item.mode_run_id,
@@ -841,3 +841,13 @@ def _git_commit() -> str | None:
         return subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
     except Exception:
         return None
+
+
+def _is_rate_limit_error(exc: BaseException) -> bool:
+    current: BaseException | None = exc
+    while current is not None:
+        message = str(current).casefold()
+        if "status 429" in message or "rate limit" in message or "rate_limit" in message:
+            return True
+        current = current.__cause__
+    return False

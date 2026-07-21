@@ -1,6 +1,8 @@
 import json
 
+from app.clients.groq_gpt_oss_client import GroqApiError
 from app.services.answer_generation_service import AnswerContext, AnswerGenerationService
+import app.services.answer_generation_service as answer_generation_module
 from app.services.rag_prompt_builder import RagPromptBuilder
 
 
@@ -90,13 +92,42 @@ def test_answer_generation_prompt_excludes_experiment_metadata():
     assert "gold evidence" not in prompt.casefold()
 
 
+def test_answer_generation_retries_groq_rate_limit(monkeypatch):
+    sleep_calls = []
+    monkeypatch.setattr(answer_generation_module.time, "sleep", lambda seconds: sleep_calls.append(seconds))
+    client = FakeGroqClient(fail_first_with_rate_limit=True)
+    service = AnswerGenerationService(client)
+
+    answer = service.generate(
+        "What happened?",
+        (
+            AnswerContext(
+                chunk_uid="chunk-1",
+                rank=1,
+                chunk_text="Holmes saw the evidence.",
+                section_title="A Story",
+                cosine_similarity=0.75,
+            ),
+        ),
+    )
+
+    assert answer.answer_text == "Supported answer."
+    assert len(client.calls) == 2
+    assert sleep_calls == [0.75]
+
+
 class FakeGroqClient:
-    def __init__(self):
+    def __init__(self, *, fail_first_with_rate_limit=False):
         self.calls = []
+        self.fail_first_with_rate_limit = fail_first_with_rate_limit
         self._settings = type("Settings", (), {"GROQ_MODEL": "test-model"})()
 
     def chat_completion(self, messages):
         self.calls.append(messages)
+        if self.fail_first_with_rate_limit and len(self.calls) == 1:
+            raise GroqApiError(
+                'Groq API returned error status 429: {"error":{"message":"Rate limit reached. Please try again in 0.5s","code":"rate_limit_exceeded"}}'
+            )
         return {
             "content": json.dumps(
                 {
@@ -108,4 +139,3 @@ class FakeGroqClient:
             ),
             "usage": {"prompt_tokens": 10, "completion_tokens": 5, "total_tokens": 15},
         }
-
