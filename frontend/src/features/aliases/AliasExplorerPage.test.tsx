@@ -71,5 +71,10 @@ describe("AliasExplorerPage", () => {
     expect(screen.getByText("87")).toBeInTheDocument();
     expect(screen.getByText("2b16f62f2537")).toBeInTheDocument();
     expect(screen.getByText("Sherlock Holmes")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Name/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Members/i })).toBeInTheDocument();
+    expect(screen.getByText("Showing 1-1 of 1")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Previous" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Next" })).toBeDisabled();
   });
 });

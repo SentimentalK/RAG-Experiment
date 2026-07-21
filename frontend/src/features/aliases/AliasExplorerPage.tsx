@@ -1,36 +1,61 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Link, useSearchParams } from "react-router";
-import { Search, Tags } from "lucide-react";
+import { ArrowDown, ArrowUp, ArrowUpDown, Search, Tags } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getAliasStatus, listAliasGroups, lookupAliasSurface } from "./api";
-import type { AliasGroupsResponse, AliasLookupResponse, AliasStatus } from "./types";
+import type { AliasGroupSummary, AliasGroupsResponse, AliasLookupResponse, AliasStatus } from "./types";
+
+type SortKey = "canonical_name" | "scope" | "entity_type" | "generatable_member_count";
+type SortDirection = "asc" | "desc";
 
 export default function AliasExplorerPage() {
   const [params, setParams] = useSearchParams();
   const [status, setStatus] = useState<AliasStatus | null>(null);
   const [groups, setGroups] = useState<AliasGroupsResponse | null>(null);
+  const [allGroups, setAllGroups] = useState<AliasGroupSummary[]>([]);
   const [lookupText, setLookupText] = useState("Mr. Holmes");
   const [lookup, setLookup] = useState<AliasLookupResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [sort, setSort] = useState<{ key: SortKey; direction: SortDirection }>({
+    key: "canonical_name",
+    direction: "asc",
+  });
   const filters = useMemo(
     () => ({
       search: params.get("search") ?? "",
       scope: params.get("scope") ?? "",
       entity_type: params.get("entity_type") ?? "",
       story_id: params.get("story_id") ?? "",
-      limit: Number(params.get("limit") ?? 50),
-      offset: Number(params.get("offset") ?? 0),
+      limit: clampNumber(params.get("limit"), 50, 1, 200),
+      offset: clampNumber(params.get("offset"), 0, 0, Number.MAX_SAFE_INTEGER),
     }),
     [params],
+  );
+  const sortedGroups = useMemo(() => sortGroups(groups?.groups ?? [], sort), [groups, sort]);
+  const scopeOptions = useMemo(() => uniqueOptions(allGroups.map((group) => group.scope)), [allGroups]);
+  const entityTypeOptions = useMemo(() => uniqueOptions(allGroups.map((group) => group.entity_type)), [allGroups]);
+  const storyOptions = useMemo(() => uniqueOptions(allGroups.flatMap((group) => group.story_ids)), [allGroups]);
+  const searchOptions = useMemo(
+    () => [...allGroups].sort((a, b) => a.canonical_name.localeCompare(b.canonical_name) || a.group_id.localeCompare(b.group_id)),
+    [allGroups],
   );
 
   useEffect(() => {
     const controller = new AbortController();
     getAliasStatus(controller.signal).then(setStatus).catch((err) => setError(err instanceof Error ? err.message : "Unable to load alias status."));
+    return () => controller.abort();
+  }, []);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    listAliasGroups({ limit: 200, offset: 0 }, controller.signal)
+      .then((payload) => setAllGroups(payload.groups))
+      .catch((err) => setError(err instanceof Error ? err.message : "Unable to load alias filters."));
     return () => controller.abort();
   }, []);
 
@@ -46,6 +71,27 @@ export default function AliasExplorerPage() {
     else next.delete(key);
     next.set("offset", "0");
     setParams(next);
+  }
+
+  function updateLimit(value: string | null) {
+    const next = new URLSearchParams(params);
+    next.set("limit", value || "50");
+    next.set("offset", "0");
+    setParams(next);
+  }
+
+  function updatePage(delta: number) {
+    const next = new URLSearchParams(params);
+    next.set("limit", String(filters.limit));
+    next.set("offset", String(Math.max(0, filters.offset + delta * filters.limit)));
+    setParams(next);
+  }
+
+  function toggleSort(key: SortKey) {
+    setSort((current) => ({
+      key,
+      direction: current.key === key && current.direction === "asc" ? "desc" : "asc",
+    }));
   }
 
   async function runLookup(event: React.FormEvent) {
@@ -102,23 +148,50 @@ export default function AliasExplorerPage() {
           <CardTitle className="text-base">Groups</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid gap-2 md:grid-cols-4">
-            <Input placeholder="Search" value={filters.search} onChange={(event) => updateFilter("search", event.target.value)} />
-            <Input placeholder="Scope" value={filters.scope} onChange={(event) => updateFilter("scope", event.target.value)} />
-            <Input placeholder="Entity Type" value={filters.entity_type} onChange={(event) => updateFilter("entity_type", event.target.value)} />
-            <Input placeholder="Story ID" value={filters.story_id} onChange={(event) => updateFilter("story_id", event.target.value)} />
+          <div className="grid gap-2 md:grid-cols-5">
+            <AliasSelect label="Group" value={filters.search || "all"} onValueChange={(value) => updateFilter("search", value === "all" ? "" : value ?? "")}>
+              <SelectItem value="all">All groups</SelectItem>
+              {searchOptions.map((group) => (
+                <SelectItem key={group.group_id} value={group.canonical_name}>
+                  {group.canonical_name}
+                </SelectItem>
+              ))}
+            </AliasSelect>
+            <AliasSelect label="Scope" value={filters.scope || "all"} onValueChange={(value) => updateFilter("scope", value === "all" ? "" : value ?? "")}>
+              <SelectItem value="all">All scopes</SelectItem>
+              {scopeOptions.map((scope) => (
+                <SelectItem key={scope} value={scope}>{scope}</SelectItem>
+              ))}
+            </AliasSelect>
+            <AliasSelect label="Entity" value={filters.entity_type || "all"} onValueChange={(value) => updateFilter("entity_type", value === "all" ? "" : value ?? "")}>
+              <SelectItem value="all">All entity types</SelectItem>
+              {entityTypeOptions.map((entityType) => (
+                <SelectItem key={entityType} value={entityType}>{entityType}</SelectItem>
+              ))}
+            </AliasSelect>
+            <AliasSelect label="Story" value={filters.story_id || "all"} onValueChange={(value) => updateFilter("story_id", value === "all" ? "" : value ?? "")}>
+              <SelectItem value="all">All stories</SelectItem>
+              {storyOptions.map((storyId) => (
+                <SelectItem key={storyId} value={storyId}>{storyId}</SelectItem>
+              ))}
+            </AliasSelect>
+            <AliasSelect label="Page size" value={String(filters.limit)} onValueChange={updateLimit}>
+              {[25, 50, 100, 200].map((size) => (
+                <SelectItem key={size} value={String(size)}>{size} rows</SelectItem>
+              ))}
+            </AliasSelect>
           </div>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Scope</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead className="text-right">Members</TableHead>
+                <SortableHead label="Name" sortKey="canonical_name" activeSort={sort} onSort={toggleSort} />
+                <SortableHead label="Scope" sortKey="scope" activeSort={sort} onSort={toggleSort} />
+                <SortableHead label="Type" sortKey="entity_type" activeSort={sort} onSort={toggleSort} />
+                <SortableHead label="Members" sortKey="generatable_member_count" activeSort={sort} onSort={toggleSort} className="text-right" />
               </TableRow>
             </TableHeader>
             <TableBody>
-              {(groups?.groups ?? []).map((group) => (
+              {sortedGroups.map((group) => (
                 <TableRow key={group.group_id}>
                   <TableCell>
                     <Link className="text-primary underline-offset-4 hover:underline" to={`/aliases/groups/${group.group_id}`}>
@@ -133,10 +206,95 @@ export default function AliasExplorerPage() {
               ))}
             </TableBody>
           </Table>
+          <div className="flex flex-col gap-3 border-t pt-4 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between">
+            <span>
+              Showing {groups ? Math.min(groups.offset + 1, groups.total) : 0}-
+              {groups ? Math.min(groups.offset + groups.groups.length, groups.total) : 0} of {groups?.total ?? 0}
+            </span>
+            <div className="flex gap-2">
+              <Button type="button" variant="outline" onClick={() => updatePage(-1)} disabled={filters.offset === 0}>
+                Previous
+              </Button>
+              <Button type="button" variant="outline" onClick={() => updatePage(1)} disabled={!groups || filters.offset + filters.limit >= groups.total}>
+                Next
+              </Button>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>
   );
+}
+
+function AliasSelect({
+  label,
+  value,
+  onValueChange,
+  children,
+}: {
+  label: string;
+  value: string;
+  onValueChange: (value: string | null) => void;
+  children: ReactNode;
+}) {
+  return (
+    <label className="space-y-1 text-xs font-medium text-muted-foreground">
+      <span>{label}</span>
+      <Select value={value} onValueChange={onValueChange}>
+        <SelectTrigger className="w-full">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent align="start">{children}</SelectContent>
+      </Select>
+    </label>
+  );
+}
+
+function SortableHead({
+  label,
+  sortKey,
+  activeSort,
+  onSort,
+  className,
+}: {
+  label: string;
+  sortKey: SortKey;
+  activeSort: { key: SortKey; direction: SortDirection };
+  onSort: (key: SortKey) => void;
+  className?: string;
+}) {
+  const active = activeSort.key === sortKey;
+  const Icon = !active ? ArrowUpDown : activeSort.direction === "asc" ? ArrowUp : ArrowDown;
+  return (
+    <TableHead className={className}>
+      <Button type="button" variant="ghost" size="sm" className={className?.includes("text-right") ? "ml-auto" : ""} onClick={() => onSort(sortKey)}>
+        {label}
+        <Icon className="ml-1 h-3.5 w-3.5" />
+      </Button>
+    </TableHead>
+  );
+}
+
+function sortGroups(groups: AliasGroupSummary[], sort: { key: SortKey; direction: SortDirection }): AliasGroupSummary[] {
+  const direction = sort.direction === "asc" ? 1 : -1;
+  return [...groups].sort((left, right) => {
+    const leftValue = left[sort.key];
+    const rightValue = right[sort.key];
+    if (typeof leftValue === "number" && typeof rightValue === "number") {
+      return (leftValue - rightValue || left.canonical_name.localeCompare(right.canonical_name)) * direction;
+    }
+    return (String(leftValue).localeCompare(String(rightValue)) || left.canonical_name.localeCompare(right.canonical_name)) * direction;
+  });
+}
+
+function uniqueOptions(values: string[]): string[] {
+  return [...new Set(values.filter(Boolean))].sort((left, right) => left.localeCompare(right));
+}
+
+function clampNumber(value: string | null, fallback: number, min: number, max: number): number {
+  const parsed = Number(value ?? fallback);
+  if (!Number.isFinite(parsed)) return fallback;
+  return Math.min(max, Math.max(min, Math.trunc(parsed)));
 }
 
 function Stat({ label, value }: { label: string; value: string }) {
