@@ -1,0 +1,10 @@
+{
+  "alias_challenge_question_count": 0,
+  "annotation_status": "seed",
+  "dataset_version": "alias-eval-v0.1",
+  "legacy_question_count": 8,
+  "negative_control_count": 0,
+  "notes": "Seed retrieval-gold dataset for Phase 4A pipeline validation. It is not an official evaluation set.",
+  "official_evaluation_ready": false
+}
+

@@ -1,0 +1,216 @@
+{
+  "dataset_id": "alias-retrieval-eval-seed-v0.1",
+  "document_id": "gutenberg-1661",
+  "questions": [
+    {
+      "category": "entity_alias",
+      "contradictory_chunk_uids": [],
+      "expected_alias_group_ids": [
+        "entity-sherlock-holmes"
+      ],
+      "expected_query_mentions": [
+        "Sherlock Holmes"
+      ],
+      "gold_evidence_groups": [
+        {
+          "alternative_chunk_uids": [
+            "g1661-s01-c0001"
+          ],
+          "description": "Holmes remembers Irene Adler as the woman.",
+          "evidence_group_id": "q001-irene-adler"
+        }
+      ],
+      "question": "Who was \"the woman\" whom Sherlock Holmes always remembered?",
+      "question_id": "q001",
+      "reference_answer": "The woman was Irene Adler.",
+      "split": "legacy_regression",
+      "supporting_chunk_uids": [
+        "g1661-s01-c0069"
+      ]
+    },
+    {
+      "category": "causal_reasoning",
+      "contradictory_chunk_uids": [],
+      "expected_alias_group_ids": [
+        "entity-jabez-wilson"
+      ],
+      "expected_query_mentions": [
+        "Jabez Wilson"
+      ],
+      "gold_evidence_groups": [
+        {
+          "alternative_chunk_uids": [
+            "g1661-s02-c0031",
+            "g1661-s02-c0075"
+          ],
+          "description": "Wilson was lured away from the shop so criminals could work nearby.",
+          "evidence_group_id": "q002-league-lure"
+        }
+      ],
+      "question": "Why was Jabez Wilson paid unusually well to copy the Encyclopaedia Britannica?",
+      "question_id": "q002",
+      "reference_answer": "The copying job was a ruse to draw Jabez Wilson away while the thieves prepared their bank robbery.",
+      "split": "legacy_regression",
+      "supporting_chunk_uids": [
+        "g1661-s02-c0030"
+      ]
+    },
+    {
+      "category": "hidden_identity",
+      "contradictory_chunk_uids": [],
+      "expected_alias_group_ids": [
+        "entity-hosmer-angel"
+      ],
+      "expected_query_mentions": [
+        "Hosmer Angel"
+      ],
+      "gold_evidence_groups": [
+        {
+          "alternative_chunk_uids": [
+            "g1661-s03-c0030"
+          ],
+          "description": "Hosmer Angel vanished from Mary Sutherland's life.",
+          "evidence_group_id": "q003-hosmer-vanished"
+        }
+      ],
+      "question": "Who was Hosmer Angel really, and why did he disappear?",
+      "question_id": "q003",
+      "reference_answer": "Hosmer Angel was James Windibank in disguise, and he disappeared to keep Mary Sutherland from marrying.",
+      "split": "legacy_regression",
+      "supporting_chunk_uids": [
+        "g1661-s03-c0029"
+      ]
+    },
+    {
+      "category": "symbolic_meaning",
+      "contradictory_chunk_uids": [],
+      "expected_alias_group_ids": [
+        "entity-ku-klux-klan"
+      ],
+      "expected_query_mentions": [],
+      "gold_evidence_groups": [
+        {
+          "alternative_chunk_uids": [
+            "g1661-s05-c0015",
+            "g1661-s05-c0034"
+          ],
+          "description": "The five orange pips were a threatening sign connected with K. K. K.",
+          "evidence_group_id": "q004-orange-pips-warning"
+        }
+      ],
+      "question": "What did the five orange pips represent, and why were they sent?",
+      "question_id": "q004",
+      "reference_answer": "They were warnings or death threats from the Ku Klux Klan.",
+      "split": "legacy_regression",
+      "supporting_chunk_uids": [
+        "g1661-s05-c0063"
+      ]
+    },
+    {
+      "category": "multiple_identity",
+      "contradictory_chunk_uids": [],
+      "expected_alias_group_ids": [
+        "entity-neville-st-clair",
+        "entity-hugh-boone"
+      ],
+      "expected_query_mentions": [
+        "Neville St. Clair",
+        "Hugh Boone"
+      ],
+      "gold_evidence_groups": [
+        {
+          "alternative_chunk_uids": [
+            "g1661-s06-c0032",
+            "g1661-s06-c0073"
+          ],
+          "description": "Neville St. Clair's life as Hugh Boone is revealed as begging for money.",
+          "evidence_group_id": "q005-st-clair-boone"
+        }
+      ],
+      "question": "Why did Neville St. Clair live part of his life as the beggar Hugh Boone?",
+      "question_id": "q005",
+      "reference_answer": "He disguised himself as Hugh Boone because begging earned him far more money than his respectable work.",
+      "split": "legacy_regression",
+      "supporting_chunk_uids": [
+        "g1661-s06-c0041"
+      ]
+    },
+    {
+      "category": "event_chain",
+      "contradictory_chunk_uids": [],
+      "expected_alias_group_ids": [],
+      "expected_query_mentions": [],
+      "gold_evidence_groups": [
+        {
+          "alternative_chunk_uids": [
+            "g1661-s07-c0055"
+          ],
+          "description": "The carbuncle was found in a goose and traced through the goose chain.",
+          "evidence_group_id": "q006-carbuncle-goose"
+        }
+      ],
+      "question": "How did the stolen blue carbuncle end up inside a Christmas goose?",
+      "question_id": "q006",
+      "reference_answer": "Ryder hid the jewel by feeding it to a goose, then lost track of the bird.",
+      "split": "legacy_regression",
+      "supporting_chunk_uids": [
+        "g1661-s07-c0005",
+        "g1661-s07-c0029"
+      ]
+    },
+    {
+      "category": "indirect_reference",
+      "contradictory_chunk_uids": [],
+      "expected_alias_group_ids": [],
+      "expected_query_mentions": [],
+      "gold_evidence_groups": [
+        {
+          "alternative_chunk_uids": [
+            "g1661-s08-c0028",
+            "g1661-s08-c0036"
+          ],
+          "description": "The speckled band refers to the fatal snake.",
+          "evidence_group_id": "q007-speckled-band"
+        }
+      ],
+      "question": "What was the \"speckled band\" that caused Julia Stoner's death?",
+      "question_id": "q007",
+      "reference_answer": "It was a venomous snake used by Dr. Roylott.",
+      "split": "legacy_regression",
+      "supporting_chunk_uids": [
+        "g1661-s08-c0025"
+      ]
+    },
+    {
+      "category": "cross_story",
+      "contradictory_chunk_uids": [],
+      "expected_alias_group_ids": [],
+      "expected_query_mentions": [],
+      "gold_evidence_groups": [
+        {
+          "alternative_chunk_uids": [
+            "g1661-s02-c0075"
+          ],
+          "description": "The Red-Headed League job was a lure for criminal access.",
+          "evidence_group_id": "q008-red-headed-league"
+        },
+        {
+          "alternative_chunk_uids": [
+            "g1661-s06-c0073"
+          ],
+          "description": "Neville St. Clair's work as a beggar was driven by money.",
+          "evidence_group_id": "q008-twisted-lip"
+        }
+      ],
+      "question": "Which two cases involved suspiciously generous employment offers, and what hidden purpose did each offer serve?",
+      "question_id": "q008",
+      "reference_answer": "The Red-Headed League used pay to lure Wilson away for a bank plot, and Neville St. Clair's beggar identity was maintained because it was lucrative.",
+      "split": "legacy_regression",
+      "supporting_chunk_uids": [
+        "g1661-s02-c0028",
+        "g1661-s06-c0073"
+      ]
+    }
+  ],
+  "schema_version": "1"
+}
