@@ -11,7 +11,7 @@ import {
   SidebarMenuItem 
 } from "@/components/ui/sidebar";
 import { useBaselineEvaluation } from "@/hooks/use-baseline-evaluation";
-import { LayoutDashboard, CheckSquare, Database, MessageSquare, FlaskConical, History, BarChart3 } from "lucide-react";
+import { LayoutDashboard, CheckSquare, Database, MessageSquare, FlaskConical, BarChart3 } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
@@ -73,16 +73,9 @@ export function AppSidebar() {
               </SidebarMenuItem>
 
               <SidebarMenuItem>
-                <SidebarMenuButton render={<Link to="/experiments/compare" />} tooltip="Experiment Workbench" isActive={location.pathname.startsWith("/experiments/compare")}>
+                <SidebarMenuButton render={<Link to="/experiments" />} tooltip="Experiment Workbench" isActive={location.pathname.startsWith("/experiments")}>
                   <FlaskConical className="h-4 w-4" />
                   <span>Experiment Workbench</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
-              <SidebarMenuItem>
-                <SidebarMenuButton render={<Link to="/experiments/sessions" />} tooltip="Experiment Sessions" isActive={location.pathname.startsWith("/experiments/sessions") || location.pathname.startsWith("/experiments/mode-runs")}>
-                  <History className="h-4 w-4" />
-                  <span>Experiment Sessions</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
 

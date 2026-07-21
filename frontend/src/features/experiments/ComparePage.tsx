@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { compareExperiment, getExperimentCapabilities } from "./api";
+import { ExperimentNav } from "./ExperimentNav";
 import { ComparisonStrip, ModeResultCard } from "./ExperimentViews";
 import { MODE_LABELS, MODE_ORDER, type ExperimentApiError, type ExperimentCapabilities, type ExperimentCompareResponse, type RetrievalMode } from "./types";
 
@@ -96,7 +97,7 @@ export default function ExperimentComparePage() {
           <h1 className="text-3xl font-bold tracking-tight">Experiment Workbench</h1>
           <p className="text-muted-foreground">Run isolated alias retrieval answer modes without changing the live Ask pipeline.</p>
         </div>
-        <Button variant="outline" render={<Link to="/experiments/sessions" />}>Session History</Button>
+        <ExperimentNav active="workbench" />
       </div>
 
       <Card>

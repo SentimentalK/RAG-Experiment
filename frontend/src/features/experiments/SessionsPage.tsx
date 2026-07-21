@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { listExperimentSessions } from "./api";
 import { enumLabel, modeLabel, safeLimit, safeOffset } from "./adapters";
+import { ExperimentNav } from "./ExperimentNav";
 import type { ExperimentSessionSummary } from "./types";
 
 export default function ExperimentSessionsPage() {
@@ -59,12 +60,15 @@ export default function ExperimentSessionsPage() {
 
   return (
     <div className="mx-auto max-w-7xl space-y-6">
-      <div>
-        <h1 className="flex items-center gap-2 text-3xl font-bold tracking-tight">
-          <History className="h-7 w-7" />
-          Experiment Sessions
-        </h1>
-        <p className="text-muted-foreground">Saved interactive experiment runs, loaded without full traces or context text by default.</p>
+      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
+        <div>
+          <h1 className="flex items-center gap-2 text-3xl font-bold tracking-tight">
+            <History className="h-7 w-7" />
+            Experiment Sessions
+          </h1>
+          <p className="text-muted-foreground">Saved interactive experiment runs, loaded without full traces or context text by default.</p>
+        </div>
+        <ExperimentNav active="history" />
       </div>
       <Card>
         <CardHeader>

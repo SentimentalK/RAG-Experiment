@@ -23,7 +23,8 @@ function App() {
             <Route path="/data" element={<DataExplorerPage />} />
             <Route path="/data/aliases/groups/:groupId" element={<AliasGroupDetailPage />} />
             <Route path="/ask" element={<AskQuestionPage />} />
-            <Route path="/experiments/compare" element={<ExperimentComparePage />} />
+            <Route path="/experiments" element={<ExperimentComparePage />} />
+            <Route path="/experiments/compare" element={<Navigate to="/experiments" replace />} />
             <Route path="/experiments/sessions" element={<ExperimentSessionsPage />} />
             <Route path="/experiments/sessions/:sessionId" element={<ExperimentSessionDetailPage />} />
             <Route path="/experiments/mode-runs/:modeRunId" element={<ExperimentModeRunDetailPage />} />
