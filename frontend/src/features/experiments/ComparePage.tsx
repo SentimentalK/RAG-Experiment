@@ -34,7 +34,7 @@ export default function ExperimentComparePage() {
         setMaxVariants(value.expansion.max_query_variants);
         setAllowStoryScoped(value.expansion.allow_story_scoped);
         setAllowSingleToken(value.expansion.allow_story_scoped_single_token);
-        setPersist(value.persistence.required);
+        setPersist(value.persistence.enabled);
       })
       .catch((err) => setError(err instanceof Error ? err : new Error("Unable to load capabilities.")));
     return () => controller.abort();
@@ -185,7 +185,7 @@ export default function ExperimentComparePage() {
                     <span>{capabilities.persistence.required ? "Save required" : "Save experiment"}</span>
                   </label>
                 ) : (
-                  <Badge variant="outline">Persistence disabled</Badge>
+                  <Badge variant="outline">Persistence unavailable</Badge>
                 )}
                 {!persist && (
                   <label className="flex items-center gap-2">

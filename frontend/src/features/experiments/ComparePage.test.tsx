@@ -40,6 +40,7 @@ describe("ExperimentComparePage", () => {
 
     const storyControl = screen.getByLabelText("Allow story-scoped aliases");
     expect(storyControl).toBeEnabled();
+    expect(screen.getByLabelText("Save experiment")).toBeChecked();
   });
 });
 
