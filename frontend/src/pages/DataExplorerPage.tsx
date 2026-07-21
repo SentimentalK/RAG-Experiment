@@ -15,6 +15,7 @@ export default function DataExplorerPage() {
   const { data, loading, error } = useBaselineEvaluation();
   const [params, setParams] = useSearchParams();
   const activeTab = params.get("tab") === "chunks" || params.get("tab") === "aliases" ? params.get("tab")! : "stories";
+  const header = dataHeader(activeTab, data?.stories.length ?? 0, data?.chunks.length ?? 0);
 
   function setActiveTab(value: string | null) {
     const next = new URLSearchParams(params);
@@ -44,14 +45,15 @@ export default function DataExplorerPage() {
   }
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
+    <div className="mx-auto w-full max-w-[1800px] space-y-6 px-2 animate-in fade-in duration-500 sm:px-4">
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex flex-col gap-6">
-        <div className="flex items-center justify-between gap-4 border-b pb-4">
+        <div className="flex flex-col justify-between gap-4 border-b pb-4 md:flex-row md:items-end">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">Data Explorer</h1>
-            <p className="text-muted-foreground mt-1 text-sm">
-              Browse the original stories and the extracted vector chunks.
-            </p>
+            <h1 className="flex items-center gap-2 text-3xl font-bold tracking-tight">
+              <header.Icon className="h-7 w-7" />
+              {header.title}
+            </h1>
+            <p className="mt-1 text-muted-foreground">{header.subtitle}</p>
           </div>
           <TabsList className="shrink-0 flex items-center">
             <TabsTrigger value="stories" className="flex items-center gap-2">
@@ -78,11 +80,33 @@ export default function DataExplorerPage() {
         </TabsContent>
 
         <TabsContent value="aliases" className="mt-0 w-full">
-          <AliasExplorerPage />
+          <AliasExplorerPage embedded />
         </TabsContent>
       </Tabs>
     </div>
   );
+}
+
+function dataHeader(tab: string, storyCount: number, chunkCount: number) {
+  if (tab === "chunks") {
+    return {
+      title: "Cleaned Chunks",
+      subtitle: `Browse and search ${chunkCount} extracted vector chunks.`,
+      Icon: Database,
+    };
+  }
+  if (tab === "aliases") {
+    return {
+      title: "Alias Explorer",
+      subtitle: "Browse the frozen alias dataset and run exact normalized surface lookup.",
+      Icon: Tags,
+    };
+  }
+  return {
+    title: "Full Stories",
+    subtitle: `Browse ${storyCount} original stories from the corpus.`,
+    Icon: BookOpen,
+  };
 }
 
 function StoriesTab({ stories }: { stories: import("@/types/evaluation").Story[] }) {

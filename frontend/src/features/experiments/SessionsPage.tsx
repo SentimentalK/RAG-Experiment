@@ -59,7 +59,7 @@ export default function ExperimentSessionsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6">
+    <div className="mx-auto w-full max-w-[1800px] space-y-6 px-2 sm:px-4">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
           <h1 className="flex items-center gap-2 text-3xl font-bold tracking-tight">

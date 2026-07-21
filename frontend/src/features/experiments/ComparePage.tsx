@@ -94,7 +94,10 @@ export default function ExperimentComparePage() {
     <div className="mx-auto w-full max-w-[1800px] space-y-6 px-2 sm:px-4">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Experiment Workbench</h1>
+          <h1 className="flex items-center gap-2 text-3xl font-bold tracking-tight">
+            <FlaskConical className="h-7 w-7" />
+            Experiment Workbench
+          </h1>
           <p className="text-muted-foreground">Run isolated alias retrieval answer modes without changing the live Ask pipeline.</p>
         </div>
         <ExperimentNav active="workbench" />

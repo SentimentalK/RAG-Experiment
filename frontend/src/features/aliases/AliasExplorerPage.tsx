@@ -13,7 +13,7 @@ import type { AliasGroupSummary, AliasGroupsResponse, AliasLookupResponse, Alias
 type SortKey = "canonical_name" | "scope" | "entity_type" | "generatable_member_count";
 type SortDirection = "asc" | "desc";
 
-export default function AliasExplorerPage() {
+export default function AliasExplorerPage({ embedded = false }: { embedded?: boolean }) {
   const [params, setParams] = useSearchParams();
   const [status, setStatus] = useState<AliasStatus | null>(null);
   const [groups, setGroups] = useState<AliasGroupsResponse | null>(null);
@@ -105,14 +105,16 @@ export default function AliasExplorerPage() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6">
-      <div>
-        <h1 className="flex items-center gap-2 text-3xl font-bold tracking-tight">
-          <Tags className="h-7 w-7" />
-          Alias Explorer
-        </h1>
-        <p className="text-muted-foreground">Browse the frozen alias dataset and run exact normalized surface lookup.</p>
-      </div>
+    <div className={embedded ? "space-y-6" : "mx-auto max-w-7xl space-y-6"}>
+      {!embedded && (
+        <div>
+          <h1 className="flex items-center gap-2 text-3xl font-bold tracking-tight">
+            <Tags className="h-7 w-7" />
+            Alias Explorer
+          </h1>
+          <p className="text-muted-foreground">Browse the frozen alias dataset and run exact normalized surface lookup.</p>
+        </div>
+      )}
       {error && <p className="text-sm text-red-600">{error}</p>}
       {status && (
         <div className="grid gap-3 md:grid-cols-4">
