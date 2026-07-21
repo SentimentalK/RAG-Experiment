@@ -10,6 +10,7 @@ from app.db.connection import get_connection
 from app.providers.minilm_provider import MiniLMProvider
 from app.services.rag_answer_service import RagAnswerService
 from app.services.alias_registry import AliasRegistry
+from app.services.query_expansion_service import QueryExpansionConfig, QueryExpansionService
 from app.services.vector_search_service import VectorSearchService
 
 from app.api.routes.aliases import router as aliases_router
@@ -40,6 +41,11 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         alias_status.validation_warning_count,
     )
 
+    query_expansion_service = QueryExpansionService(
+        alias_registry=alias_registry,
+        config=QueryExpansionConfig.from_settings(settings),
+    )
+
     # 2. Warm up embedding provider
     provider = MiniLMProvider()
     provider.encode("Sherlock Holmes")
@@ -61,6 +67,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
     # 5. Save to app state
     app.state.alias_registry = alias_registry
+    app.state.query_expansion_service = query_expansion_service
     app.state.rag_service = rag_service
     app.state.embedding_provider = provider
     app.state.ready = True

@@ -1,17 +1,26 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+from pydantic import BaseModel, ConfigDict, Field
 
-from app.api.dependencies import get_alias_registry
+from app.api.dependencies import get_alias_registry, get_query_expansion_service
 from app.services.alias_registry import (
     AliasMemberReference,
     AliasRegistry,
     CompiledAliasGroup,
     normalize_alias_surface,
 )
+from app.services.query_expansion_service import QueryExpansionRequestOptions, QueryExpansionService
 
 
 router = APIRouter(prefix="/aliases", tags=["aliases"])
+
+
+class AliasExpandRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    query: str = Field(min_length=1)
+    options: QueryExpansionRequestOptions | None = None
 
 
 def _member_payload(member: AliasMemberReference) -> dict:
@@ -137,3 +146,12 @@ def lookup_alias_surface(
             len(registry.normalized_surface_to_generatable_group_ids.get(normalize_alias_surface(surface), frozenset())) == 1
         ),
     }
+
+
+@router.post("/expand")
+def expand_alias_query(
+    payload: AliasExpandRequest,
+    service: QueryExpansionService = Depends(get_query_expansion_service),
+) -> dict:
+    trace = service.expand(payload.query, config_override=payload.options)
+    return trace.model_dump(mode="json")
