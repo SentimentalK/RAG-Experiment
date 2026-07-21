@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
-import { AlertCircle, FlaskConical, Loader2, SlidersHorizontal } from "lucide-react";
+import { AlertCircle, CheckCircle2, ChevronRight, FileText, FlaskConical, Loader2, Search, SlidersHorizontal } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,7 @@ import { MODE_LABELS, MODE_ORDER, type ExperimentApiError, type ExperimentCapabi
 export default function ExperimentComparePage() {
   const [capabilities, setCapabilities] = useState<ExperimentCapabilities | null>(null);
   const [query, setQuery] = useState("What did Mr. Holmes discover?");
-  const [modes, setModes] = useState<RetrievalMode[]>(["baseline", "strong_only", "strong_story"]);
+  const [modes, setModes] = useState<RetrievalMode[]>(["baseline", "strong_story"]);
   const [persist, setPersist] = useState(false);
   const [maxVariants, setMaxVariants] = useState(8);
   const [allowStoryScoped, setAllowStoryScoped] = useState(true);
@@ -226,6 +226,7 @@ export default function ExperimentComparePage() {
             <span>{result.answer_generation_count} answer generation(s)</span>
             {result.session_id && <Link className="text-primary underline-offset-4 hover:underline" to={`/experiments/sessions/${result.session_id}`}>Open saved session</Link>}
           </div>
+          <ExperimentWorkflow result={result} />
           {result.comparisons.length > 0 && (
             <div className={comparisonGridClass(result.comparisons.length)}>
               {result.comparisons.map((comparison) => (
@@ -264,4 +265,80 @@ function modeGridClass(count: number): string {
 function comparisonGridClass(count: number): string {
   if (count <= 1) return "grid gap-4";
   return "grid gap-4 xl:grid-cols-2";
+}
+
+function ExperimentWorkflow({ result }: { result: ExperimentCompareResponse }) {
+  const baseline = result.results.baseline;
+  const alias = result.results.strong_story ?? result.results.strong_only;
+  const panels = [
+    baseline ? (
+      <WorkflowPanel
+        key="baseline"
+        title="Baseline RAG"
+        subtitle="Exactly the same path as Ask a Question."
+        steps={[
+          { label: "Original Question", detail: "No alias rewriting" },
+          { label: "MiniLM Embedding", detail: "1 query" },
+          { label: "Vector Search", detail: `${baseline.contexts.length || 10} contexts` },
+          { label: "Answer LLM", detail: formatWorkflowMs(baseline.timing.generation_duration_ms) },
+        ]}
+      />
+    ) : null,
+    alias ? (
+      <WorkflowPanel
+        key="alias"
+        title="Alias-Enhanced RAG"
+        subtitle="Generate safe query variations, retrieve each one, fuse back to the same 10-context answer path."
+        steps={[
+          { label: "Alias Variations", detail: `${alias.retrieval_summary.generated_variant_count} variants` },
+          { label: "Embedding + Search", detail: `${alias.retrieval_summary.vector_search_call_count} searches` },
+          { label: "Weighted RRF", detail: `${alias.contexts.length} fused contexts` },
+          { label: "Answer LLM", detail: formatWorkflowMs(alias.timing.generation_duration_ms) },
+        ]}
+      />
+    ) : null,
+  ].filter(Boolean);
+
+  if (panels.length === 0) return null;
+  return <div className={panels.length === 1 ? "grid gap-4" : "grid gap-4 xl:grid-cols-2"}>{panels}</div>;
+}
+
+function WorkflowPanel({ title, subtitle, steps }: { title: string; subtitle: string; steps: { label: string; detail: string }[] }) {
+  return (
+    <Card>
+      <CardHeader className="pb-3">
+        <CardTitle className="text-base">{title}</CardTitle>
+        <CardDescription>{subtitle}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="grid gap-3 md:grid-cols-4">
+          {steps.map((step, index) => (
+            <WorkflowStep key={step.label} label={step.label} detail={step.detail} isLast={index === steps.length - 1} />
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function WorkflowStep({ label, detail, isLast }: { label: string; detail: string; isLast: boolean }) {
+  const Icon = label.includes("Search") ? Search : label.includes("Answer") ? FileText : label.includes("Question") || label.includes("Variations") ? FlaskConical : CheckCircle2;
+  return (
+    <div className="relative flex flex-col items-center rounded-xl border bg-slate-50/50 p-4 text-center dark:bg-slate-900/50">
+      <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-700 dark:bg-green-950/50 dark:text-green-400">
+        <Icon className="h-5 w-5" />
+      </div>
+      <h3 className="mb-1 text-sm font-semibold">{label}</h3>
+      <p className="font-mono text-xs text-muted-foreground">{detail}</p>
+      {!isLast && (
+        <div className="absolute -right-2 top-1/2 z-10 hidden -translate-y-1/2 text-muted-foreground md:block">
+          <ChevronRight className="h-4 w-4" />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function formatWorkflowMs(value: number | null | undefined): string {
+  return value == null ? "n/a" : `${value.toFixed(0)} ms`;
 }
