@@ -64,7 +64,7 @@ export function ModeResultCard({
           <Metric label="Searches" value={String(detail.retrieval_summary.vector_search_call_count)} />
           <Metric label="Contexts" value={String(detail.contexts.length)} />
           <Metric label="Retrieval" value={detail.retrieval_summary.retrieval_executed ? "Executed" : "Reused"} />
-          <Metric label="Total" value={formatDuration(detail.timing.total_duration_ms)} />
+          <Metric label="Time" value={formatDuration(detail.timing.total_duration_ms ?? detail.timing.retrieval_duration_ms)} />
         </div>
         {detail.retrieval_summary.retrieval_reused && (
           <Badge variant="outline" className="w-fit">
@@ -75,7 +75,14 @@ export function ModeResultCard({
           <Alert className="border-amber-200 bg-amber-50/70 dark:border-amber-900/50 dark:bg-amber-950/20">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Answer unavailable</AlertTitle>
-            <AlertDescription>Retrieval completed successfully, so contexts and inspectors remain available.</AlertDescription>
+            <AlertDescription>
+              Retrieval completed successfully, so contexts and inspectors remain available.
+              {detail.error_code && (
+                <span className="mt-2 block font-mono text-xs">
+                  {detail.error_code}: {detail.error_message ?? "Generation did not return a valid answer payload."}
+                </span>
+              )}
+            </AlertDescription>
           </Alert>
         )}
       </CardHeader>
