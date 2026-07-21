@@ -10,11 +10,15 @@ from app.db.connection import get_connection
 from app.providers.minilm_provider import MiniLMProvider
 from app.services.rag_answer_service import RagAnswerService
 from app.services.alias_registry import AliasRegistry
+from app.services.answer_generation_service import AnswerGenerationService
 from app.services.expanded_retrieval_service import ExpandedRetrievalConfig, ExpandedRetrievalService
+from app.services.experimental_answer_service import ExperimentalAnswerConfig, ExperimentalAnswerService
 from app.services.query_expansion_service import QueryExpansionConfig, QueryExpansionService
 from app.services.vector_search_service import VectorSearchService
+from app.repositories.experiment_repository import ExperimentRepository
 
 from app.api.routes.aliases import router as aliases_router
+from app.api.routes.experiments import router as experiments_router
 from app.api.routes.health import router as health_router
 from app.api.routes.rag import router as rag_router
 
@@ -60,11 +64,20 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     # 4. Instantiate client and services
     groq_client = GroqGptOssClient(settings)
     search_service = VectorSearchService(provider)
+    answer_generation_service = AnswerGenerationService(groq_client)
     expanded_retrieval_service = ExpandedRetrievalService(
         alias_registry=alias_registry,
         query_expansion_service=query_expansion_service,
         vector_search_service=search_service,
         config=ExpandedRetrievalConfig.from_settings(settings),
+    )
+    experiment_repository = ExperimentRepository()
+    experimental_answer_service = ExperimentalAnswerService(
+        alias_registry=alias_registry,
+        expanded_retrieval_service=expanded_retrieval_service,
+        answer_generation_service=answer_generation_service,
+        experiment_repository=experiment_repository,
+        config=ExperimentalAnswerConfig.from_settings(settings),
     )
 
     rag_service = RagAnswerService(
@@ -76,6 +89,9 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.alias_registry = alias_registry
     app.state.query_expansion_service = query_expansion_service
     app.state.expanded_retrieval_service = expanded_retrieval_service
+    app.state.answer_generation_service = answer_generation_service
+    app.state.experiment_repository = experiment_repository
+    app.state.experimental_answer_service = experimental_answer_service
     app.state.rag_service = rag_service
     app.state.embedding_provider = provider
     app.state.ready = True
@@ -106,6 +122,7 @@ def create_app() -> FastAPI:
 
     # Include Routers
     app.include_router(aliases_router, prefix="/api")
+    app.include_router(experiments_router, prefix="/api")
     app.include_router(health_router, prefix="/api")
     app.include_router(rag_router, prefix="/api")
 

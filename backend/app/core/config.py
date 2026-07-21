@@ -62,6 +62,12 @@ class Settings(BaseSettings):
     ALIAS_RETRIEVAL_MAX_VARIANTS: int = 8
     ALIAS_RETRIEVAL_STRICT_VARIANT_FAILURES: bool = True
 
+    # Experimental Answer Settings
+    EXPERIMENT_PERSISTENCE_ENABLED: bool = True
+    EXPERIMENT_PERSISTENCE_REQUIRED: bool = False
+    EXPERIMENT_PERSISTENCE_STRICT: bool = True
+    EXPERIMENT_PERSIST_FULL_TRACE: bool = True
+
     # Database Settings
     DATABASE_URL: str = "postgresql://rag_user:rag_password@localhost:5432/sherlock_rag"
 

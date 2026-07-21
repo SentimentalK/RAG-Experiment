@@ -1,0 +1,120 @@
+from datetime import datetime
+from typing import Annotated
+from uuid import UUID
+
+from fastapi import APIRouter, Depends, HTTPException, Query
+
+from app.api.dependencies import get_experimental_answer_service
+from app.schemas.experiments import ExperimentalAnswerRequest, ExperimentCompareRequest
+from app.services.experimental_answer_service import ExperimentalAnswerError, ExperimentalAnswerService
+
+
+router = APIRouter(prefix="/experiments", tags=["experiments"])
+
+
+@router.post("/answer")
+def experimental_answer(
+    payload: ExperimentalAnswerRequest,
+    service: ExperimentalAnswerService = Depends(get_experimental_answer_service),
+) -> dict:
+    try:
+        return service.answer(
+            query=payload.query,
+            mode=payload.mode,
+            document_id=payload.document_id,
+            expansion_options=payload.expansion_options,
+            persist=payload.persist,
+            include_trace=payload.include_trace,
+        ).model_dump(mode="json")
+    except ExperimentalAnswerError as exc:
+        raise _http_error(exc)
+
+
+@router.post("/compare")
+def experimental_compare(
+    payload: ExperimentCompareRequest,
+    service: ExperimentalAnswerService = Depends(get_experimental_answer_service),
+) -> dict:
+    try:
+        return service.compare(
+            query=payload.query,
+            modes=payload.modes,
+            document_id=payload.document_id,
+            expansion_options=payload.expansion_options,
+            persist=payload.persist,
+            include_trace=payload.include_trace,
+        ).model_dump(mode="json")
+    except ExperimentalAnswerError as exc:
+        raise _http_error(exc)
+
+
+@router.get("/sessions")
+def list_experiment_sessions(
+    service: ExperimentalAnswerService = Depends(get_experimental_answer_service),
+    status: str | None = None,
+    mode: str | None = None,
+    created_after: datetime | None = None,
+    created_before: datetime | None = None,
+    limit: Annotated[int, Query(ge=1, le=200)] = 50,
+    offset: Annotated[int, Query(ge=0)] = 0,
+) -> dict:
+    sessions = service.list_sessions(
+        status=status,
+        mode=mode,
+        created_after=created_after,
+        created_before=created_before,
+        limit=limit,
+        offset=offset,
+    )
+    return {"sessions": [session.model_dump(mode="json") for session in sessions], "limit": limit, "offset": offset}
+
+
+@router.get("/sessions/{session_id}")
+def get_experiment_session(
+    session_id: UUID,
+    service: ExperimentalAnswerService = Depends(get_experimental_answer_service),
+) -> dict:
+    detail = service.get_session_detail(session_id)
+    if detail is None:
+        raise HTTPException(status_code=404, detail="Experiment session not found")
+    return detail.model_dump(mode="json")
+
+
+@router.get("/mode-runs/{mode_run_id}")
+def get_experiment_mode_run(
+    mode_run_id: UUID,
+    include_trace: bool = False,
+    include_context_text: bool = False,
+    service: ExperimentalAnswerService = Depends(get_experimental_answer_service),
+) -> dict:
+    detail = service.get_mode_run_detail(
+        mode_run_id,
+        include_trace=include_trace,
+        include_context_text=include_context_text,
+    )
+    if detail is None:
+        raise HTTPException(status_code=404, detail="Experiment mode run not found")
+    return detail.model_dump(mode="json")
+
+
+def _http_error(exc: ExperimentalAnswerError) -> HTTPException:
+    status_code = 400
+    if exc.error_code in {
+        "retrieval_failed",
+        "answer_generation_failed",
+        "experiment_persistence_failed",
+        "baseline_parity_failed",
+        "invalid_retrieval_trace",
+        "context_snapshot_failed",
+    }:
+        status_code = 503
+    return HTTPException(
+        status_code=status_code,
+        detail={
+            "error_code": exc.error_code,
+            "message": str(exc),
+            "session_id": str(exc.session_id) if exc.session_id else None,
+            "failed_mode": exc.failed_mode,
+        },
+    )
+
