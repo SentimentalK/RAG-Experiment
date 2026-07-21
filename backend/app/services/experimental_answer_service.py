@@ -635,6 +635,7 @@ def _mode_result(item: WorkItem, *, include_trace: bool) -> ExperimentModeResult
         status=item.status,  # type: ignore[arg-type]
         answer=answer.answer_text if answer else None,
         evidence_sufficient=answer.evidence_sufficient if answer else None,
+        citations=answer.citations if answer else (),
         confidence=answer.confidence if answer else None,
         contexts=contexts,
         context_chunk_uids=tuple(context.chunk_uid for context in item.contexts),
@@ -678,6 +679,7 @@ def _mode_result_from_row(row: dict[str, Any], *, include_trace: bool, include_c
         status=row["status"],
         answer=row.get("answer_text"),
         evidence_sufficient=answer_payload.get("evidence_sufficient"),
+        citations=tuple(answer_payload.get("citations") or ()),
         confidence=answer_payload.get("confidence"),
         contexts=tuple(contexts),
         context_chunk_uids=tuple(row.get("context_chunk_uids") or []),

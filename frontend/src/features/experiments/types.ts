@@ -74,6 +74,7 @@ export interface ExperimentModeResult {
   status: ModeRunStatus;
   answer: string | null;
   evidence_sufficient: boolean | null;
+  citations: { chunk_uid: string; reason: string }[];
   confidence: number | null;
   contexts: ExperimentContextRecord[];
   context_chunk_uids: string[];

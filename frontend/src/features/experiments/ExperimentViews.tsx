@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
-import { AlertCircle, ChevronDown, FileSearch, Loader2 } from "lucide-react";
+import { AlertCircle, ChevronRight, FileSearch, Loader2 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,7 +18,6 @@ export function ModeResultCard({
 }) {
   const [detail, setDetail] = useState<ExperimentModeResult>(result);
   const [loadingTrace, setLoadingTrace] = useState(false);
-  const [loadingText, setLoadingText] = useState(false);
   const [detailError, setDetailError] = useState<string | null>(null);
   const view = normalizeModeRunDetail(detail);
   const invalidCitations = extractCitations(detail.answer).filter((rank) => rank > detail.contexts.length);
@@ -27,22 +26,19 @@ export function ModeResultCard({
 
   useEffect(() => setDetail(result), [result]);
 
-  async function loadDetail(options: { include_trace?: boolean; include_context_text?: boolean }) {
+  async function loadDetail(options: { include_trace?: boolean }) {
     if (!detail.mode_run_id) return;
     setDetailError(null);
     if (options.include_trace) setLoadingTrace(true);
-    if (options.include_context_text) setLoadingText(true);
     try {
       const response = (await getExperimentModeRun(detail.mode_run_id, {
         include_trace: options.include_trace || !!detail.trace,
-        include_context_text: options.include_context_text || detail.contexts.some((context) => context.chunk_text),
       })) as ExperimentModeResult;
       setDetail(response);
     } catch (error) {
       setDetailError(error instanceof Error ? error.message : "Unable to load mode detail.");
     } finally {
       setLoadingTrace(false);
-      setLoadingText(false);
     }
   }
 
@@ -86,11 +82,6 @@ export function ModeResultCard({
         <AnswerBlock answer={detail.answer} contextCount={detail.contexts.length} invalidCitations={invalidCitations} />
         {detailError && <p className="text-sm text-red-600">{detailError}</p>}
         <div className="flex flex-wrap gap-2">
-          {detail.mode_run_id && (
-            <Button variant="outline" size="sm" render={<Link to={`/experiments/mode-runs/${detail.mode_run_id}`} />}>
-              Open Detail
-            </Button>
-          )}
           {!hasInlineTrace && canLazyFetch && (
             <Button type="button" variant="outline" size="sm" onClick={() => loadDetail({ include_trace: true })} disabled={loadingTrace}>
               {loadingTrace ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <FileSearch className="mr-2 h-4 w-4" />}
@@ -109,7 +100,7 @@ export function ModeResultCard({
           </Alert>
         )}
         <AnswerModelInputSummary result={detail} />
-        <ContextList contexts={detail.contexts} comparison={comparison} onLoadText={() => loadDetail({ include_context_text: true })} loading={loadingText} />
+        <ContextList contexts={detail.contexts} citations={detail.citations ?? []} comparison={comparison} />
       </CardContent>
     </Card>
   );
@@ -153,43 +144,122 @@ function AnswerBlock({ answer, contextCount, invalidCitations }: { answer: strin
 
 function ContextList({
   contexts,
+  citations,
   comparison,
-  onLoadText,
-  loading,
 }: {
   contexts: ExperimentContextRecord[];
+  citations: { chunk_uid: string; reason: string }[];
   comparison?: ModeComparisonSummary;
-  onLoadText: () => void;
-  loading: boolean;
 }) {
-  const hasText = contexts.some((context) => context.chunk_text);
   const newSet = new Set(comparison?.new_chunk_uids ?? []);
+  const displacedSet = new Set(comparison?.displaced_chunk_uids ?? []);
+  const citationByChunk = new Map(citations.map((citation) => [citation.chunk_uid, citation]));
   return (
-    <div className="space-y-3">
-      <div className="flex items-center justify-between gap-2">
-        <h3 className="text-sm font-semibold">Contexts</h3>
-        {!hasText && contexts.length > 0 && (
-          <Button type="button" variant="outline" size="sm" onClick={onLoadText} disabled={loading}>
-            {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <ChevronDown className="mr-2 h-4 w-4" />}
-            Load Text
-          </Button>
-        )}
-      </div>
-      <div className="space-y-2">
-        {contexts.map((context) => (
-          <div key={`${context.rank}-${context.chunk_uid}`} className="rounded-md border bg-slate-50 p-3 dark:bg-slate-900/40">
-            <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-              <Badge variant="outline">[{context.rank}]</Badge>
-              <span className="font-mono">{context.chunk_uid}</span>
-              <span>{context.section_title}</span>
-              {comparison && <Badge variant={newSet.has(context.chunk_uid) ? "secondary" : "outline"}>{newSet.has(context.chunk_uid) ? "New" : "Shared"}</Badge>}
-              {context.alias_only_candidate && <Badge variant="outline">Alias-only</Badge>}
-            </div>
-            {context.chunk_text && <p className="mt-2 line-clamp-6 text-sm leading-relaxed">{context.chunk_text}</p>}
-          </div>
-        ))}
-      </div>
+    <div className="space-y-4">
+      <h3 className="text-sm font-semibold">Contexts</h3>
+      {contexts.map((context) => {
+        const citation = citationByChunk.get(context.chunk_uid);
+        return (
+          <ExperimentChunkCard
+            key={`${context.rank}-${context.chunk_uid}`}
+            context={context}
+            isCited={!!citation}
+            citationReason={citation?.reason}
+            comparisonLabel={comparison ? (newSet.has(context.chunk_uid) ? "New" : displacedSet.has(context.chunk_uid) ? "Displaced" : "Shared") : null}
+          />
+        );
+      })}
     </div>
+  );
+}
+
+function ExperimentChunkCard({
+  context,
+  isCited,
+  citationReason,
+  comparisonLabel,
+}: {
+  context: ExperimentContextRecord;
+  isCited: boolean;
+  citationReason?: string;
+  comparisonLabel: "Shared" | "New" | "Displaced" | null;
+}) {
+  return (
+    <Card className={`overflow-hidden border-slate-200 shadow-sm transition-all dark:border-slate-800 ${isCited ? "border-blue-500 ring-1 ring-blue-100 dark:ring-blue-950/30" : ""}`}>
+      <div className="flex flex-col justify-between gap-4 border-b bg-slate-50 p-4 dark:bg-slate-900/50 md:flex-row md:items-center">
+        <div className="flex items-center gap-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
+            #{context.rank}
+          </div>
+          <div>
+            <div className="flex items-center gap-2 text-sm font-medium">
+              <span className="max-w-[200px] truncate text-muted-foreground sm:max-w-[300px]">
+                {context.section_title || "Unknown section"}
+              </span>
+              <ChevronRight className="h-3 w-3 text-muted-foreground" />
+              <span className="rounded bg-slate-200 px-1.5 py-0.5 text-xs text-muted-foreground dark:bg-slate-800">
+                Chunk {context.chunk_order ?? context.chunk_index ?? "n/a"}
+              </span>
+            </div>
+            <div className="mt-1 flex flex-wrap gap-3 text-xs text-muted-foreground">
+              <span>Distance: {context.raw_distance == null ? "n/a" : context.raw_distance.toFixed(4)}</span>
+              <span>Tokens: {context.token_count ?? "n/a"}</span>
+              <span className="font-mono">{context.chunk_uid}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge variant="outline" className="border-slate-200 bg-slate-100 text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">
+            Relevance not evaluated
+          </Badge>
+          {comparisonLabel && (
+            <Badge variant="outline" className={comparisonLabel === "New" ? "border-blue-200 bg-blue-100 text-blue-800 dark:border-blue-800 dark:bg-blue-900/30 dark:text-blue-400" : "border-slate-200 bg-slate-100 text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400"}>
+              {comparisonLabel}
+            </Badge>
+          )}
+          {context.alias_only_candidate && (
+            <Badge variant="outline" className="border-violet-200 bg-violet-100 text-violet-800 dark:border-violet-800 dark:bg-violet-900/30 dark:text-violet-400">
+              Alias-only
+            </Badge>
+          )}
+          {isCited && (
+            <Badge variant="outline" className="whitespace-nowrap border-blue-200 bg-blue-100 text-blue-800 dark:border-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
+              Cited by RAG
+            </Badge>
+          )}
+        </div>
+      </div>
+
+      <CardContent className="p-0">
+        <Accordion>
+          <AccordionItem value="text" className="border-none">
+            <AccordionTrigger className="px-4 py-3 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-900/50">
+              View Chunk Content
+            </AccordionTrigger>
+            <AccordionContent className="px-4 pb-4">
+              <div className="space-y-4 pt-2">
+                {isCited && citationReason && (
+                  <div className="rounded-md border border-blue-100/50 bg-blue-50/50 p-3 text-sm italic text-muted-foreground dark:border-blue-900/20 dark:bg-blue-950/20">
+                    <span className="mb-1 block font-semibold not-italic text-foreground">RAG Citation Reason:</span>
+                    {citationReason}
+                  </div>
+                )}
+                <div>
+                  {context.chunk_text ? (
+                    <p className="whitespace-pre-wrap font-serif text-sm leading-relaxed text-foreground">
+                      {context.chunk_text}
+                    </p>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">Context text is not included in this response.</p>
+                  )}
+                </div>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </CardContent>
+    </Card>
   );
 }
 

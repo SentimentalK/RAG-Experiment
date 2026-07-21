@@ -52,6 +52,7 @@ describe("normalizeModeRunDetail", () => {
       status: "completed",
       answer: "Answer [1].",
       evidence_sufficient: true,
+      citations: [],
       confidence: 0.8,
       contexts: [],
       context_chunk_uids: [],

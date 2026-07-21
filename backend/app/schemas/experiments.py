@@ -4,6 +4,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+from app.schemas.rag_answer import Citation
 from app.services.query_expansion_service import QueryExpansionRequestOptions
 
 
@@ -146,6 +147,7 @@ class ExperimentModeResult(BaseModel):
     status: ModeRunStatus
     answer: str | None
     evidence_sufficient: bool | None = None
+    citations: tuple[Citation, ...] = ()
     confidence: float | None = None
     contexts: tuple[ExperimentContextRecord, ...]
     context_chunk_uids: tuple[str, ...]
