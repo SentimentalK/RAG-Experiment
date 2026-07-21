@@ -14,7 +14,7 @@ export default function ExperimentModeRunDetailPage() {
   useEffect(() => {
     if (!modeRunId) return;
     const controller = new AbortController();
-    getExperimentModeRun(modeRunId, {}, controller.signal)
+    getExperimentModeRun(modeRunId, { include_context_text: true }, controller.signal)
       .then((payload) => {
         setDetail(payload as ExperimentModeResult);
         setError(null);
@@ -27,7 +27,7 @@ export default function ExperimentModeRunDetailPage() {
   if (!detail) return <p className="text-sm text-muted-foreground">Loading mode run...</p>;
 
   return (
-    <div className="mx-auto max-w-4xl space-y-6">
+    <div className="mx-auto w-full max-w-[1200px] space-y-6 px-2 sm:px-4">
       <Button variant="outline" render={<Link to="/experiments/sessions" />}>
         <ArrowLeft className="mr-2 h-4 w-4" />
         Session History

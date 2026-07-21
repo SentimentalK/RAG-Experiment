@@ -44,6 +44,7 @@ export default function ExperimentComparePage() {
     () => new Map(result?.comparisons.map((comparison) => [comparison.compared_mode, comparison]) ?? []),
     [result],
   );
+  const resultModes = MODE_ORDER.filter((mode) => result?.results[mode]);
 
   function toggleMode(mode: RetrievalMode) {
     setModes((current) => {
@@ -89,7 +90,7 @@ export default function ExperimentComparePage() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6">
+    <div className="mx-auto w-full max-w-[1800px] space-y-6 px-2 sm:px-4">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Experiment Workbench</h1>
@@ -231,8 +232,8 @@ export default function ExperimentComparePage() {
               </CardContent>
             </Card>
           ))}
-          <div className="grid gap-4 xl:grid-cols-3">
-            {MODE_ORDER.filter((mode) => result.results[mode]).map((mode) => (
+          <div className={modeGridClass(resultModes.length)}>
+            {resultModes.map((mode) => (
               <ModeResultCard
                 key={mode}
                 result={result.results[mode]!}
@@ -244,4 +245,10 @@ export default function ExperimentComparePage() {
       )}
     </div>
   );
+}
+
+function modeGridClass(count: number): string {
+  if (count <= 1) return "grid gap-4";
+  if (count === 2) return "grid gap-4 xl:grid-cols-2";
+  return "grid gap-4 2xl:grid-cols-3";
 }

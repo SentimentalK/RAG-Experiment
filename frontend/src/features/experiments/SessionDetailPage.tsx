@@ -1,18 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router";
 import { ArrowLeft, Database } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getExperimentSession } from "./api";
+import { getExperimentModeRun, getExperimentSession } from "./api";
 import { ModeResultCard } from "./ExperimentViews";
 import { enumLabel, modeLabel } from "./adapters";
-import type { ExperimentSessionDetail } from "./types";
+import type { ExperimentModeResult, ExperimentSessionDetail } from "./types";
 
 export default function ExperimentSessionDetailPage() {
   const { sessionId } = useParams();
   const [detail, setDetail] = useState<ExperimentSessionDetail | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const fetchedTextRunIds = useRef(new Set<string>());
 
   useEffect(() => {
     if (!sessionId) return;
@@ -26,11 +27,43 @@ export default function ExperimentSessionDetailPage() {
     return () => controller.abort();
   }, [sessionId]);
 
+  useEffect(() => {
+    if (!detail) return;
+    const missingText = detail.modes.filter(
+      (mode) => mode.mode_run_id && !fetchedTextRunIds.current.has(mode.mode_run_id) && mode.contexts.some((context) => !context.chunk_text),
+    );
+    if (missingText.length === 0) return;
+    missingText.forEach((mode) => fetchedTextRunIds.current.add(mode.mode_run_id!));
+    const controller = new AbortController();
+    Promise.all(
+      missingText.map((mode) =>
+        getExperimentModeRun(mode.mode_run_id!, { include_context_text: true }, controller.signal) as Promise<ExperimentModeResult>,
+      ),
+    )
+      .then((modesWithText) => {
+        const byId = new Map(modesWithText.map((mode) => [mode.mode_run_id, mode]));
+        setDetail((current) =>
+          current
+            ? {
+                ...current,
+                modes: current.modes.map((mode) => byId.get(mode.mode_run_id) ?? mode),
+              }
+            : current,
+        );
+      })
+      .catch((err) => {
+        if ((err as Error).name !== "AbortError") {
+          setError(err instanceof Error ? err.message : "Unable to load context text.");
+        }
+      });
+    return () => controller.abort();
+  }, [detail]);
+
   if (error) return <p className="text-sm text-red-600">{error}</p>;
   if (!detail) return <p className="text-sm text-muted-foreground">Loading session...</p>;
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6">
+    <div className="mx-auto w-full max-w-[1800px] space-y-6 px-2 sm:px-4">
       <Button variant="outline" render={<Link to="/experiments/sessions" />}>
         <ArrowLeft className="mr-2 h-4 w-4" />
         Sessions
@@ -53,13 +86,19 @@ export default function ExperimentSessionDetailPage() {
           <Meta label="Answer Model" value={String(detail.generation_config.model ?? "n/a")} />
         </CardContent>
       </Card>
-      <div className="grid gap-4 xl:grid-cols-3">
+      <div className={modeGridClass(detail.modes.length)}>
         {detail.modes.map((mode) => (
           <ModeResultCard key={mode.mode} result={mode} />
         ))}
       </div>
     </div>
   );
+}
+
+function modeGridClass(count: number): string {
+  if (count <= 1) return "grid gap-4";
+  if (count === 2) return "grid gap-4 xl:grid-cols-2";
+  return "grid gap-4 2xl:grid-cols-3";
 }
 
 function Meta({ label, value }: { label: string; value: string }) {

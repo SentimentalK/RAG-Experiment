@@ -251,7 +251,7 @@ function ExperimentChunkCard({
                       {context.chunk_text}
                     </p>
                   ) : (
-                    <p className="text-sm text-muted-foreground">Context text is not included in this response.</p>
+                    <p className="text-sm text-muted-foreground">Context text is unavailable in this summary response.</p>
                   )}
                 </div>
               </div>
