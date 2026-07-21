@@ -21,6 +21,18 @@ class Settings(BaseSettings):
     RAW_DATA_DIR: Path = BASE_DIR / "data" / "raw"
     PROCESSED_DATA_DIR: Path = BASE_DIR / "data" / "processed"
 
+    # Alias Dataset Settings
+    ALIAS_DATASET_PATH: Path = (
+        BASE_DIR
+        / "experiments"
+        / "noun_units_v2a"
+        / "candidates"
+        / "review"
+        / "sherlock_entity_alias_groups_final.json"
+    )
+    ALIAS_DATASET_EXPECTED_SHA256: str = "2b16f62f2537c0703985585a8e467cda14d0790a3fad3258c31439322cfd5dd7"
+    ALIAS_DATASET_STRICT_VALIDATION: bool = True
+
     # Database Settings
     DATABASE_URL: str = "postgresql://rag_user:rag_password@localhost:5432/sherlock_rag"
 

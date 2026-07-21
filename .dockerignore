@@ -19,6 +19,17 @@ data/*
 !data/artifacts/embedding_ingestion_report.json
 
 
-# Ignore experiments except the baseline evaluation JSON needed by frontend build
-experiments/
+# Ignore experiments except the baseline evaluation JSON and frozen alias dataset
+experiments/*
+!experiments/baseline_v1/
+experiments/baseline_v1/*
+!experiments/baseline_v1/generated/
+experiments/baseline_v1/generated/*
 !experiments/baseline_v1/generated/baseline_evaluation.json
+!experiments/noun_units_v2a/
+experiments/noun_units_v2a/*
+!experiments/noun_units_v2a/candidates/
+experiments/noun_units_v2a/candidates/*
+!experiments/noun_units_v2a/candidates/review/
+experiments/noun_units_v2a/candidates/review/*
+!experiments/noun_units_v2a/candidates/review/sherlock_entity_alias_groups_final.json

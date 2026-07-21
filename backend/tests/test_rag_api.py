@@ -49,17 +49,52 @@ def mock_rag_service():
     service.generate_answer.return_value = response
     return service
 
+class DummyHealthCursor:
+    def __init__(self):
+        self.query_count = 0
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        return False
+
+    def execute(self, query):
+        self.query_count += 1
+
+    def fetchone(self):
+        return (1, 12, 909, 909, 0)
+
+    def fetchall(self):
+        return [("sentence-transformers/all-MiniLM-L6-v2", 384, True)]
+
+
+class DummyHealthConnection:
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        return False
+
+    def cursor(self):
+        return DummyHealthCursor()
+
+
 @pytest.fixture
-def client(mock_rag_service):
+def client(mock_rag_service, monkeypatch):
     # Setup dependency override
     app.dependency_overrides[get_rag_service] = lambda: mock_rag_service
+    import app.api.routes.health as health_module
+    monkeypatch.setattr(health_module, "get_connection", lambda: DummyHealthConnection())
+    monkeypatch.setattr(health_module.settings, "GROQ_API_KEY", "test-key")
+    monkeypatch.setattr(health_module.settings, "GROQ_MODEL", "test-model")
+    monkeypatch.setattr(health_module.settings, "GROQ_BASE_URL", "https://example.test")
     
     # Temporarily force app state ready
     app.state.ready = True
     
-    # We use context manager to trigger lifespan but override state in fixture
-    with TestClient(app) as test_client:
-        yield test_client
+    # Do not trigger lifespan; these route tests mock service and DB dependencies directly.
+    yield TestClient(app)
         
     app.dependency_overrides.clear()
 
@@ -72,12 +107,16 @@ def test_liveness_endpoint(client):
 
 def test_readiness_endpoint_when_not_ready():
     # Create client without calling lifespan to verify ready flag works
-    with TestClient(app) as local_client:
+    previous_ready = getattr(app.state, "ready", False)
+    try:
         app.state.ready = False
+        local_client = TestClient(app)
         response = local_client.get("/api/health/ready")
         assert response.status_code == 503
         assert response.json()["status"] == "not_ready"
         assert response.json()["dataset"] == "not_initialized"
+    finally:
+        app.state.ready = previous_ready
 
 def test_readiness_endpoint_db_failure(client):
     # Mock connection failure by replacing get_connection with a failure mock
