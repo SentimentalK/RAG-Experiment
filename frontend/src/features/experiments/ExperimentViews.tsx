@@ -473,16 +473,18 @@ function FusedResults({ results }: { results: TraceRecord[] }) {
         return (
           <details key={String(result.chunk_id)} className="rounded-md border bg-white p-3 dark:bg-slate-950">
             <summary className="cursor-pointer list-none">
-              <div className="grid gap-2 text-sm md:grid-cols-[4rem_1fr_6rem_6rem_6rem] md:items-center">
-                <span className="font-semibold">#{String(result.final_rank)}</span>
-                <span>
-                  <span className="font-medium">{String(result.section_title ?? "Unknown story")}</span>
+              <div className="space-y-2">
+                <div className="flex flex-wrap items-center gap-2 text-xs">
+                  <span className="mr-1 text-sm font-semibold">#{String(result.final_rank)}</span>
+                  <Badge variant="outline">Contributing queries: {String(result.contributing_variant_count ?? contributions.length)}</Badge>
+                  <Badge variant="outline">Original query rank: {result.original_query_rank == null ? "not in original top results" : String(result.original_query_rank)}</Badge>
+                  <Badge variant="outline">Weighted RRF score: {Number(result.fusion_score ?? 0).toFixed(4)}</Badge>
+                </div>
+                <div className="text-sm">
+                  <span className="font-semibold">{String(result.section_title ?? "Unknown story")}</span>
                   <span className="ml-2 font-mono text-xs text-muted-foreground">{String(result.chunk_id)}</span>
-                  <span className="mt-1 block text-xs text-muted-foreground">{preview(String(result.chunk_text ?? ""))}</span>
-                </span>
-                <span>{String(result.contributing_variant_count ?? contributions.length)} queries</span>
-                <span>Orig {result.original_query_rank == null ? "–" : String(result.original_query_rank)}</span>
-                <span>{Number(result.fusion_score ?? 0).toFixed(4)}</span>
+                  <p className="mt-1 text-xs text-muted-foreground">{preview(String(result.chunk_text ?? ""))}</p>
+                </div>
               </div>
             </summary>
             <div className="mt-3 space-y-2 text-xs">
