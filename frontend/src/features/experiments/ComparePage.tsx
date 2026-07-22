@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { compareExperiment, getExperimentCapabilities } from "./api";
+import { getExperimentAdminSecret, subscribeExperimentAdmin } from "./admin";
 import { ExperimentNav } from "./ExperimentNav";
 import { ComparisonStrip, ModeResultCard } from "./ExperimentViews";
 import { MODE_LABELS, MODE_ORDER, type ExperimentApiError, type ExperimentCapabilities, type ExperimentCompareResponse, type RetrievalMode } from "./types";
@@ -16,7 +17,7 @@ export default function ExperimentComparePage() {
   const [capabilities, setCapabilities] = useState<ExperimentCapabilities | null>(null);
   const [query, setQuery] = useState("What did Mr. Holmes discover?");
   const [modes, setModes] = useState<RetrievalMode[]>(["baseline", "strong_story"]);
-  const [persist, setPersist] = useState(false);
+  const [adminSecret, setAdminSecret] = useState<string | null>(getExperimentAdminSecret());
   const [maxVariants, setMaxVariants] = useState(8);
   const [allowStoryScoped, setAllowStoryScoped] = useState(true);
   const [allowSingleToken, setAllowSingleToken] = useState(true);
@@ -34,11 +35,12 @@ export default function ExperimentComparePage() {
         setMaxVariants(value.expansion.max_query_variants);
         setAllowStoryScoped(value.expansion.allow_story_scoped);
         setAllowSingleToken(value.expansion.allow_story_scoped_single_token);
-        setPersist(value.persistence.enabled);
       })
       .catch((err) => setError(err instanceof Error ? err : new Error("Unable to load capabilities.")));
     return () => controller.abort();
   }, []);
+
+  useEffect(() => subscribeExperimentAdmin(() => setAdminSecret(getExperimentAdminSecret())), []);
 
   const storyControlsEnabled = modes.includes("strong_story") && !!capabilities?.expansion.allow_story_scoped;
   const comparisonsByMode = useMemo(
@@ -70,7 +72,7 @@ export default function ExperimentComparePage() {
         {
           query,
           modes,
-          persist,
+          persist: !!adminSecret && !!capabilities?.persistence.enabled,
           include_trace: false,
           expansion_options: {
             max_query_variants: Math.min(maxVariants, capabilities?.expansion.max_query_variants ?? maxVariants),
@@ -79,6 +81,7 @@ export default function ExperimentComparePage() {
           },
         },
         controller.signal,
+        adminSecret,
       );
       if (requestRef.current === token) setResult(response);
     } catch (err) {
@@ -184,17 +187,11 @@ export default function ExperimentComparePage() {
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex flex-wrap items-center gap-3 text-sm">
                 {capabilities?.persistence.enabled ? (
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={persist}
-                      disabled={capabilities.persistence.required}
-                      onChange={(event) => setPersist(event.target.checked)}
-                    />
-                    <span>{capabilities.persistence.required ? "Save required" : "Save experiment"}</span>
-                  </label>
+                  <p className="text-sm text-muted-foreground">
+                    {adminSecret ? "Runs will be saved to experiment history." : "Runs are not saved. Unlock to save experiment history."}
+                  </p>
                 ) : (
-                  <Badge variant="outline">Persistence unavailable</Badge>
+                  <p className="text-sm text-muted-foreground">Persistence unavailable.</p>
                 )}
               </div>
               <Button type="submit" disabled={loading || modes.length === 0 || !query.trim()}>
@@ -213,7 +210,10 @@ export default function ExperimentComparePage() {
           <AlertDescription className="space-y-2">
             <p>{(error as ExperimentApiError).detail?.message ?? error.message}</p>
             {(error as ExperimentApiError).detail?.error_code === "experiment_persistence_failed" && (
-              <p>Turn off Save experiment for an unsaved run, or apply database migration 003 before saving sessions.</p>
+              <p>Run while locked for an unsaved result, or apply database migration 003 before saving sessions.</p>
+            )}
+            {(error as ExperimentApiError).detail?.error_code === "experiment_admin_auth_required" && (
+              <p>Unlock experiment admin before saving runs.</p>
             )}
             {(error as ExperimentApiError).detail?.session_id && (
               <Button variant="outline" size="sm" render={<Link to={`/experiments/sessions/${(error as ExperimentApiError).detail?.session_id}`} />}>

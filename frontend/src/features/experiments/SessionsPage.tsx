@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router";
-import { History, Search } from "lucide-react";
+import { History, Search, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { listExperimentSessions } from "./api";
+import { deleteExperimentSession, listExperimentSessions } from "./api";
+import { getExperimentAdminSecret, subscribeExperimentAdmin } from "./admin";
 import { enumLabel, modeLabel, safeLimit, safeOffset } from "./adapters";
 import { ExperimentNav } from "./ExperimentNav";
 import type { ExperimentSessionSummary } from "./types";
@@ -16,6 +17,8 @@ export default function ExperimentSessionsPage() {
   const [sessions, setSessions] = useState<ExperimentSessionSummary[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [adminSecret, setAdminSecret] = useState<string | null>(getExperimentAdminSecret());
+  const [deletingSessionId, setDeletingSessionId] = useState<string | null>(null);
   const filters = useMemo(
     () => ({
       status: params.get("status") ?? "",
@@ -43,6 +46,8 @@ export default function ExperimentSessionsPage() {
     return () => controller.abort();
   }, [filters]);
 
+  useEffect(() => subscribeExperimentAdmin(() => setAdminSecret(getExperimentAdminSecret())), []);
+
   function updateFilter(key: string, value: string) {
     const next = new URLSearchParams(params);
     if (value) next.set(key, value);
@@ -56,6 +61,20 @@ export default function ExperimentSessionsPage() {
     next.set("offset", String(Math.max(0, filters.offset + delta * filters.limit)));
     next.set("limit", String(filters.limit));
     setParams(next);
+  }
+
+  async function deleteSession(session: ExperimentSessionSummary) {
+    if (!adminSecret) return;
+    setDeletingSessionId(session.session_id);
+    setError(null);
+    try {
+      await deleteExperimentSession(session.session_id, adminSecret);
+      setSessions((current) => current.filter((row) => row.session_id !== session.session_id));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unable to delete session.");
+    } finally {
+      setDeletingSessionId(null);
+    }
   }
 
   return (
@@ -93,6 +112,7 @@ export default function ExperimentSessionsPage() {
                 <TableHead>Modes</TableHead>
                 <TableHead>Query</TableHead>
                 <TableHead className="text-right">Calls</TableHead>
+                {adminSecret && <TableHead className="text-right">Actions</TableHead>}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -113,11 +133,25 @@ export default function ExperimentSessionsPage() {
                     </Link>
                   </TableCell>
                   <TableCell className="text-right">{session.total_vector_search_call_count}</TableCell>
+                  {adminSecret && (
+                    <TableCell className="text-right">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon-sm"
+                        onClick={() => void deleteSession(session)}
+                        disabled={deletingSessionId === session.session_id}
+                        aria-label="Delete session"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </TableCell>
+                  )}
                 </TableRow>
               ))}
               {!loading && sessions.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
+                  <TableCell colSpan={adminSecret ? 6 : 5} className="h-24 text-center text-muted-foreground">
                     <Search className="mx-auto mb-2 h-5 w-5" />
                     No sessions found.
                   </TableCell>

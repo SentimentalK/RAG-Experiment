@@ -73,6 +73,7 @@ def test_experiment_capabilities_api_serializes_server_policy():
         ),
         trace_persistence_enabled=True,
         evaluation_catalog_available=False,
+        admin_auth_required=True,
     )
     app.dependency_overrides[get_experimental_answer_service] = lambda: service
     try:
@@ -84,6 +85,69 @@ def test_experiment_capabilities_api_serializes_server_policy():
         assert payload["persistence"] == {"enabled": True, "required": False}
         assert payload["expansion"]["max_query_variants"] == 8
         assert payload["evaluation_catalog_available"] is False
+        assert payload["admin_auth_required"] is True
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_experiment_admin_verify_and_persistence_gate():
+    service = MagicMock()
+    service.verify_admin_secret.side_effect = lambda secret: secret == "xx"
+    service.answer.return_value = ExperimentalAnswerResponse(
+        session_id=None,
+        mode_run_id=None,
+        persisted=False,
+        query="Question?",
+        mode="baseline",
+        result=_mode_result(),
+    )
+    app.dependency_overrides[get_experimental_answer_service] = lambda: service
+    try:
+        client = TestClient(app)
+        bad_verify = client.post("/api/experiments/admin/verify", json={"secret": "bad"})
+        assert bad_verify.status_code == 200
+        assert bad_verify.json() == {"authenticated": False}
+
+        good_verify = client.post("/api/experiments/admin/verify", json={"secret": "xx"})
+        assert good_verify.status_code == 200
+        assert good_verify.json() == {"authenticated": True}
+
+        blocked = client.post("/api/experiments/answer", json={"query": "Question?", "mode": "baseline", "persist": True})
+        assert blocked.status_code == 403
+        assert blocked.json()["detail"]["error_code"] == "experiment_admin_auth_required"
+
+        unsaved = client.post("/api/experiments/answer", json={"query": "Question?", "mode": "baseline", "persist": False})
+        assert unsaved.status_code == 200
+
+        saved = client.post(
+            "/api/experiments/answer",
+            json={"query": "Question?", "mode": "baseline", "persist": True},
+            headers={"X-Experiment-Admin-Secret": "xx"},
+        )
+        assert saved.status_code == 200
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_delete_experiment_session_requires_admin_secret():
+    service = MagicMock()
+    session_id = uuid4()
+
+    def delete_session(_, *, admin_secret):
+        if admin_secret != "xx":
+            raise ExperimentalAnswerError("experiment_admin_auth_required", "Experiment admin unlock is required.")
+        return True
+
+    service.delete_session.side_effect = delete_session
+    app.dependency_overrides[get_experimental_answer_service] = lambda: service
+    try:
+        client = TestClient(app)
+        blocked = client.delete(f"/api/experiments/sessions/{session_id}")
+        assert blocked.status_code == 403
+
+        deleted = client.delete(f"/api/experiments/sessions/{session_id}", headers={"X-Experiment-Admin-Secret": "xx"})
+        assert deleted.status_code == 200
+        assert deleted.json() == {"deleted": True, "session_id": str(session_id)}
     finally:
         app.dependency_overrides.clear()
 

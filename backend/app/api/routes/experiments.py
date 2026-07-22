@@ -2,10 +2,16 @@ from datetime import datetime
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, Header, HTTPException, Query
 
 from app.api.dependencies import get_experimental_answer_service
-from app.schemas.experiments import ExperimentalAnswerRequest, ExperimentCompareRequest
+from app.schemas.experiments import (
+    ExperimentAdminVerifyRequest,
+    ExperimentAdminVerifyResponse,
+    ExperimentCompareRequest,
+    ExperimentDeleteSessionResponse,
+    ExperimentalAnswerRequest,
+)
 from app.services.experimental_answer_service import ExperimentalAnswerError, ExperimentalAnswerService
 
 
@@ -19,12 +25,22 @@ def experiment_capabilities(
     return service.get_capabilities().model_dump(mode="json")
 
 
+@router.post("/admin/verify")
+def verify_experiment_admin(
+    payload: ExperimentAdminVerifyRequest,
+    service: ExperimentalAnswerService = Depends(get_experimental_answer_service),
+) -> dict:
+    return ExperimentAdminVerifyResponse(authenticated=service.verify_admin_secret(payload.secret)).model_dump(mode="json")
+
+
 @router.post("/answer")
 def experimental_answer(
     payload: ExperimentalAnswerRequest,
+    x_experiment_admin_secret: str | None = Header(default=None),
     service: ExperimentalAnswerService = Depends(get_experimental_answer_service),
 ) -> dict:
     try:
+        _require_admin_for_persistence(payload.persist, x_experiment_admin_secret, service)
         return service.answer(
             query=payload.query,
             mode=payload.mode,
@@ -40,9 +56,11 @@ def experimental_answer(
 @router.post("/compare")
 def experimental_compare(
     payload: ExperimentCompareRequest,
+    x_experiment_admin_secret: str | None = Header(default=None),
     service: ExperimentalAnswerService = Depends(get_experimental_answer_service),
 ) -> dict:
     try:
+        _require_admin_for_persistence(payload.persist, x_experiment_admin_secret, service)
         return service.compare(
             query=payload.query,
             modes=payload.modes,
@@ -53,6 +71,21 @@ def experimental_compare(
         ).model_dump(mode="json")
     except ExperimentalAnswerError as exc:
         raise _http_error(exc)
+
+
+@router.delete("/sessions/{session_id}")
+def delete_experiment_session(
+    session_id: UUID,
+    x_experiment_admin_secret: str | None = Header(default=None),
+    service: ExperimentalAnswerService = Depends(get_experimental_answer_service),
+) -> dict:
+    try:
+        deleted = service.delete_session(session_id, admin_secret=x_experiment_admin_secret)
+    except ExperimentalAnswerError as exc:
+        raise _http_error(exc)
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Experiment session not found")
+    return ExperimentDeleteSessionResponse(deleted=True, session_id=session_id).model_dump(mode="json")
 
 
 @router.get("/sessions")
@@ -106,6 +139,8 @@ def get_experiment_mode_run(
 
 def _http_error(exc: ExperimentalAnswerError) -> HTTPException:
     status_code = 400
+    if exc.error_code == "experiment_admin_auth_required":
+        status_code = 403
     if exc.error_code in {
         "retrieval_failed",
         "answer_generation_failed",
@@ -124,3 +159,12 @@ def _http_error(exc: ExperimentalAnswerError) -> HTTPException:
             "failed_mode": exc.failed_mode,
         },
     )
+
+
+def _require_admin_for_persistence(
+    persist_requested: bool,
+    admin_secret: str | None,
+    service: ExperimentalAnswerService,
+) -> None:
+    if persist_requested and not service.verify_admin_secret(admin_secret):
+        raise ExperimentalAnswerError("experiment_admin_auth_required", "Experiment admin unlock is required.")

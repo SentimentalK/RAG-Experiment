@@ -52,6 +52,8 @@ class ExperimentalAnswerConfig(BaseModel):
     persistence_required: bool = False
     persistence_strict: bool = True
     persist_full_trace: bool = True
+    admin_secret: str = "xx"
+    admin_auth_required: bool = True
 
     @classmethod
     def from_settings(cls, app_settings: Any) -> "ExperimentalAnswerConfig":
@@ -60,6 +62,8 @@ class ExperimentalAnswerConfig(BaseModel):
             persistence_required=app_settings.EXPERIMENT_PERSISTENCE_REQUIRED,
             persistence_strict=app_settings.EXPERIMENT_PERSISTENCE_STRICT,
             persist_full_trace=app_settings.EXPERIMENT_PERSIST_FULL_TRACE,
+            admin_secret=app_settings.EXPERIMENT_ADMIN_SECRET,
+            admin_auth_required=app_settings.EXPERIMENT_ADMIN_AUTH_REQUIRED,
         )
 
 
@@ -122,7 +126,18 @@ class ExperimentalAnswerService:
             ),
             trace_persistence_enabled=self._config.persist_full_trace,
             evaluation_catalog_available=False,
+            admin_auth_required=self._config.admin_auth_required,
         )
+
+    def verify_admin_secret(self, secret: str | None) -> bool:
+        if not self._config.admin_auth_required:
+            return True
+        return bool(secret) and secret == self._config.admin_secret
+
+    def delete_session(self, session_id: UUID, *, admin_secret: str | None) -> bool:
+        if not self.verify_admin_secret(admin_secret):
+            raise ExperimentalAnswerError("experiment_admin_auth_required", "Experiment admin unlock is required.")
+        return self._repository.delete_session(session_id)
 
     def answer(
         self,

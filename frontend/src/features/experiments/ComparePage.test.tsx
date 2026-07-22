@@ -24,6 +24,7 @@ describe("ExperimentComparePage", () => {
           },
           trace_persistence_enabled: true,
           evaluation_catalog_available: false,
+          admin_auth_required: true,
         }),
         { status: 200, headers: { "Content-Type": "application/json" } },
       ),
@@ -40,7 +41,7 @@ describe("ExperimentComparePage", () => {
 
     const storyControl = screen.getByLabelText("Allow story-scoped aliases");
     expect(storyControl).toBeEnabled();
-    expect(screen.getByLabelText("Save experiment")).toBeChecked();
+    expect(screen.getByText("Runs are not saved. Unlock to save experiment history.")).toBeInTheDocument();
   });
 });
 

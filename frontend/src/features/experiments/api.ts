@@ -21,8 +21,21 @@ async function requestJson<T>(url: string, init?: RequestInit): Promise<T> {
   return payload as T;
 }
 
+function adminHeaders(adminSecret?: string | null): HeadersInit {
+  return adminSecret ? { "X-Experiment-Admin-Secret": adminSecret } : {};
+}
+
 export function getExperimentCapabilities(signal?: AbortSignal): Promise<ExperimentCapabilities> {
   return requestJson<ExperimentCapabilities>("/api/experiments/capabilities", { signal });
+}
+
+export function verifyExperimentAdmin(secret: string, signal?: AbortSignal): Promise<{ authenticated: boolean }> {
+  return requestJson<{ authenticated: boolean }>("/api/experiments/admin/verify", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ secret }),
+    signal,
+  });
 }
 
 export interface CompareExperimentPayload {
@@ -34,10 +47,10 @@ export interface CompareExperimentPayload {
   include_trace?: boolean;
 }
 
-export function compareExperiment(payload: CompareExperimentPayload, signal?: AbortSignal): Promise<ExperimentCompareResponse> {
+export function compareExperiment(payload: CompareExperimentPayload, signal?: AbortSignal, adminSecret?: string | null): Promise<ExperimentCompareResponse> {
   return requestJson<ExperimentCompareResponse>("/api/experiments/compare", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...adminHeaders(adminSecret) },
     body: JSON.stringify(payload),
     signal,
   });
@@ -52,10 +65,10 @@ export interface AnswerExperimentPayload {
   include_trace?: boolean;
 }
 
-export function answerExperiment(payload: AnswerExperimentPayload, signal?: AbortSignal): Promise<ExperimentalAnswerResponse> {
+export function answerExperiment(payload: AnswerExperimentPayload, signal?: AbortSignal, adminSecret?: string | null): Promise<ExperimentalAnswerResponse> {
   return requestJson<ExperimentalAnswerResponse>("/api/experiments/answer", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...adminHeaders(adminSecret) },
     body: JSON.stringify(payload),
     signal,
   });
@@ -98,4 +111,12 @@ export function getExperimentModeRun(
   if (options.include_context_text) params.set("include_context_text", "true");
   const suffix = params.toString() ? `?${params.toString()}` : "";
   return requestJson(`/api/experiments/mode-runs/${modeRunId}${suffix}`, { signal });
+}
+
+export function deleteExperimentSession(sessionId: string, adminSecret: string, signal?: AbortSignal): Promise<{ deleted: boolean; session_id: string }> {
+  return requestJson<{ deleted: boolean; session_id: string }>(`/api/experiments/sessions/${sessionId}`, {
+    method: "DELETE",
+    headers: adminHeaders(adminSecret),
+    signal,
+  });
 }

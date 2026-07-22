@@ -1,6 +1,7 @@
 import { Outlet } from "react-router";
 import { AppSidebar } from "../components/app-sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { ExperimentAdminButton } from "@/features/experiments/ExperimentAdminButton";
 
 export default function DashboardLayout() {
   return (
@@ -11,6 +12,7 @@ export default function DashboardLayout() {
           <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 lg:px-6">
             <SidebarTrigger />
             <div className="flex-1" />
+            <ExperimentAdminButton />
             <a
               href="https://github.com/SentimentalK/RAG-Experiment"
               target="_blank"

@@ -38,6 +38,26 @@ class ExperimentCapabilities(BaseModel):
     expansion: ExperimentExpansionCapabilities
     trace_persistence_enabled: bool
     evaluation_catalog_available: bool = False
+    admin_auth_required: bool = True
+
+
+class ExperimentAdminVerifyRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    secret: str = ""
+
+
+class ExperimentAdminVerifyResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    authenticated: bool
+
+
+class ExperimentDeleteSessionResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    deleted: bool
+    session_id: UUID
 
 
 class ExperimentVariantStatus(BaseModel):

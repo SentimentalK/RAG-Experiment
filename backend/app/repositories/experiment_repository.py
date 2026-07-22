@@ -362,6 +362,14 @@ class ExperimentRepository:
                 row = cur.fetchone()
                 return dict(row) if row else None
 
+    def delete_session(self, session_id: UUID) -> bool:
+        with get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute("DELETE FROM experiment_sessions WHERE id=%s;", (session_id,))
+                deleted = cur.rowcount > 0
+            conn.commit()
+        return deleted
+
     def _update_mode_status(self, mode_run_id: UUID, status: str) -> None:
         with get_connection() as conn:
             with conn.cursor() as cur:

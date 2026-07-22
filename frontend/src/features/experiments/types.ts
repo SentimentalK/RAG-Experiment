@@ -17,6 +17,7 @@ export interface ExperimentCapabilities {
   };
   trace_persistence_enabled: boolean;
   evaluation_catalog_available: boolean;
+  admin_auth_required: boolean;
 }
 
 export interface ExpansionOptions {

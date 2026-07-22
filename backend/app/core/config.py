@@ -67,6 +67,8 @@ class Settings(BaseSettings):
     EXPERIMENT_PERSISTENCE_REQUIRED: bool = False
     EXPERIMENT_PERSISTENCE_STRICT: bool = True
     EXPERIMENT_PERSIST_FULL_TRACE: bool = True
+    EXPERIMENT_ADMIN_SECRET: str = "xx"
+    EXPERIMENT_ADMIN_AUTH_REQUIRED: bool = True
 
     # Database Settings
     DATABASE_URL: str = "postgresql://rag_user:rag_password@localhost:5432/sherlock_rag"
