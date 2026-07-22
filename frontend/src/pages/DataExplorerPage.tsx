@@ -125,8 +125,8 @@ function StoriesTab({ stories }: { stories: import("@/types/evaluation").Story[]
           </CardHeader>
           <CardContent className="p-0">
             <div className="p-6 max-h-[400px] overflow-y-auto">
-              <p className="whitespace-pre-wrap font-serif text-sm leading-relaxed text-foreground/90">
-                {story.section_text}
+              <p className="font-serif text-sm leading-relaxed text-foreground/90">
+                {collapseDisplayWhitespace(story.section_text)}
               </p>
             </div>
           </CardContent>
@@ -215,8 +215,8 @@ function ChunksTab({ chunks }: { chunks: import("@/types/evaluation").Chunk[] })
                 </div>
               </CardHeader>
               <CardContent className="p-4">
-                <p className="whitespace-pre-wrap font-serif text-sm leading-relaxed">
-                  {chunk.chunk_text}
+                <p className="font-serif text-sm leading-relaxed">
+                  {collapseDisplayWhitespace(chunk.chunk_text)}
                 </p>
               </CardContent>
             </Card>
@@ -241,4 +241,8 @@ function ChunksTab({ chunks }: { chunks: import("@/types/evaluation").Chunk[] })
       )}
     </div>
   );
+}
+
+function collapseDisplayWhitespace(text: string): string {
+  return text.replace(/\s+/g, " ").trim();
 }
