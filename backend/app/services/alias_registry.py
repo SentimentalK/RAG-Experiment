@@ -6,13 +6,28 @@ from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 from types import MappingProxyType
-from typing import Any, Mapping
+from typing import Any, Literal, Mapping
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator
 
 
 EXPECTED_ALIAS_DATASET_SHA256 = "2b16f62f2537c0703985585a8e467cda14d0790a3fad3258c31439322cfd5dd7"
 APPROVED_STATUSES = {"approved_strong", "approved_story_scoped"}
+ALLOWED_PATTERN_TAGS = {
+    "initialism",
+    "abbreviation",
+    "nickname",
+    "first_name_vs_surname",
+    "full_name_vs_surname",
+    "shortened_name",
+    "extended_name",
+    "social_title_or_name_change",
+    "domain_shorthand",
+    "low_lexical_overlap",
+    "title_only",
+    "determiner_only",
+    "already_demonstrated_gain",
+}
 DASH_CHARS = {
     "\u2010",
     "\u2011",
@@ -112,6 +127,74 @@ class CandidateFinalDisposition(BaseModel):
         return value
 
 
+class RecommendedAliasPair(BaseModel):
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    source_candidate_uid: str
+    target_candidate_uid: str
+    value: Literal["high", "medium", "low"]
+    label: str | None = None
+
+    @field_validator("source_candidate_uid", "target_candidate_uid")
+    @classmethod
+    def non_empty_uid(cls, value: str) -> str:
+        if not value or not value.strip():
+            raise ValueError("must be non-empty")
+        return value
+
+
+class ExampleAliasQuestion(BaseModel):
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    question: str
+    expected_answer: str
+    purpose: str
+
+
+class AliasGroupCurationRecord(BaseModel):
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    review_status: Literal["pending", "reviewed"]
+    retrieval_value: Literal["high", "medium", "low"] | None
+    showcase: bool
+    showcase_rank: int | None
+    pattern_tags: tuple[str, ...] = ()
+    review_note: str = ""
+    recommended_pairs: tuple[RecommendedAliasPair, ...] = ()
+    example_questions: tuple[ExampleAliasQuestion, ...] = ()
+
+    @field_validator("pattern_tags")
+    @classmethod
+    def controlled_pattern_tags(cls, value: tuple[str, ...]) -> tuple[str, ...]:
+        unknown = sorted(set(value) - ALLOWED_PATTERN_TAGS)
+        if unknown:
+            raise ValueError(f"unknown pattern tags: {unknown}")
+        return value
+
+
+class AliasCurationDocument(BaseModel):
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    schema_version: str
+    curation_version: str
+    target_alias_dataset_sha256: str
+    groups: Mapping[str, AliasGroupCurationRecord]
+
+
+class RuntimeAliasGroupCuration(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    source: Literal["explicit", "implicit_default"]
+    review_status: Literal["pending", "reviewed"]
+    retrieval_value: Literal["high", "medium", "low"] | None
+    showcase: bool
+    showcase_rank: int | None
+    pattern_tags: tuple[str, ...] = ()
+    review_note: str = ""
+    recommended_pairs: tuple[RecommendedAliasPair, ...] = ()
+    example_questions: tuple[ExampleAliasQuestion, ...] = ()
+
+
 class AliasDatasetDocument(BaseModel):
     model_config = ConfigDict(frozen=True, extra="allow")
 
@@ -189,10 +272,15 @@ class AliasDatasetSnapshot(BaseModel):
     source_file_name: str
     source_file_path: str
     sha256: str
+    curation_loaded: bool = False
+    curation_file_name: str | None = None
+    curation_sha256: str | None = None
+    curation_version: str | None = None
     loaded_at: datetime
     metadata: Mapping[str, Any]
     validation_summary: AliasValidationSummary
     groups: tuple[CompiledAliasGroup, ...]
+    curation_by_group_id: Mapping[str, RuntimeAliasGroupCuration] = Field(default_factory=dict)
     rejected_groups: tuple[Any, ...]
     excluded_candidates: tuple[Any, ...]
     singletons: tuple[Any, ...]
@@ -207,6 +295,11 @@ class AliasDatasetStatus(BaseModel):
     loaded: bool
     file_name: str
     sha256: str
+    alias_dataset_sha256: str
+    curation_loaded: bool
+    curation_file_name: str | None = None
+    curation_sha256: str | None = None
+    curation_version: str | None = None
     loaded_at: datetime
     approved_group_count: int
     approved_strong_group_count: int
@@ -215,6 +308,13 @@ class AliasDatasetStatus(BaseModel):
     normalization_only_member_count: int
     final_disposition_count: int
     validation_warning_count: int
+    explicit_curation_record_count: int = 0
+    reviewed_group_count: int = 0
+    pending_group_count: int = 0
+    showcase_group_count: int = 0
+    high_value_group_count: int = 0
+    medium_value_group_count: int = 0
+    low_value_group_count: int = 0
 
 
 def normalize_alias_surface(text: str) -> str:
@@ -254,6 +354,114 @@ def _freeze_json_value(value: Any) -> Any:
     if isinstance(value, list | tuple):
         return tuple(_freeze_json_value(item) for item in value)
     return value
+
+
+def _implicit_curation() -> RuntimeAliasGroupCuration:
+    return RuntimeAliasGroupCuration(
+        source="implicit_default",
+        review_status="pending",
+        retrieval_value=None,
+        showcase=False,
+        showcase_rank=None,
+    )
+
+
+def _load_curation_document(
+    *,
+    source_path: Path,
+    alias_sha256: str,
+    curation_path: str | Path | None,
+    curation_required: bool,
+    groups: tuple[CompiledAliasGroup, ...],
+) -> tuple[Mapping[str, RuntimeAliasGroupCuration], str | None, str | None, str | None, bool]:
+    resolved_path = Path(curation_path).expanduser().resolve() if curation_path else source_path.with_name("sherlock_alias_group_curation.json")
+    if not resolved_path.exists():
+        if curation_required:
+            raise AliasDatasetError(f"Alias curation file not found: {resolved_path}")
+        return MappingProxyType({group.group_id: _implicit_curation() for group in groups}), None, None, None, False
+
+    raw_bytes = resolved_path.read_bytes()
+    curation_sha256 = hashlib.sha256(raw_bytes).hexdigest()
+    try:
+        raw_document = json.loads(raw_bytes)
+    except json.JSONDecodeError as exc:
+        raise AliasDatasetError(f"Alias curation is not valid JSON: {exc}") from exc
+    try:
+        document = AliasCurationDocument.model_validate(raw_document)
+    except ValidationError as exc:
+        raise AliasDatasetError(f"Alias curation schema validation failed: {exc}") from exc
+
+    if document.target_alias_dataset_sha256 != alias_sha256:
+        raise AliasDatasetError(
+            "Alias curation target_alias_dataset_sha256 does not match loaded alias dataset SHA-256"
+        )
+
+    group_by_id = {group.group_id: group for group in groups}
+    unknown_group_ids = sorted(set(document.groups) - set(group_by_id))
+    if unknown_group_ids:
+        raise AliasDatasetError(f"Alias curation references unknown group_id values: {unknown_group_ids}")
+
+    ranks: dict[int, str] = {}
+    runtime: dict[str, RuntimeAliasGroupCuration] = {}
+    for group in groups:
+        record = document.groups.get(group.group_id)
+        if record is None:
+            runtime[group.group_id] = _implicit_curation()
+            continue
+        _validate_curation_record(group, record, ranks)
+        runtime[group.group_id] = RuntimeAliasGroupCuration(
+            source="explicit",
+            review_status=record.review_status,
+            retrieval_value=record.retrieval_value,
+            showcase=record.showcase,
+            showcase_rank=record.showcase_rank,
+            pattern_tags=record.pattern_tags,
+            review_note=record.review_note,
+            recommended_pairs=record.recommended_pairs,
+            example_questions=record.example_questions,
+        )
+
+    return MappingProxyType(runtime), resolved_path.name, curation_sha256, document.curation_version, True
+
+
+def _validate_curation_record(
+    group: CompiledAliasGroup,
+    record: AliasGroupCurationRecord,
+    showcase_ranks: dict[int, str],
+) -> None:
+    if record.showcase:
+        if record.showcase_rank is None or record.showcase_rank <= 0:
+            raise AliasDatasetError(f"{group.group_id}: showcase=true requires a positive showcase_rank")
+        if record.showcase_rank in showcase_ranks:
+            raise AliasDatasetError(
+                f"duplicate showcase_rank {record.showcase_rank}: {showcase_ranks[record.showcase_rank]} and {group.group_id}"
+            )
+        showcase_ranks[record.showcase_rank] = group.group_id
+    elif record.showcase_rank is not None:
+        raise AliasDatasetError(f"{group.group_id}: showcase=false requires showcase_rank=null")
+
+    members = {member.candidate_uid: member for member in group.members}
+    seen_pairs: set[tuple[str, str]] = set()
+    for pair in record.recommended_pairs:
+        key = (pair.source_candidate_uid, pair.target_candidate_uid)
+        if key in seen_pairs:
+            raise AliasDatasetError(f"{group.group_id}: duplicate recommended pair {key}")
+        seen_pairs.add(key)
+        if pair.source_candidate_uid == pair.target_candidate_uid:
+            raise AliasDatasetError(f"{group.group_id}: recommended pair source and target must differ")
+        source = members.get(pair.source_candidate_uid)
+        target = members.get(pair.target_candidate_uid)
+        if source is None or target is None:
+            raise AliasDatasetError(f"{group.group_id}: recommended pair UID does not belong to the group")
+        for role, member in (("source", source), ("target", target)):
+            if not member.same_entity:
+                raise AliasDatasetError(f"{group.group_id}: recommended pair {role} member is not same_entity")
+            if not member.safe_to_substitute:
+                raise AliasDatasetError(f"{group.group_id}: recommended pair {role} member is not safe_to_substitute")
+            if "do_not_generate" in member.substitution_constraints:
+                raise AliasDatasetError(f"{group.group_id}: recommended pair {role} member has do_not_generate")
+        if source.normalized_surface == target.normalized_surface:
+            raise AliasDatasetError(f"{group.group_id}: recommended pair source and target surfaces normalize identically")
 
 
 def _validate_document_semantics(document: AliasDatasetDocument, strict: bool) -> AliasValidationSummary:
@@ -498,6 +706,8 @@ class AliasRegistry:
         *,
         expected_sha256: str | None = EXPECTED_ALIAS_DATASET_SHA256,
         strict_validation: bool = True,
+        curation_path: str | Path | None = None,
+        curation_required: bool = False,
     ) -> "AliasRegistry":
         source_path = Path(path).expanduser().resolve()
         try:
@@ -553,6 +763,20 @@ class AliasRegistry:
         if compiled_errors:
             raise AliasDatasetError("; ".join(compiled_errors))
 
+        (
+            curation_by_group_id,
+            curation_file_name,
+            curation_sha256,
+            curation_version,
+            curation_loaded,
+        ) = _load_curation_document(
+            source_path=source_path,
+            alias_sha256=actual_sha256,
+            curation_path=curation_path,
+            curation_required=curation_required,
+            groups=compiled_groups,
+        )
+
         final_summary = AliasValidationSummary(
             errors=(),
             warnings=tuple(sorted(compiled_warnings)),
@@ -562,10 +786,15 @@ class AliasRegistry:
             source_file_name=source_path.name,
             source_file_path=str(source_path),
             sha256=actual_sha256,
+            curation_loaded=curation_loaded,
+            curation_file_name=curation_file_name,
+            curation_sha256=curation_sha256,
+            curation_version=curation_version,
             loaded_at=datetime.now(timezone.utc),
             metadata=MappingProxyType(dict(document.metadata)),
             validation_summary=final_summary,
             groups=compiled_groups,
+            curation_by_group_id=curation_by_group_id,
             rejected_groups=_freeze_json_value(document.rejected_groups),
             excluded_candidates=_freeze_json_value(document.excluded_candidates),
             singletons=_freeze_json_value(document.singletons),
@@ -643,6 +872,9 @@ class AliasRegistry:
             return ()
         return group.generatable_members
 
+    def get_curation(self, group_id: str) -> RuntimeAliasGroupCuration:
+        return self.snapshot.curation_by_group_id.get(group_id, _implicit_curation())
+
     def get_groups_for_story(self, story_id: str) -> tuple[CompiledAliasGroup, ...]:
         return self.groups_by_story_id.get(story_id, ())
 
@@ -652,10 +884,16 @@ class AliasRegistry:
 
     def get_status(self) -> AliasDatasetStatus:
         counts = self.snapshot.validation_summary.computed_counts
+        curation_records = tuple(self.snapshot.curation_by_group_id.values())
         return AliasDatasetStatus(
             loaded=True,
             file_name=self.snapshot.source_file_name,
             sha256=self.snapshot.sha256,
+            alias_dataset_sha256=self.snapshot.sha256,
+            curation_loaded=self.snapshot.curation_loaded,
+            curation_file_name=self.snapshot.curation_file_name,
+            curation_sha256=self.snapshot.curation_sha256,
+            curation_version=self.snapshot.curation_version,
             loaded_at=self.snapshot.loaded_at,
             approved_group_count=counts["approved_group_count"],
             approved_strong_group_count=counts["approved_strong_group_count"],
@@ -664,6 +902,13 @@ class AliasRegistry:
             normalization_only_member_count=counts["active_normalization_only_member_count"],
             final_disposition_count=counts["final_disposition_count"],
             validation_warning_count=len(self.snapshot.validation_summary.warnings),
+            explicit_curation_record_count=sum(1 for record in curation_records if record.source == "explicit"),
+            reviewed_group_count=sum(1 for record in curation_records if record.review_status == "reviewed"),
+            pending_group_count=sum(1 for record in curation_records if record.review_status == "pending"),
+            showcase_group_count=sum(1 for record in curation_records if record.showcase),
+            high_value_group_count=sum(1 for record in curation_records if record.retrieval_value == "high"),
+            medium_value_group_count=sum(1 for record in curation_records if record.retrieval_value == "medium"),
+            low_value_group_count=sum(1 for record in curation_records if record.retrieval_value == "low"),
         )
 
 

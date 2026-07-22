@@ -27,6 +27,7 @@ COPY data/artifacts/embedding_ingestion_report.json ./data/artifacts/embedding_i
 
 # Copy frozen alias dataset used by the runtime AliasRegistry
 COPY experiments/noun_units_v2a/candidates/review/sherlock_entity_alias_groups_final.json ./experiments/noun_units_v2a/candidates/review/sherlock_entity_alias_groups_final.json
+COPY experiments/noun_units_v2a/candidates/review/sherlock_alias_group_curation.json ./experiments/noun_units_v2a/candidates/review/sherlock_alias_group_curation.json
 
 
 EXPOSE 8000

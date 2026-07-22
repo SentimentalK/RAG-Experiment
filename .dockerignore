@@ -33,3 +33,4 @@ experiments/noun_units_v2a/candidates/*
 !experiments/noun_units_v2a/candidates/review/
 experiments/noun_units_v2a/candidates/review/*
 !experiments/noun_units_v2a/candidates/review/sherlock_entity_alias_groups_final.json
+!experiments/noun_units_v2a/candidates/review/sherlock_alias_group_curation.json

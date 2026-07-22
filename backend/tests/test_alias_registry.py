@@ -123,6 +123,37 @@ def write_dataset(tmp_path: Path, document: dict) -> Path:
     return path
 
 
+def write_curation(path: Path, alias_sha: str, groups: dict) -> Path:
+    curation_path = path.with_name("sherlock_alias_group_curation.json")
+    curation_path.write_text(
+        json.dumps(
+            {
+                "schema_version": "1.0",
+                "curation_version": "test-curation",
+                "target_alias_dataset_sha256": alias_sha,
+                "groups": groups,
+            }
+        ),
+        encoding="utf-8",
+    )
+    return curation_path
+
+
+def curation_record(**overrides) -> dict:
+    record = {
+        "review_status": "reviewed",
+        "retrieval_value": "high",
+        "showcase": True,
+        "showcase_rank": 1,
+        "pattern_tags": ["initialism"],
+        "review_note": "Reviewed.",
+        "recommended_pairs": [],
+        "example_questions": [],
+    }
+    record.update(overrides)
+    return record
+
+
 def load_fixture(tmp_path: Path, document: dict | None = None, *, strict: bool = True) -> AliasRegistry:
     path = write_dataset(tmp_path, document or make_document())
     return AliasRegistry.load(path, expected_sha256=None, strict_validation=strict)
@@ -148,6 +179,14 @@ def test_loads_frozen_alias_dataset_counts_and_known_groups():
 
     status = registry.get_status()
     assert status.sha256 == EXPECTED_ALIAS_DATASET_SHA256
+    assert status.alias_dataset_sha256 == EXPECTED_ALIAS_DATASET_SHA256
+    assert status.curation_loaded is True
+    assert status.curation_version == "sherlock-alias-curation-v1"
+    assert status.explicit_curation_record_count == 20
+    assert status.showcase_group_count == 10
+    assert status.high_value_group_count == 10
+    assert status.low_value_group_count == 10
+    assert status.pending_group_count == 67
     assert status.approved_group_count == 87
     assert status.approved_strong_group_count == 5
     assert status.approved_story_scoped_group_count == 82
@@ -288,6 +327,102 @@ def test_surface_conflict_fixture_marks_non_unique_and_returns_both(tmp_path):
     assert any("surface conflict" in warning for warning in registry.snapshot.validation_summary.warnings)
 
 
+def test_curation_defaults_and_validation_errors(tmp_path):
+    document = make_document()
+    path = write_dataset(tmp_path, document)
+    alias_sha = hashlib.sha256(path.read_bytes()).hexdigest()
+
+    registry = AliasRegistry.load(path, expected_sha256=None)
+    default = registry.get_curation("entity-alpha")
+    assert default.source == "implicit_default"
+    assert default.review_status == "pending"
+    assert default.retrieval_value is None
+
+    bad_path = tmp_path / "missing-curation.json"
+    with pytest.raises(AliasDatasetError, match="curation file not found"):
+        AliasRegistry.load(path, expected_sha256=None, curation_path=bad_path, curation_required=True)
+
+    write_curation(path, "bad-sha", {})
+    with pytest.raises(AliasDatasetError, match="target_alias_dataset_sha256"):
+        AliasRegistry.load(path, expected_sha256=None, curation_required=True)
+
+    write_curation(path, alias_sha, {"entity-alpha": curation_record(pattern_tags=["initials"])})
+    with pytest.raises(AliasDatasetError, match="unknown pattern tags"):
+        AliasRegistry.load(path, expected_sha256=None, curation_required=True)
+
+    write_curation(path, alias_sha, {"entity-alpha": curation_record(showcase=True, showcase_rank=None)})
+    with pytest.raises(AliasDatasetError, match="requires a positive showcase_rank"):
+        AliasRegistry.load(path, expected_sha256=None, curation_required=True)
+
+    write_curation(path, alias_sha, {"entity-alpha": curation_record(showcase=False, showcase_rank=1)})
+    with pytest.raises(AliasDatasetError, match="showcase=false"):
+        AliasRegistry.load(path, expected_sha256=None, curation_required=True)
+
+    write_curation(
+        path,
+        alias_sha,
+        {
+            "entity-alpha": curation_record(
+                recommended_pairs=[
+                    {
+                        "source_candidate_uid": "uid-alpha",
+                        "target_candidate_uid": "uid-alpha",
+                        "value": "high",
+                        "label": None,
+                    }
+                ]
+            )
+        },
+    )
+    with pytest.raises(AliasDatasetError, match="source and target must differ"):
+        AliasRegistry.load(path, expected_sha256=None, curation_required=True)
+
+    write_curation(
+        path,
+        alias_sha,
+        {
+            "entity-alpha": curation_record(
+                recommended_pairs=[
+                    {
+                        "source_candidate_uid": "uid-alpha-raw",
+                        "target_candidate_uid": "uid-alpha",
+                        "value": "high",
+                        "label": None,
+                    }
+                ]
+            )
+        },
+    )
+    with pytest.raises(AliasDatasetError, match="not safe_to_substitute"):
+        AliasRegistry.load(path, expected_sha256=None, curation_required=True)
+
+
+def test_curation_showcase_filter_orders_by_rank():
+    registry = AliasRegistry.load(
+        settings.ALIAS_DATASET_PATH,
+        expected_sha256=EXPECTED_ALIAS_DATASET_SHA256,
+        strict_validation=True,
+    )
+    app.dependency_overrides[get_alias_registry] = lambda: registry
+    try:
+        client = TestClient(app)
+        response = client.get("/api/aliases/groups", params={"showcase_only": "true", "limit": 3})
+        assert response.status_code == 200
+        payload = response.json()
+        assert [group["group_id"] for group in payload["groups"]] == [
+            "entity-lone-star",
+            "entity-ku-klux-klan",
+            "entity-francis-hay-moulton",
+        ]
+        assert [group["curation"]["showcase_rank"] for group in payload["groups"]] == [1, 2, 3]
+
+        not_reviewed = client.get("/api/aliases/groups", params={"retrieval_value": "not_reviewed", "limit": 1})
+        assert not_reviewed.status_code == 200
+        assert not_reviewed.json()["groups"][0]["curation"]["retrieval_value"] is None
+    finally:
+        app.dependency_overrides.clear()
+
+
 def test_groups_by_story_excludes_global_groups(tmp_path):
     document = make_document(
         [
@@ -327,6 +462,8 @@ def test_alias_api_status_groups_lookup_and_no_absolute_path():
         assert status_json["file_name"] == "sherlock_entity_alias_groups_final.json"
         assert "source_file_path" not in status_json
         assert status_json["generatable_member_count"] == 226
+        assert status_json["curation_loaded"] is True
+        assert status_json["curation_sha256"]
 
         groups = client.get("/api/aliases/groups", params={"search": "Holmes", "limit": 5})
         assert groups.status_code == 200
@@ -337,6 +474,7 @@ def test_alias_api_status_groups_lookup_and_no_absolute_path():
         assert detail.status_code == 200
         assert detail.json()["group_id"] == "entity-sherlock-holmes"
         assert detail.json()["generatable_member_count"] >= 2
+        assert detail.json()["curation"]["source"] == "implicit_default"
 
         lookup = client.get("/api/aliases/lookup", params={"surface": "this K. K. K."})
         assert lookup.status_code == 200
@@ -355,6 +493,15 @@ def test_lifespan_loads_alias_registry_once(monkeypatch):
     fake_registry.get_status.return_value.generatable_member_count = 2
     fake_registry.get_status.return_value.normalization_only_member_count = 0
     fake_registry.get_status.return_value.validation_warning_count = 0
+    fake_registry.get_status.return_value.curation_loaded = True
+    fake_registry.get_status.return_value.curation_file_name = "curation.json"
+    fake_registry.get_status.return_value.curation_sha256 = "curation-sha"
+    fake_registry.get_status.return_value.curation_version = "test-curation"
+    fake_registry.get_status.return_value.explicit_curation_record_count = 1
+    fake_registry.get_status.return_value.showcase_group_count = 1
+    fake_registry.get_status.return_value.high_value_group_count = 1
+    fake_registry.get_status.return_value.low_value_group_count = 0
+    fake_registry.get_status.return_value.pending_group_count = 0
     fake_registry.snapshot.source_file_path = "/tmp/aliases.json"
 
     load_mock = MagicMock(return_value=fake_registry)

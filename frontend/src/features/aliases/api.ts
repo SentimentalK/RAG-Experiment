@@ -14,7 +14,18 @@ export function getAliasStatus(signal?: AbortSignal): Promise<AliasStatus> {
 }
 
 export function listAliasGroups(
-  filters: { scope?: string; entity_type?: string; story_id?: string; search?: string; limit?: number; offset?: number },
+  filters: {
+    scope?: string;
+    entity_type?: string;
+    story_id?: string;
+    search?: string;
+    showcase_only?: boolean;
+    review_status?: string;
+    retrieval_value?: string;
+    pattern_tag?: string;
+    limit?: number;
+    offset?: number;
+  },
   signal?: AbortSignal,
 ): Promise<AliasGroupsResponse> {
   const params = new URLSearchParams();

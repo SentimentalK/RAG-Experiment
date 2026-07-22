@@ -1,0 +1,254 @@
+{
+  "schema_version": "1.0",
+  "curation_version": "sherlock-alias-curation-v1",
+  "target_alias_dataset_sha256": "2b16f62f2537c0703985585a8e467cda14d0790a3fad3258c31439322cfd5dd7",
+  "groups": {
+    "entity-lone-star": {
+      "review_status": "reviewed",
+      "retrieval_value": "high",
+      "showcase": true,
+      "showcase_rank": 1,
+      "pattern_tags": ["initialism", "extended_name", "low_lexical_overlap", "already_demonstrated_gain"],
+      "review_note": "Strong demo group for initials and fuller vessel names. Useful for showing low lexical overlap between a query mention and corpus wording.",
+      "recommended_pairs": [
+        {
+          "source_candidate_uid": "nc_18336b097881ea5a",
+          "target_candidate_uid": "nc_67c7b7b7e0a2fc7e",
+          "value": "high",
+          "label": null
+        },
+        {
+          "source_candidate_uid": "nc_18336b097881ea5a",
+          "target_candidate_uid": "nc_813bbc021d9099a3",
+          "value": "high",
+          "label": null
+        }
+      ],
+      "example_questions": []
+    },
+    "entity-ku-klux-klan": {
+      "review_status": "reviewed",
+      "retrieval_value": "high",
+      "showcase": true,
+      "showcase_rank": 2,
+      "pattern_tags": ["initialism", "abbreviation", "low_lexical_overlap", "already_demonstrated_gain"],
+      "review_note": "Strong demo group for initials that expand into the full organization name.",
+      "recommended_pairs": [
+        {
+          "source_candidate_uid": "nc_f3dd4d99e2f6bcea",
+          "target_candidate_uid": "nc_62a87f6516b756bd",
+          "value": "high",
+          "label": null
+        }
+      ],
+      "example_questions": []
+    },
+    "entity-francis-hay-moulton": {
+      "review_status": "reviewed",
+      "retrieval_value": "high",
+      "showcase": true,
+      "showcase_rank": 3,
+      "pattern_tags": ["nickname", "abbreviation", "low_lexical_overlap"],
+      "review_note": "Good person-name demo covering nickname and abbreviated middle initial variants.",
+      "recommended_pairs": [
+        {
+          "source_candidate_uid": "nc_77646f5a4f316663",
+          "target_candidate_uid": "nc_b598cdaaa5d39495",
+          "value": "high",
+          "label": null
+        },
+        {
+          "source_candidate_uid": "nc_a6de746150078804",
+          "target_candidate_uid": "nc_b598cdaaa5d39495",
+          "value": "high",
+          "label": null
+        }
+      ],
+      "example_questions": []
+    },
+    "entity-elias-openshaw": {
+      "review_status": "reviewed",
+      "retrieval_value": "high",
+      "showcase": true,
+      "showcase_rank": 4,
+      "pattern_tags": ["first_name_vs_surname", "social_title_or_name_change"],
+      "review_note": "Useful story-scoped person-name example where a first name can map to a titled surname form.",
+      "recommended_pairs": [
+        {
+          "source_candidate_uid": "nc_de7ee76e7373c19b",
+          "target_candidate_uid": "nc_f839136de3d7fb04",
+          "value": "high",
+          "label": null
+        }
+      ],
+      "example_questions": []
+    },
+    "entity-jephro-rucastle": {
+      "review_status": "reviewed",
+      "retrieval_value": "high",
+      "showcase": true,
+      "showcase_rank": 5,
+      "pattern_tags": ["first_name_vs_surname", "social_title_or_name_change"],
+      "review_note": "Useful story-scoped person-name example where a rare first name maps to a title plus surname mention.",
+      "recommended_pairs": [
+        {
+          "source_candidate_uid": "nc_d60f7ebb613c94c8",
+          "target_candidate_uid": "nc_84821fe4c822c2cb",
+          "value": "high",
+          "label": null
+        }
+      ],
+      "example_questions": []
+    },
+    "entity-hatty-doran": {
+      "review_status": "reviewed",
+      "retrieval_value": "high",
+      "showcase": true,
+      "showcase_rank": 6,
+      "pattern_tags": ["nickname", "social_title_or_name_change"],
+      "review_note": "Good showcase candidate for personal-name variation in a story-scoped setting.",
+      "recommended_pairs": [],
+      "example_questions": []
+    },
+    "entity-alpha-inn": {
+      "review_status": "reviewed",
+      "retrieval_value": "high",
+      "showcase": true,
+      "showcase_rank": 7,
+      "pattern_tags": ["domain_shorthand", "determiner_only"],
+      "review_note": "Useful place-name example for venue references and determiner variants.",
+      "recommended_pairs": [],
+      "example_questions": []
+    },
+    "entity-encyclopaedia-britannica": {
+      "review_status": "reviewed",
+      "retrieval_value": "high",
+      "showcase": true,
+      "showcase_rank": 8,
+      "pattern_tags": ["domain_shorthand", "low_lexical_overlap"],
+      "review_note": "Useful object/publication example with spelling and lexical variation.",
+      "recommended_pairs": [],
+      "example_questions": []
+    },
+    "entity-colonel-lysander-stark": {
+      "review_status": "reviewed",
+      "retrieval_value": "high",
+      "showcase": true,
+      "showcase_rank": 9,
+      "pattern_tags": ["full_name_vs_surname", "social_title_or_name_change"],
+      "review_note": "Strong person-name group for title and full-name variation.",
+      "recommended_pairs": [],
+      "example_questions": []
+    },
+    "entity-lord-robert-st-simon": {
+      "review_status": "reviewed",
+      "retrieval_value": "high",
+      "showcase": true,
+      "showcase_rank": 10,
+      "pattern_tags": ["full_name_vs_surname", "social_title_or_name_change"],
+      "review_note": "Strong titled-person group for social title and name variation.",
+      "recommended_pairs": [],
+      "example_questions": []
+    },
+    "entity-h-division": {
+      "review_status": "reviewed",
+      "retrieval_value": "low",
+      "showcase": false,
+      "showcase_rank": null,
+      "pattern_tags": ["domain_shorthand"],
+      "review_note": "Low priority for demo use; likely less useful for retrieval improvement.",
+      "recommended_pairs": [],
+      "example_questions": []
+    },
+    "entity-aberdeen-shipping-company": {
+      "review_status": "reviewed",
+      "retrieval_value": "low",
+      "showcase": false,
+      "showcase_rank": null,
+      "pattern_tags": ["determiner_only"],
+      "review_note": "Mostly exact or determiner variation; low expected retrieval demonstration value.",
+      "recommended_pairs": [],
+      "example_questions": []
+    },
+    "entity-beryl-coronet": {
+      "review_status": "reviewed",
+      "retrieval_value": "low",
+      "showcase": false,
+      "showcase_rank": null,
+      "pattern_tags": ["determiner_only"],
+      "review_note": "Specific object name, but current variants are unlikely to show a distinctive alias retrieval gain.",
+      "recommended_pairs": [],
+      "example_questions": []
+    },
+    "entity-inner-temple": {
+      "review_status": "reviewed",
+      "retrieval_value": "low",
+      "showcase": false,
+      "showcase_rank": null,
+      "pattern_tags": ["domain_shorthand"],
+      "review_note": "Low priority for demo use; likely limited lexical variation.",
+      "recommended_pairs": [],
+      "example_questions": []
+    },
+    "entity-amateur-mendicant-society": {
+      "review_status": "reviewed",
+      "retrieval_value": "low",
+      "showcase": false,
+      "showcase_rank": null,
+      "pattern_tags": ["domain_shorthand"],
+      "review_note": "Low priority for demo use until manually shown to improve retrieval.",
+      "recommended_pairs": [],
+      "example_questions": []
+    },
+    "entity-arabian-nights": {
+      "review_status": "reviewed",
+      "retrieval_value": "low",
+      "showcase": false,
+      "showcase_rank": null,
+      "pattern_tags": ["domain_shorthand"],
+      "review_note": "Known title/reference, but low expected value for alias expansion demonstration.",
+      "recommended_pairs": [],
+      "example_questions": []
+    },
+    "entity-bengal-artillery": {
+      "review_status": "reviewed",
+      "retrieval_value": "low",
+      "showcase": false,
+      "showcase_rank": null,
+      "pattern_tags": ["domain_shorthand"],
+      "review_note": "Low priority for demo use; likely not a strong alias-retrieval example.",
+      "recommended_pairs": [],
+      "example_questions": []
+    },
+    "entity-bermuda-dockyard": {
+      "review_status": "reviewed",
+      "retrieval_value": "low",
+      "showcase": false,
+      "showcase_rank": null,
+      "pattern_tags": ["domain_shorthand"],
+      "review_note": "Low priority location/reference group for retrieval demos.",
+      "recommended_pairs": [],
+      "example_questions": []
+    },
+    "entity-black-swan-hotel": {
+      "review_status": "reviewed",
+      "retrieval_value": "low",
+      "showcase": false,
+      "showcase_rank": null,
+      "pattern_tags": ["domain_shorthand", "determiner_only"],
+      "review_note": "Venue name with limited useful variation; low showcase value for now.",
+      "recommended_pairs": [],
+      "example_questions": []
+    },
+    "entity-crown-inn": {
+      "review_status": "reviewed",
+      "retrieval_value": "low",
+      "showcase": false,
+      "showcase_rank": null,
+      "pattern_tags": ["domain_shorthand", "determiner_only"],
+      "review_note": "Venue name with limited useful variation; low showcase value for now.",
+      "recommended_pairs": [],
+      "example_questions": []
+    }
+  }
+}

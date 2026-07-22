@@ -8,6 +8,7 @@ from app.services.alias_registry import (
     AliasMemberReference,
     AliasRegistry,
     CompiledAliasGroup,
+    RuntimeAliasGroupCuration,
     normalize_alias_surface,
 )
 from app.services.expanded_retrieval_service import ExpandedRetrievalError, ExpandedRetrievalService
@@ -58,7 +59,21 @@ def _member_payload(member: AliasMemberReference) -> dict:
     }
 
 
-def _group_summary(group: CompiledAliasGroup) -> dict:
+def _curation_payload(curation: RuntimeAliasGroupCuration) -> dict:
+    return {
+        "source": curation.source,
+        "review_status": curation.review_status,
+        "retrieval_value": curation.retrieval_value,
+        "showcase": curation.showcase,
+        "showcase_rank": curation.showcase_rank,
+        "pattern_tags": list(curation.pattern_tags),
+        "review_note": curation.review_note,
+        "recommended_pairs": [pair.model_dump(mode="json") for pair in curation.recommended_pairs],
+        "example_questions": [question.model_dump(mode="json") for question in curation.example_questions],
+    }
+
+
+def _group_summary(group: CompiledAliasGroup, curation: RuntimeAliasGroupCuration) -> dict:
     canonical_surface = normalize_alias_surface(group.canonical_name)
     return {
         "group_id": group.group_id,
@@ -75,11 +90,12 @@ def _group_summary(group: CompiledAliasGroup) -> dict:
         "member_count": len(group.members),
         "generatable_member_count": len(group.generatable_members),
         "normalization_only_member_count": len(group.normalization_only_members),
+        "curation": _curation_payload(curation),
     }
 
 
-def _group_detail(group: CompiledAliasGroup) -> dict:
-    payload = _group_summary(group)
+def _group_detail(group: CompiledAliasGroup, curation: RuntimeAliasGroupCuration) -> dict:
+    payload = _group_summary(group, curation)
     payload.update(
         {
             "group_review_reason": group.group_review_reason,
@@ -104,6 +120,10 @@ def list_alias_groups(
     entity_type: str | None = None,
     story_id: str | None = None,
     search: str | None = None,
+    showcase_only: bool = False,
+    review_status: str | None = None,
+    retrieval_value: str | None = None,
+    pattern_tag: str | None = None,
     limit: Annotated[int, Query(ge=1, le=200)] = 50,
     offset: Annotated[int, Query(ge=0)] = 0,
 ) -> dict:
@@ -114,6 +134,17 @@ def list_alias_groups(
         groups = [group for group in groups if group.entity_type == entity_type]
     if story_id is not None:
         groups = [group for group in groups if story_id in group.story_ids]
+    if showcase_only:
+        groups = [group for group in groups if registry.get_curation(group.group_id).showcase]
+    if review_status is not None:
+        groups = [group for group in groups if registry.get_curation(group.group_id).review_status == review_status]
+    if retrieval_value is not None:
+        if retrieval_value == "not_reviewed":
+            groups = [group for group in groups if registry.get_curation(group.group_id).retrieval_value is None]
+        else:
+            groups = [group for group in groups if registry.get_curation(group.group_id).retrieval_value == retrieval_value]
+    if pattern_tag is not None:
+        groups = [group for group in groups if pattern_tag in registry.get_curation(group.group_id).pattern_tags]
     if search:
         needle = search.casefold()
         groups = [
@@ -124,14 +155,24 @@ def list_alias_groups(
             or any(needle in member.candidate_text.casefold() for member in group.members)
         ]
 
-    groups = sorted(groups, key=lambda group: (group.canonical_name.casefold(), group.group_id))
+    if showcase_only:
+        groups = sorted(
+            groups,
+            key=lambda group: (
+                registry.get_curation(group.group_id).showcase_rank or 10**9,
+                group.canonical_name.casefold(),
+                group.group_id,
+            ),
+        )
+    else:
+        groups = sorted(groups, key=lambda group: (group.canonical_name.casefold(), group.group_id))
     total = len(groups)
     page = groups[offset : offset + limit]
     return {
         "total": total,
         "limit": limit,
         "offset": offset,
-        "groups": [_group_summary(group) for group in page],
+        "groups": [_group_summary(group, registry.get_curation(group.group_id)) for group in page],
     }
 
 
@@ -140,7 +181,7 @@ def get_alias_group(group_id: str, registry: AliasRegistry = Depends(get_alias_r
     group = registry.get_group(group_id)
     if group is None:
         raise HTTPException(status_code=404, detail="Alias group not found")
-    return _group_detail(group)
+    return _group_detail(group, registry.get_curation(group_id))
 
 
 @router.get("/lookup")

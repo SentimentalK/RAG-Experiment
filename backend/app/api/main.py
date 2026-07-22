@@ -31,6 +31,8 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         settings.ALIAS_DATASET_PATH,
         expected_sha256=settings.ALIAS_DATASET_EXPECTED_SHA256 or None,
         strict_validation=settings.ALIAS_DATASET_STRICT_VALIDATION,
+        curation_path=settings.ALIAS_CURATION_PATH,
+        curation_required=settings.ALIAS_CURATION_REQUIRED,
     )
     alias_status = alias_registry.get_status()
     logger.info(
@@ -44,6 +46,19 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         alias_status.generatable_member_count,
         alias_status.normalization_only_member_count,
         alias_status.validation_warning_count,
+    )
+    logger.info(
+        "Alias curation loaded loaded=%s file=%s sha256=%s version=%s explicit_records=%s "
+        "showcase_groups=%s reviewed_high=%s reviewed_low=%s pending_groups=%s",
+        alias_status.curation_loaded,
+        alias_status.curation_file_name,
+        alias_status.curation_sha256,
+        alias_status.curation_version,
+        alias_status.explicit_curation_record_count,
+        alias_status.showcase_group_count,
+        alias_status.high_value_group_count,
+        alias_status.low_value_group_count,
+        alias_status.pending_group_count,
     )
 
     query_expansion_service = QueryExpansionService(

@@ -30,6 +30,8 @@ class Settings(BaseSettings):
         / "review"
         / "sherlock_entity_alias_groups_final.json"
     )
+    ALIAS_CURATION_PATH: Path | None = None
+    ALIAS_CURATION_REQUIRED: bool = True
     ALIAS_DATASET_EXPECTED_SHA256: str = "2b16f62f2537c0703985585a8e467cda14d0790a3fad3258c31439322cfd5dd7"
     ALIAS_DATASET_STRICT_VALIDATION: bool = True
 

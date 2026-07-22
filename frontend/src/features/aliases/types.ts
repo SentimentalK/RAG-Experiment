@@ -2,6 +2,11 @@ export interface AliasStatus {
   loaded: boolean;
   file_name: string;
   sha256: string;
+  alias_dataset_sha256: string;
+  curation_loaded: boolean;
+  curation_file_name: string | null;
+  curation_sha256: string | null;
+  curation_version: string | null;
   expected_sha256: string | null;
   strict_validation: boolean;
   approved_group_count: number;
@@ -11,6 +16,13 @@ export interface AliasStatus {
   normalization_only_member_count: number;
   final_disposition_count: number;
   validation_warning_count: number;
+  explicit_curation_record_count: number;
+  reviewed_group_count: number;
+  pending_group_count: number;
+  showcase_group_count: number;
+  high_value_group_count: number;
+  medium_value_group_count: number;
+  low_value_group_count: number;
   loaded_at: string;
 }
 
@@ -38,6 +50,31 @@ export interface AliasMember {
   review_reason: string | null;
 }
 
+export interface RecommendedAliasPair {
+  source_candidate_uid: string;
+  target_candidate_uid: string;
+  value: "high" | "medium" | "low";
+  label: string | null;
+}
+
+export interface ExampleAliasQuestion {
+  question: string;
+  expected_answer: string;
+  purpose: string;
+}
+
+export interface AliasGroupCuration {
+  source: "explicit" | "implicit_default";
+  review_status: "pending" | "reviewed";
+  retrieval_value: "high" | "medium" | "low" | null;
+  showcase: boolean;
+  showcase_rank: number | null;
+  pattern_tags: string[];
+  review_note: string;
+  recommended_pairs: RecommendedAliasPair[];
+  example_questions: ExampleAliasQuestion[];
+}
+
 export interface AliasGroupSummary {
   group_id: string;
   canonical_name: string;
@@ -51,6 +88,7 @@ export interface AliasGroupSummary {
   member_count: number;
   generatable_member_count: number;
   normalization_only_member_count: number;
+  curation: AliasGroupCuration;
 }
 
 export interface AliasGroupDetail extends AliasGroupSummary {

@@ -31,6 +31,10 @@ export default function AliasExplorerPage({ embedded = false }: { embedded?: boo
       scope: params.get("scope") ?? "",
       entity_type: params.get("entity_type") ?? "",
       story_id: params.get("story_id") ?? "",
+      showcase_only: params.get("showcase_only") === "true",
+      review_status: params.get("review_status") ?? "",
+      retrieval_value: params.get("retrieval_value") ?? "",
+      pattern_tag: params.get("pattern_tag") ?? "",
       limit: clampNumber(params.get("limit"), 50, 1, 200),
       offset: clampNumber(params.get("offset"), 0, 0, Number.MAX_SAFE_INTEGER),
     }),
@@ -40,10 +44,13 @@ export default function AliasExplorerPage({ embedded = false }: { embedded?: boo
   const scopeOptions = useMemo(() => uniqueOptions(allGroups.map((group) => group.scope)), [allGroups]);
   const entityTypeOptions = useMemo(() => uniqueOptions(allGroups.map((group) => group.entity_type)), [allGroups]);
   const storyOptions = useMemo(() => uniqueOptions(allGroups.flatMap((group) => group.story_ids)), [allGroups]);
+  const patternTagOptions = useMemo(() => uniqueOptions(allGroups.flatMap((group) => group.curation.pattern_tags)), [allGroups]);
   const searchOptions = useMemo(
     () => [...allGroups].sort((a, b) => a.canonical_name.localeCompare(b.canonical_name) || a.group_id.localeCompare(b.group_id)),
     [allGroups],
   );
+  const detailBasePath = embedded ? "/data/aliases/groups" : "/aliases/groups";
+  const detailSearch = params.toString();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -142,8 +149,13 @@ export default function AliasExplorerPage({ embedded = false }: { embedded?: boo
           </form>
           {lookup && (
             <div className="grid gap-3 md:grid-cols-2">
-              <LookupColumn title="Generatable" members={lookup.generatable_matches} />
-              <LookupColumn title="Normalization Only" members={lookup.normalization_only_matches} />
+              <LookupColumn title="Generatable" members={lookup.generatable_matches} detailBasePath={detailBasePath} detailSearch={detailSearch} />
+              <LookupColumn
+                title="Normalization Only"
+                members={lookup.normalization_only_matches}
+                detailBasePath={detailBasePath}
+                detailSearch={detailSearch}
+              />
             </div>
           )}
         </CardContent>
@@ -186,12 +198,37 @@ export default function AliasExplorerPage({ embedded = false }: { embedded?: boo
               ))}
             </AliasSelect>
           </div>
+          <div className="grid gap-2 md:grid-cols-4">
+            <AliasSelect label="Showcase" value={filters.showcase_only ? "true" : "all"} onValueChange={(value) => updateFilter("showcase_only", value === "true" ? "true" : "")}>
+              <SelectItem value="all">All groups</SelectItem>
+              <SelectItem value="true">Showcase only</SelectItem>
+            </AliasSelect>
+            <AliasSelect label="Review" value={filters.review_status || "all"} onValueChange={(value) => updateFilter("review_status", value === "all" ? "" : value ?? "")}>
+              <SelectItem value="all">All review statuses</SelectItem>
+              <SelectItem value="reviewed">Reviewed</SelectItem>
+              <SelectItem value="pending">Pending</SelectItem>
+            </AliasSelect>
+            <AliasSelect label="Retrieval value" value={filters.retrieval_value || "all"} onValueChange={(value) => updateFilter("retrieval_value", value === "all" ? "" : value ?? "")}>
+              <SelectItem value="all">All values</SelectItem>
+              <SelectItem value="high">High</SelectItem>
+              <SelectItem value="medium">Medium</SelectItem>
+              <SelectItem value="low">Low</SelectItem>
+              <SelectItem value="not_reviewed">Not reviewed</SelectItem>
+            </AliasSelect>
+            <AliasSelect label="Pattern" value={filters.pattern_tag || "all"} onValueChange={(value) => updateFilter("pattern_tag", value === "all" ? "" : value ?? "")}>
+              <SelectItem value="all">All patterns</SelectItem>
+              {patternTagOptions.map((tag) => (
+                <SelectItem key={tag} value={tag}>{formatTag(tag)}</SelectItem>
+              ))}
+            </AliasSelect>
+          </div>
           <Table>
             <TableHeader>
               <TableRow>
                 <SortableHead label="Name" sortKey="canonical_name" activeSort={sort} onSort={toggleSort} />
                 <SortableHead label="Scope" sortKey="scope" activeSort={sort} onSort={toggleSort} />
                 <SortableHead label="Type" sortKey="entity_type" activeSort={sort} onSort={toggleSort} />
+                <TableHead>Curation</TableHead>
                 <SortableHead label="Members" sortKey="generatable_member_count" activeSort={sort} onSort={toggleSort} className="text-right" />
               </TableRow>
             </TableHeader>
@@ -199,13 +236,26 @@ export default function AliasExplorerPage({ embedded = false }: { embedded?: boo
               {sortedGroups.map((group) => (
                 <TableRow key={group.group_id}>
                   <TableCell>
-                    <Link className="text-primary underline-offset-4 hover:underline" to={`/data/aliases/groups/${group.group_id}`}>
+                    <Link
+                      className="text-primary underline-offset-4 hover:underline"
+                      to={`${detailBasePath}/${group.group_id}${detailSearch ? `?${detailSearch}` : ""}`}
+                    >
                       {group.canonical_name}
                     </Link>
                     {!group.canonical_name_is_generatable && <Badge className="ml-2" variant="outline">Display only</Badge>}
                   </TableCell>
                   <TableCell>{formatAliasScope(group.scope)}</TableCell>
                   <TableCell>{group.entity_type}</TableCell>
+                  <TableCell>
+                    <div className="flex flex-wrap gap-1">
+                      {group.curation.showcase && <Badge variant="secondary">Showcase #{group.curation.showcase_rank}</Badge>}
+                      <Badge variant="outline">{formatReviewStatus(group.curation.review_status)}</Badge>
+                      <Badge variant="outline">{formatRetrievalValue(group.curation.retrieval_value)}</Badge>
+                      {group.curation.pattern_tags.slice(0, 2).map((tag) => (
+                        <Badge key={tag} variant="outline">{formatTag(tag)}</Badge>
+                      ))}
+                    </div>
+                  </TableCell>
                   <TableCell className="text-right">{group.generatable_member_count}/{group.member_count}</TableCell>
                 </TableRow>
               ))}
@@ -302,6 +352,23 @@ function formatAliasScope(scope: string): string {
   return scope;
 }
 
+function formatReviewStatus(status: string): string {
+  if (status === "reviewed") return "Reviewed";
+  if (status === "pending") return "Pending review";
+  return status;
+}
+
+function formatRetrievalValue(value: string | null): string {
+  if (value === "high") return "High value";
+  if (value === "medium") return "Medium value";
+  if (value === "low") return "Low value";
+  return "Not reviewed";
+}
+
+function formatTag(tag: string): string {
+  return tag.replaceAll("_", " ");
+}
+
 function clampNumber(value: string | null, fallback: number, min: number, max: number): number {
   const parsed = Number(value ?? fallback);
   if (!Number.isFinite(parsed)) return fallback;
@@ -319,7 +386,17 @@ function Stat({ label, value }: { label: string; value: string }) {
   );
 }
 
-function LookupColumn({ title, members }: { title: string; members: AliasLookupResponse["generatable_matches"] }) {
+function LookupColumn({
+  title,
+  members,
+  detailBasePath,
+  detailSearch,
+}: {
+  title: string;
+  members: AliasLookupResponse["generatable_matches"];
+  detailBasePath: string;
+  detailSearch: string;
+}) {
   return (
     <div className="rounded-md border p-3">
       <h3 className="font-medium">{title}</h3>
@@ -329,7 +406,10 @@ function LookupColumn({ title, members }: { title: string; members: AliasLookupR
         <div className="mt-2 space-y-2">
           {members.map((member) => (
             <div key={member.candidate_uid} className="text-sm">
-              <Link className="text-primary underline-offset-4 hover:underline" to={`/data/aliases/groups/${member.group_id}`}>
+              <Link
+                className="text-primary underline-offset-4 hover:underline"
+                to={`${detailBasePath}/${member.group_id}${detailSearch ? `?${detailSearch}` : ""}`}
+              >
                 {member.candidate_text}
               </Link>
               <p className="text-xs text-muted-foreground">{member.canonical_name} · {member.relation_type}</p>
