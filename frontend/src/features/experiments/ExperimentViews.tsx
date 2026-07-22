@@ -44,27 +44,33 @@ export function ModeResultCard({
 
   return (
     <Card className="border-slate-200 shadow-sm dark:border-slate-800">
-      <CardHeader className="space-y-3">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <CardTitle className="text-lg">{modeLabel(detail.mode)}</CardTitle>
-            <p className="text-sm text-muted-foreground">{enumLabel(detail.status)}</p>
+      <CardHeader className="grid min-h-[132px] gap-4 md:grid-cols-[minmax(0,3fr)_minmax(9rem,1fr)] md:items-stretch">
+        <div className="flex min-w-0 flex-col gap-4">
+          <CardTitle className="truncate text-lg">{modeLabel(detail.mode)}</CardTitle>
+          <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground sm:grid-cols-4">
+            <Metric label="Searches" value={String(detail.retrieval_summary.vector_search_call_count)} />
+            <Metric label="Contexts" value={String(detail.contexts.length)} />
+            <Metric label="Retrieval" value={detail.retrieval_summary.retrieval_executed ? "Executed" : "Reused"} />
+            <Metric label="Time" value={formatDuration(detail.timing.total_duration_ms ?? detail.timing.retrieval_duration_ms)} />
           </div>
+        </div>
+        <div className="flex flex-row items-start justify-between gap-2 md:flex-col md:items-end">
           <StatusBadge status={detail.status} />
+          <div className="flex min-h-8 justify-end">
+            {detail.retrieval_summary.retrieval_reused ? (
+              <Badge variant="outline" className="w-fit" title={`Retrieval reused from ${modeLabel(detail.retrieval_summary.retrieval_source_mode ?? "baseline")}`}>
+                Retrieval reused
+              </Badge>
+            ) : detail.mode !== "baseline" && !hasInlineTrace && canLazyFetch ? (
+              <Button type="button" variant="outline" size="sm" onClick={() => loadDetail({ include_trace: true })} disabled={loadingTrace}>
+                {loadingTrace ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <FileSearch className="mr-2 h-4 w-4" />}
+                Load Trace
+              </Button>
+            ) : null}
+          </div>
         </div>
-        <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
-          <Metric label="Searches" value={String(detail.retrieval_summary.vector_search_call_count)} />
-          <Metric label="Contexts" value={String(detail.contexts.length)} />
-          <Metric label="Retrieval" value={detail.retrieval_summary.retrieval_executed ? "Executed" : "Reused"} />
-          <Metric label="Time" value={formatDuration(detail.timing.total_duration_ms ?? detail.timing.retrieval_duration_ms)} />
-        </div>
-        {detail.retrieval_summary.retrieval_reused && (
-          <Badge variant="outline" className="w-fit">
-            Retrieval reused from {modeLabel(detail.retrieval_summary.retrieval_source_mode ?? "baseline")}
-          </Badge>
-        )}
         {detail.status === "failed" && detail.contexts.length > 0 && (
-          <Alert className="border-amber-200 bg-amber-50/70 dark:border-amber-900/50 dark:bg-amber-950/20">
+          <Alert className="border-amber-200 bg-amber-50/70 dark:border-amber-900/50 dark:bg-amber-950/20 md:col-span-2">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Answer unavailable</AlertTitle>
             <AlertDescription>
@@ -81,14 +87,6 @@ export function ModeResultCard({
       <CardContent className="space-y-4">
         <AnswerBlock answer={detail.answer} contextCount={detail.contexts.length} invalidCitations={invalidCitations} />
         {detailError && <p className="text-sm text-red-600">{detailError}</p>}
-        <div className="flex flex-wrap gap-2">
-          {detail.mode !== "baseline" && !hasInlineTrace && canLazyFetch && (
-            <Button type="button" variant="outline" size="sm" onClick={() => loadDetail({ include_trace: true })} disabled={loadingTrace}>
-              {loadingTrace ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <FileSearch className="mr-2 h-4 w-4" />}
-              Load Trace
-            </Button>
-          )}
-        </div>
         {hasInlineTrace ? <TraceInspectors result={detail} /> : null}
         {view.unsupportedTraceSchema && (
           <Alert>
@@ -106,9 +104,9 @@ export function ModeResultCard({
   );
 }
 
-function StatusBadge({ status }: { status: string }) {
+function StatusBadge({ status, className }: { status: string; className?: string }) {
   const variant = status === "completed" ? "outline" : status === "failed" ? "destructive" : "secondary";
-  return <Badge variant={variant}>{enumLabel(status)}</Badge>;
+  return <Badge variant={variant} className={className}>{enumLabel(status)}</Badge>;
 }
 
 function Metric({ label, value }: { label: string; value: string }) {

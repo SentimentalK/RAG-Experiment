@@ -75,8 +75,8 @@ export function AppSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton render={<Link to="/experiments" />} tooltip="Experiment Workbench" isActive={location.pathname.startsWith("/experiments")}>
                   <FlaskConical className="h-4 w-4" />
-                  <span className="flex-1">Experiment Workbench</span>
-                  <Badge variant="outline" className="text-[10px] uppercase font-bold py-0 h-4 bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 border-green-200 dark:border-green-800">Live</Badge>
+                  <span className="min-w-0 flex-1 truncate whitespace-nowrap">Experiment Workbench</span>
+                  <Badge variant="outline" className="shrink-0 text-[10px] uppercase font-bold py-0 h-4 bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 border-green-200 dark:border-green-800">Live</Badge>
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
