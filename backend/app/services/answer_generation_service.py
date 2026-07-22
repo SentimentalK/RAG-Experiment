@@ -64,7 +64,13 @@ class AnswerGenerationService:
     def __init__(self, groq_client: GroqGptOssClient) -> None:
         self._groq_client = groq_client
 
-    def generate(self, question: str, contexts: tuple[AnswerContext, ...]) -> GeneratedAnswer:
+    def generate(
+        self,
+        question: str,
+        contexts: tuple[AnswerContext, ...],
+        *,
+        groq_api_key_override: str | None = None,
+    ) -> GeneratedAnswer:
         _validate_context_ranks(contexts)
         prompt_chunks = [_prompt_chunk(context) for context in contexts]
         messages = RagPromptBuilder.build_messages(question, prompt_chunks)
@@ -86,7 +92,7 @@ class AnswerGenerationService:
             response = None
             for api_attempt in range(1, max_api_attempts_per_validation_attempt + 1):
                 try:
-                    response = self._groq_client.chat_completion(messages)
+                    response = self._groq_client.chat_completion(messages, api_key_override=groq_api_key_override)
                     break
                 except GroqApiError as exc:
                     retry_after = _groq_retry_after_seconds(str(exc))

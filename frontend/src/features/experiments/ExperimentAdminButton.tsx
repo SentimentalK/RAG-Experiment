@@ -10,17 +10,32 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { clearExperimentAdminSecret, getExperimentAdminSecret, setExperimentAdminSecret, subscribeExperimentAdmin } from "./admin";
+import {
+  clearExperimentAdminSecret,
+  getExperimentAdminSecret,
+  getExperimentGroqApiKey,
+  setExperimentAdminSession,
+  subscribeExperimentAdmin,
+} from "./admin";
 import { verifyExperimentAdmin } from "./api";
 
 export function ExperimentAdminButton() {
   const [open, setOpen] = useState(false);
   const [secret, setSecret] = useState("");
+  const [groqApiKey, setGroqApiKey] = useState("");
   const [unlocked, setUnlocked] = useState(!!getExperimentAdminSecret());
+  const [hasCustomGroqKey, setHasCustomGroqKey] = useState(!!getExperimentGroqApiKey());
   const [error, setError] = useState<string | null>(null);
   const [verifying, setVerifying] = useState(false);
 
-  useEffect(() => subscribeExperimentAdmin(() => setUnlocked(!!getExperimentAdminSecret())), []);
+  useEffect(
+    () =>
+      subscribeExperimentAdmin(() => {
+        setUnlocked(!!getExperimentAdminSecret());
+        setHasCustomGroqKey(!!getExperimentGroqApiKey());
+      }),
+    [],
+  );
 
   async function unlock(event: FormEvent) {
     event.preventDefault();
@@ -33,8 +48,9 @@ export function ExperimentAdminButton() {
         setError("Password incorrect.");
         return;
       }
-      setExperimentAdminSecret(secret);
+      setExperimentAdminSession(secret, groqApiKey);
       setSecret("");
+      setGroqApiKey("");
       setOpen(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to verify password.");
@@ -46,6 +62,7 @@ export function ExperimentAdminButton() {
   function lock() {
     clearExperimentAdminSecret();
     setSecret("");
+    setGroqApiKey("");
     setError(null);
     setOpen(false);
   }
@@ -75,9 +92,14 @@ export function ExperimentAdminButton() {
           </DialogHeader>
           {unlocked ? (
             <div className="space-y-4">
-              <p className="rounded-md border bg-slate-50 p-3 text-sm dark:bg-slate-900/40">
-                Admin is unlocked. New experiment runs will be saved by default.
-              </p>
+              <div className="space-y-2 rounded-md border bg-slate-50 p-3 text-sm dark:bg-slate-900/40">
+                <p>Admin is unlocked. New experiment runs will be saved by default.</p>
+                <p className="text-muted-foreground">
+                  {hasCustomGroqKey
+                    ? "A custom Groq API key is active for this browser session."
+                    : "Experiment answers will use the server Groq API key unless you unlock again with a custom key."}
+                </p>
+              </div>
               <DialogFooter>
                 <Button type="button" variant="outline" onClick={() => setOpen(false)}>
                   Close
@@ -97,6 +119,16 @@ export function ExperimentAdminButton() {
                   onChange={(event) => setSecret(event.target.value)}
                   autoFocus
                 />
+              </label>
+              <label className="space-y-1 text-sm">
+                <span className="font-medium">Groq API Key (optional)</span>
+                <Input
+                  type="password"
+                  value={groqApiKey}
+                  onChange={(event) => setGroqApiKey(event.target.value)}
+                  placeholder="Use this session key instead of the server key"
+                />
+                <p className="text-xs text-muted-foreground">Stored only in this browser session. Leave blank to use the server key.</p>
               </label>
               {error && <p className="text-sm text-red-600">{error}</p>}
               <DialogFooter>

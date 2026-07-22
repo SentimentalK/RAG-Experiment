@@ -129,6 +129,36 @@ def test_experiment_admin_verify_and_persistence_gate():
         app.dependency_overrides.clear()
 
 
+def test_experiment_api_forwards_optional_groq_api_key_override_header():
+    service = MagicMock()
+    service.verify_admin_secret.return_value = True
+    service.compare.return_value = ExperimentCompareResponse(
+        session_id=None,
+        persisted=False,
+        query="Question?",
+        status="completed",
+        results={"strong_story": _mode_result()},
+        comparisons=(),
+        requested_mode_count=1,
+        retrieval_execution_count=1,
+        answer_generation_count=1,
+        total_vector_search_call_count=2,
+    )
+    app.dependency_overrides[get_experimental_answer_service] = lambda: service
+    try:
+        client = TestClient(app)
+        response = client.post(
+            "/api/experiments/compare",
+            json={"query": "Question?", "modes": ["strong_story"], "persist": False},
+            headers={"X-Experiment-Groq-Api-Key": "session-key"},
+        )
+        assert response.status_code == 200
+        service.compare.assert_called_once()
+        assert service.compare.call_args.kwargs["groq_api_key_override"] == "session-key"
+    finally:
+        app.dependency_overrides.clear()
+
+
 def test_delete_experiment_session_requires_admin_secret():
     service = MagicMock()
     session_id = uuid4()

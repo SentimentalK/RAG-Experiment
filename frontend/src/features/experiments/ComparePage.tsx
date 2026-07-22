@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { compareExperiment, getExperimentCapabilities } from "./api";
-import { getExperimentAdminSecret, subscribeExperimentAdmin } from "./admin";
+import { getExperimentAdminSecret, getExperimentGroqApiKey, subscribeExperimentAdmin } from "./admin";
 import { ExperimentNav } from "./ExperimentNav";
 import { ComparisonStrip, ModeResultCard } from "./ExperimentViews";
 import { MODE_LABELS, MODE_ORDER, type ExperimentApiError, type ExperimentCapabilities, type ExperimentCompareResponse, type RetrievalMode } from "./types";
@@ -18,6 +18,7 @@ export default function ExperimentComparePage() {
   const [query, setQuery] = useState("What did Mr. Holmes discover?");
   const [modes, setModes] = useState<RetrievalMode[]>(["baseline", "strong_story"]);
   const [adminSecret, setAdminSecret] = useState<string | null>(getExperimentAdminSecret());
+  const [adminGroqApiKey, setAdminGroqApiKey] = useState<string | null>(getExperimentGroqApiKey());
   const [maxVariants, setMaxVariants] = useState(8);
   const [allowStoryScoped, setAllowStoryScoped] = useState(true);
   const [allowSingleToken, setAllowSingleToken] = useState(true);
@@ -40,7 +41,14 @@ export default function ExperimentComparePage() {
     return () => controller.abort();
   }, []);
 
-  useEffect(() => subscribeExperimentAdmin(() => setAdminSecret(getExperimentAdminSecret())), []);
+  useEffect(
+    () =>
+      subscribeExperimentAdmin(() => {
+        setAdminSecret(getExperimentAdminSecret());
+        setAdminGroqApiKey(getExperimentGroqApiKey());
+      }),
+    [],
+  );
 
   const storyControlsEnabled = modes.includes("strong_story") && !!capabilities?.expansion.allow_story_scoped;
   const comparisonsByMode = useMemo(
@@ -82,6 +90,7 @@ export default function ExperimentComparePage() {
         },
         controller.signal,
         adminSecret,
+        adminGroqApiKey,
       );
       if (requestRef.current === token) setResult(response);
     } catch (err) {

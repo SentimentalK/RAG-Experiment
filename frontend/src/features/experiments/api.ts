@@ -21,8 +21,11 @@ async function requestJson<T>(url: string, init?: RequestInit): Promise<T> {
   return payload as T;
 }
 
-function adminHeaders(adminSecret?: string | null): HeadersInit {
-  return adminSecret ? { "X-Experiment-Admin-Secret": adminSecret } : {};
+function adminHeaders(adminSecret?: string | null, groqApiKey?: string | null): HeadersInit {
+  const headers: Record<string, string> = {};
+  if (adminSecret) headers["X-Experiment-Admin-Secret"] = adminSecret;
+  if (groqApiKey?.trim()) headers["X-Experiment-Groq-Api-Key"] = groqApiKey.trim();
+  return headers;
 }
 
 export function getExperimentCapabilities(signal?: AbortSignal): Promise<ExperimentCapabilities> {
@@ -47,10 +50,15 @@ export interface CompareExperimentPayload {
   include_trace?: boolean;
 }
 
-export function compareExperiment(payload: CompareExperimentPayload, signal?: AbortSignal, adminSecret?: string | null): Promise<ExperimentCompareResponse> {
+export function compareExperiment(
+  payload: CompareExperimentPayload,
+  signal?: AbortSignal,
+  adminSecret?: string | null,
+  groqApiKey?: string | null,
+): Promise<ExperimentCompareResponse> {
   return requestJson<ExperimentCompareResponse>("/api/experiments/compare", {
     method: "POST",
-    headers: { "Content-Type": "application/json", ...adminHeaders(adminSecret) },
+    headers: { "Content-Type": "application/json", ...adminHeaders(adminSecret, groqApiKey) },
     body: JSON.stringify(payload),
     signal,
   });
@@ -65,10 +73,15 @@ export interface AnswerExperimentPayload {
   include_trace?: boolean;
 }
 
-export function answerExperiment(payload: AnswerExperimentPayload, signal?: AbortSignal, adminSecret?: string | null): Promise<ExperimentalAnswerResponse> {
+export function answerExperiment(
+  payload: AnswerExperimentPayload,
+  signal?: AbortSignal,
+  adminSecret?: string | null,
+  groqApiKey?: string | null,
+): Promise<ExperimentalAnswerResponse> {
   return requestJson<ExperimentalAnswerResponse>("/api/experiments/answer", {
     method: "POST",
-    headers: { "Content-Type": "application/json", ...adminHeaders(adminSecret) },
+    headers: { "Content-Type": "application/json", ...adminHeaders(adminSecret, groqApiKey) },
     body: JSON.stringify(payload),
     signal,
   });

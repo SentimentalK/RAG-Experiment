@@ -122,7 +122,7 @@ class FakeGroqClient:
         self.fail_first_with_rate_limit = fail_first_with_rate_limit
         self._settings = type("Settings", (), {"GROQ_MODEL": "test-model"})()
 
-    def chat_completion(self, messages):
+    def chat_completion(self, messages, *, api_key_override=None):
         self.calls.append(messages)
         if self.fail_first_with_rate_limit and len(self.calls) == 1:
             raise GroqApiError(
@@ -139,3 +139,34 @@ class FakeGroqClient:
             ),
             "usage": {"prompt_tokens": 10, "completion_tokens": 5, "total_tokens": 15},
         }
+
+
+def test_answer_generation_passes_optional_groq_api_key_override():
+    client = FakeGroqClientWithOverride()
+    service = AnswerGenerationService(client)
+
+    service.generate(
+        "What happened?",
+        (
+            AnswerContext(
+                chunk_uid="chunk-1",
+                rank=1,
+                chunk_text="Holmes saw the evidence.",
+                section_title="A Story",
+                cosine_similarity=0.75,
+            ),
+        ),
+        groq_api_key_override="override-key",
+    )
+
+    assert client.last_api_key_override == "override-key"
+
+
+class FakeGroqClientWithOverride(FakeGroqClient):
+    def __init__(self):
+        super().__init__()
+        self.last_api_key_override = None
+
+    def chat_completion(self, messages, *, api_key_override=None):
+        self.last_api_key_override = api_key_override
+        return super().chat_completion(messages, api_key_override=api_key_override)

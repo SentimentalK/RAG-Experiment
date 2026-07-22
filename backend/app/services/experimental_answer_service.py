@@ -148,6 +148,7 @@ class ExperimentalAnswerService:
         expansion_options: QueryExpansionRequestOptions | None = None,
         persist: bool = True,
         include_trace: bool = False,
+        groq_api_key_override: str | None = None,
     ) -> ExperimentalAnswerResponse:
         comparison = self.compare(
             query=query,
@@ -156,6 +157,7 @@ class ExperimentalAnswerService:
             expansion_options=expansion_options,
             persist=persist,
             include_trace=include_trace,
+            groq_api_key_override=groq_api_key_override,
         )
         result = comparison.results[mode]
         return ExperimentalAnswerResponse(
@@ -177,6 +179,7 @@ class ExperimentalAnswerService:
         expansion_options: QueryExpansionRequestOptions | None = None,
         persist: bool = True,
         include_trace: bool = False,
+        groq_api_key_override: str | None = None,
     ) -> ExperimentCompareResponse:
         plan = build_execution_plan(modes)
         persist_effective = self._resolve_persistence(persist)
@@ -245,7 +248,12 @@ class ExperimentalAnswerService:
                 if item.status == "failed":
                     continue
                 try:
-                    self._generate_answer_for_item(query, item, persist_effective)
+                    self._generate_answer_for_item(
+                        query,
+                        item,
+                        persist_effective,
+                        groq_api_key_override=groq_api_key_override,
+                    )
                     answer_generation_count += 1
                 except ExperimentalAnswerError as exc:
                     if exc.error_code not in {"answer_generation_failed", "answer_rate_limited"}:
@@ -454,10 +462,21 @@ class ExperimentalAnswerService:
             retrieval_summary=retrieval_summary,
         )
 
-    def _generate_answer_for_item(self, query: str, item: WorkItem, persist_effective: bool) -> None:
+    def _generate_answer_for_item(
+        self,
+        query: str,
+        item: WorkItem,
+        persist_effective: bool,
+        *,
+        groq_api_key_override: str | None = None,
+    ) -> None:
         start = perf_counter()
         try:
-            answer = self._answer_generation_service.generate(query, item.contexts)
+            answer = self._answer_generation_service.generate(
+                query,
+                item.contexts,
+                groq_api_key_override=groq_api_key_override,
+            )
             item.answer = answer
             item.status = "completed"
             item.total_duration_ms = (perf_counter() - start) * 1000 + (item.retrieval_duration_ms or 0.0)

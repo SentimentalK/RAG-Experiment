@@ -12,14 +12,18 @@ def test_settings() -> Settings:
         GROQ_BASE_URL="https://mock.groq.com/v1"
     )
 
-def test_missing_api_key():
+def test_missing_api_key_errors_when_requesting_without_override():
     bad_settings = Settings(
         GROQ_API_KEY="",
         GROQ_MODEL="mock-model",
         GROQ_BASE_URL="https://mock.groq.com/v1"
     )
+    client = GroqGptOssClient(bad_settings, http_client=httpx.Client(
+        transport=httpx.MockTransport(lambda request: httpx.Response(200, json={})),
+        base_url="https://mock.groq.com/v1",
+    ))
     with pytest.raises(GroqApiError, match="GROQ_API_KEY is not configured."):
-        GroqGptOssClient(bad_settings)
+        client.chat_completion([])
 
 def test_chat_completions_headers_and_payload(test_settings):
     def mock_handler(request: httpx.Request) -> httpx.Response:
@@ -71,6 +75,25 @@ def test_chat_completions_headers_and_payload(test_settings):
     assert res["usage"]["prompt_tokens"] == 100
     assert res["usage"]["completion_tokens"] == 20
     assert res["usage"]["total_tokens"] == 120
+
+
+def test_chat_completions_use_override_api_key(test_settings):
+    def mock_handler(request: httpx.Request) -> httpx.Response:
+        assert request.headers["Authorization"] == "Bearer override-key"
+        return httpx.Response(
+            200,
+            json={
+                "choices": [{"message": {"content": '{"answer":"x","evidence_sufficient":true,"citations":[],"confidence":0.1}'}}],
+                "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2},
+            },
+        )
+
+    mock_client = httpx.Client(
+        transport=httpx.MockTransport(mock_handler),
+        base_url="https://mock.groq.com/v1"
+    )
+    client = GroqGptOssClient(test_settings, http_client=mock_client)
+    client.chat_completion([], api_key_override="override-key")
 
 def test_api_error_responses(test_settings):
     # Test 401 Unauthorized

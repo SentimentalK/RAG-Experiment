@@ -13,10 +13,6 @@ class GroqGptOssClient:
         settings: Settings,
         http_client: httpx.Client | None = None,
     ) -> None:
-        # Check API Key
-        if not settings.GROQ_API_KEY.strip():
-            raise GroqApiError("GROQ_API_KEY is not configured.")
-
         self._settings = settings
         self._owns_client = http_client is None
         self._client = http_client or httpx.Client(
@@ -29,7 +25,7 @@ class GroqGptOssClient:
             ),
         )
 
-    def chat_completion(self, messages: list[dict]) -> dict:
+    def chat_completion(self, messages: list[dict], *, api_key_override: str | None = None) -> dict:
         """
         Sends chat completion request to Groq with response_format matching the strict JSON schema.
         Returns a dict containing:
@@ -37,6 +33,10 @@ class GroqGptOssClient:
           - "duration_ms": float time in ms for the request
           - "usage": dict of tokens usage details
         """
+        api_key = (api_key_override or self._settings.GROQ_API_KEY).strip()
+        if not api_key:
+            raise GroqApiError("GROQ_API_KEY is not configured.")
+
         payload = {
             "model": self._settings.GROQ_MODEL,
             "messages": messages,
@@ -96,7 +96,7 @@ class GroqGptOssClient:
             response = self._client.post(
                 "/chat/completions",
                 headers={
-                    "Authorization": f"Bearer {self._settings.GROQ_API_KEY}",
+                    "Authorization": f"Bearer {api_key}",
                     "Content-Type": "application/json",
                 },
                 json=payload,

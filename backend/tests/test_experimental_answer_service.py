@@ -129,6 +129,19 @@ def test_read_api_defaults_hide_trace_and_context_text():
     assert detail.contexts[0].chunk_text is None
 
 
+def test_compare_passes_optional_groq_api_key_override_to_answer_generation():
+    service, _, answer, _ = service_for()
+
+    service.compare(
+        query="Question",
+        modes=("baseline",),
+        persist=False,
+        groq_api_key_override="session-key",
+    )
+
+    assert answer.calls[0]["groq_api_key_override"] == "session-key"
+
+
 class FakeRetrievalService:
     def __init__(self, *, story_variant_in_strong_only=False):
         self.calls = []
@@ -165,8 +178,8 @@ class FakeAnswerGenerationService:
     def prompt_template_sha256(self):
         return "template-sha"
 
-    def generate(self, question, contexts):
-        self.calls.append({"question": question, "contexts": contexts})
+    def generate(self, question, contexts, *, groq_api_key_override=None):
+        self.calls.append({"question": question, "contexts": contexts, "groq_api_key_override": groq_api_key_override})
         chunk_ids = {context.chunk_uid for context in contexts}
         inferred_mode = "strong_story" if "alias" in chunk_ids else "baseline"
         if inferred_mode in self.fail_modes:

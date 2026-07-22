@@ -37,6 +37,7 @@ def verify_experiment_admin(
 def experimental_answer(
     payload: ExperimentalAnswerRequest,
     x_experiment_admin_secret: str | None = Header(default=None),
+    x_experiment_groq_api_key: str | None = Header(default=None),
     service: ExperimentalAnswerService = Depends(get_experimental_answer_service),
 ) -> dict:
     try:
@@ -48,6 +49,7 @@ def experimental_answer(
             expansion_options=payload.expansion_options,
             persist=payload.persist,
             include_trace=payload.include_trace,
+            groq_api_key_override=_normalized_header(x_experiment_groq_api_key),
         ).model_dump(mode="json")
     except ExperimentalAnswerError as exc:
         raise _http_error(exc)
@@ -57,6 +59,7 @@ def experimental_answer(
 def experimental_compare(
     payload: ExperimentCompareRequest,
     x_experiment_admin_secret: str | None = Header(default=None),
+    x_experiment_groq_api_key: str | None = Header(default=None),
     service: ExperimentalAnswerService = Depends(get_experimental_answer_service),
 ) -> dict:
     try:
@@ -68,6 +71,7 @@ def experimental_compare(
             expansion_options=payload.expansion_options,
             persist=payload.persist,
             include_trace=payload.include_trace,
+            groq_api_key_override=_normalized_header(x_experiment_groq_api_key),
         ).model_dump(mode="json")
     except ExperimentalAnswerError as exc:
         raise _http_error(exc)
@@ -168,3 +172,10 @@ def _require_admin_for_persistence(
 ) -> None:
     if persist_requested and not service.verify_admin_secret(admin_secret):
         raise ExperimentalAnswerError("experiment_admin_auth_required", "Experiment admin unlock is required.")
+
+
+def _normalized_header(value: str | None) -> str | None:
+    if value is None:
+        return None
+    normalized = value.strip()
+    return normalized or None
