@@ -113,6 +113,9 @@ export default function AliasExplorerPage({ embedded = false }: { embedded?: boo
             Alias Explorer
           </h1>
           <p className="text-muted-foreground">Browse the frozen alias dataset and run exact normalized surface lookup.</p>
+          <p className="mt-2 max-w-4xl text-sm text-muted-foreground">
+            Global aliases are safe to substitute across the whole corpus. Story aliases are only safe inside one specific story, where that surface stays tied to the same entity.
+          </p>
         </div>
       )}
       {error && <p className="text-sm text-red-600">{error}</p>}
@@ -162,7 +165,7 @@ export default function AliasExplorerPage({ embedded = false }: { embedded?: boo
             <AliasSelect label="Scope" value={filters.scope || "all"} onValueChange={(value) => updateFilter("scope", value === "all" ? "" : value ?? "")}>
               <SelectItem value="all">All scopes</SelectItem>
               {scopeOptions.map((scope) => (
-                <SelectItem key={scope} value={scope}>{scope}</SelectItem>
+                <SelectItem key={scope} value={scope}>{formatAliasScope(scope)}</SelectItem>
               ))}
             </AliasSelect>
             <AliasSelect label="Entity" value={filters.entity_type || "all"} onValueChange={(value) => updateFilter("entity_type", value === "all" ? "" : value ?? "")}>
@@ -201,7 +204,7 @@ export default function AliasExplorerPage({ embedded = false }: { embedded?: boo
                     </Link>
                     {!group.canonical_name_is_generatable && <Badge className="ml-2" variant="outline">Display only</Badge>}
                   </TableCell>
-                  <TableCell>{group.scope}</TableCell>
+                  <TableCell>{formatAliasScope(group.scope)}</TableCell>
                   <TableCell>{group.entity_type}</TableCell>
                   <TableCell className="text-right">{group.generatable_member_count}/{group.member_count}</TableCell>
                 </TableRow>
@@ -291,6 +294,12 @@ function sortGroups(groups: AliasGroupSummary[], sort: { key: SortKey; direction
 
 function uniqueOptions(values: string[]): string[] {
   return [...new Set(values.filter(Boolean))].sort((left, right) => left.localeCompare(right));
+}
+
+function formatAliasScope(scope: string): string {
+  if (scope === "global") return "Global";
+  if (scope === "story_scoped") return "Story";
+  return scope;
 }
 
 function clampNumber(value: string | null, fallback: number, min: number, max: number): number {

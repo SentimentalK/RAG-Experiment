@@ -10,7 +10,7 @@ afterEach(() => {
 });
 
 describe("ExperimentComparePage", () => {
-  it("keeps story controls enabled when Strong + Story is selected alongside Strong Only", async () => {
+  it("keeps story controls enabled when Global + Story is selected alongside Global", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue(
       new Response(
         JSON.stringify({
@@ -79,6 +79,6 @@ describe("normalizeModeRunDetail", () => {
     const view = normalizeModeRunDetail(result);
 
     expect(view.unsupportedTraceSchema).toBe(true);
-    expect(view.label).toBe("Strong + Story");
+    expect(view.label).toBe("Global + Story");
   });
 });

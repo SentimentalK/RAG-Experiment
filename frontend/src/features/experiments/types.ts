@@ -178,6 +178,6 @@ export const MODE_ORDER: RetrievalMode[] = ["baseline", "strong_only", "strong_s
 
 export const MODE_LABELS: Record<RetrievalMode, string> = {
   baseline: "Baseline",
-  strong_only: "Strong Only",
-  strong_story: "Strong + Story",
+  strong_only: "Global",
+  strong_story: "Global + Story",
 };

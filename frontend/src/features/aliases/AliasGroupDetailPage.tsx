@@ -40,10 +40,13 @@ export default function AliasGroupDetailPage() {
             {group.canonical_name}
             {!group.canonical_name_is_generatable && <Badge variant="outline">Display label only</Badge>}
           </CardTitle>
+          <p className="text-sm text-muted-foreground">
+            Global groups are safe to substitute across the whole corpus. Story groups are only safe inside the specific story context where that surface remains unambiguous.
+          </p>
         </CardHeader>
         <CardContent className="grid gap-3 text-sm md:grid-cols-4">
           <Meta label="Group ID" value={group.group_id} />
-          <Meta label="Scope" value={group.scope} />
+          <Meta label="Scope" value={formatAliasScope(group.scope)} />
           <Meta label="Entity Type" value={group.entity_type} />
           <Meta label="Story IDs" value={group.story_ids.join(", ") || "Global"} />
         </CardContent>
@@ -55,6 +58,12 @@ export default function AliasGroupDetailPage() {
       <MemberPanel title="All Members" members={group.members} />
     </div>
   );
+}
+
+function formatAliasScope(scope: string): string {
+  if (scope === "global") return "Global";
+  if (scope === "story_scoped") return "Story";
+  return scope;
 }
 
 function Meta({ label, value }: { label: string; value: string }) {

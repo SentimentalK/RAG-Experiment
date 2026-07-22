@@ -109,7 +109,7 @@ export default function ExperimentComparePage() {
             <FlaskConical className="h-5 w-5" />
             Compare Modes
           </CardTitle>
-          <CardDescription>Baseline, strong alias, and story-scoped alias modes share one question and controlled server limits.</CardDescription>
+          <CardDescription>Baseline, globally safe alias replacements, and the broader global-plus-story alias set share one question and the same server limits.</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={submit} className="space-y-5">
@@ -128,7 +128,13 @@ export default function ExperimentComparePage() {
                   aria-pressed={modes.includes(mode)}
                 >
                   <span className="block font-medium">{MODE_LABELS[mode]}</span>
-                  <span className="text-xs text-muted-foreground">{mode === "baseline" ? "Original query" : mode === "strong_only" ? "Global aliases only" : "Strong plus story aliases"}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {mode === "baseline"
+                      ? "Exactly the same path as Ask a Question"
+                      : mode === "strong_only"
+                        ? "Uses aliases that can be safely substituted across the whole corpus, not just within one story"
+                        : "Includes the global set plus aliases that are only safe inside a specific story context"}
+                  </span>
                 </button>
               ))}
             </div>
@@ -168,10 +174,10 @@ export default function ExperimentComparePage() {
                     disabled={!storyControlsEnabled}
                     onChange={(event) => setAllowSingleToken(event.target.checked)}
                   />
-                  <span>Allow single-token story aliases</span>
+                  <span>Allow single-token story-scoped aliases</span>
                 </label>
                 <p className="md:col-span-3 text-xs text-muted-foreground">
-                  These options apply only to Strong + Story. Strong Only always disables story-scoped aliases.
+                  These options apply only to Global + Story. Global stays limited to aliases that are safe to substitute across the whole corpus, while story-scoped aliases are only used inside the story where that entity is unambiguous.
                 </p>
               </CollapsibleContent>
             </Collapsible>

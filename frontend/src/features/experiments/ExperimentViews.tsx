@@ -539,8 +539,8 @@ function humanVariantKind(kind: string): string {
 }
 
 function scopeLabel(value: string): string {
-  if (value === "approved_strong" || value === "global") return "Global strong alias";
-  if (value === "approved_story_scoped" || value === "story_scoped") return "Story-scoped alias";
+  if (value === "approved_strong" || value === "global") return "Global scope";
+  if (value === "approved_story_scoped" || value === "story_scoped") return "Story scope";
   return enumLabel(value || "alias");
 }
 
