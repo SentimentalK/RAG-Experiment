@@ -71,7 +71,7 @@ export default function ExperimentComparePage() {
           query,
           modes,
           persist,
-          include_trace: true,
+          include_trace: false,
           expansion_options: {
             max_query_variants: Math.min(maxVariants, capabilities?.expansion.max_query_variants ?? maxVariants),
             allow_story_scoped: storyControlsEnabled ? allowStoryScoped : false,
